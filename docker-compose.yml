@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - 12345:11434
+
+  frontend:
+    build: services/frontend
+    container_name: frontend
+    ports:
+      - 8080:5173
