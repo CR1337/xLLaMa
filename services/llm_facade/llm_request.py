@@ -8,7 +8,7 @@ from datetime import datetime
 import requests
 import json
 from server_sent_events import ServerSentEvents
-from config import Config, Defaults
+from config import Config
 
 
 open_ai_client: OpenAI = OpenAI(api_key=Config.OPENAI_API_KEY)
