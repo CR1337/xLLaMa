@@ -146,7 +146,7 @@ class OllamaRequest(LlmRequest):
                             "model_installation_progress",
                             event,
                             i,
-                            Defaults.STREAM_RETRY_PERIOD
+                            Config.STREAM_RETRY_PERIOD
                         )
 
             return sse_generator()
