@@ -46,7 +46,7 @@ class CodeAnalyzer:
     ) -> List[Dict[str, Any]]:
         return [
             {
-                "id": definition.id_,
+                "id": definition.id,
                 "start_line_number": (
                     definition.node.lineno if definition.node else None
                 ),
@@ -92,8 +92,9 @@ class CodeAnalyzer:
 
 
 if __name__ == "__main__":
-    with open("test.py") as f:
+    import json
+    with open("services/code_analyzer/test.py") as f:
         code = f.read()
     analyzer = CodeAnalyzer(code)
     analyzer.analyze()
-    print(analyzer.to_json())
+    print(json.dumps(analyzer.to_json()))
