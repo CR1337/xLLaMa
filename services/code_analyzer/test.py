@@ -6,6 +6,9 @@ def global_func():
     print("Global func")
 
 
+z = 0
+
+
 class Test:
 
     _x: int
@@ -20,7 +23,7 @@ class Test:
     @property
     def x(self):
         global z
-        z = x
+        z = u
         return self._x
 
     def x_cross_x(self):
