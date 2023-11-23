@@ -19,3 +19,6 @@ class Stack:
 
     def __len__(self) -> int:
         return len(self._stack)
+
+    def is_empty(self) -> bool:
+        return len(self) == 0
