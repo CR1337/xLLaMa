@@ -2,7 +2,7 @@ import ast
 from code_visitor import CodeVisitor
 from metric_calculator import MetricCalculator
 from typing import Any, Dict, List
-from scope import Definition
+from definition import Definition
 
 
 class CodeAnalyzer:

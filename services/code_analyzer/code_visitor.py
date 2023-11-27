@@ -1,7 +1,8 @@
 from __future__ import annotations
 import ast
 from stack import Stack
-from scope import Definition, Scope
+from definition import Definition
+from scope import Scope
 from typing import Any, Callable, Dict, List, Tuple
 from functools import wraps
 
