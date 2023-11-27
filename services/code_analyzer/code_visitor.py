@@ -5,10 +5,6 @@ from scope import Definition, Scope
 from typing import Any, Callable, Dict, List, Tuple
 from functools import wraps
 
-# FIXME: global and nonlocal doesnt work yet
-# because those definitions arent recognized as such
-# before the global (or nonlocal) scope is finished
-
 
 def visit_sub_scope(func: Callable[[CodeVisitor, ast.AST], None]):
     @wraps(func)
@@ -38,19 +34,10 @@ def visit_sub_scope(func: Callable[[CodeVisitor, ast.AST], None]):
         elif is_functiondef:
             self.function_scopes.pop()
 
-        self.imports.extend(scope.imported_names)
-        self.functions.extend(scope.defined_functions)
-        self.classes.extend(scope.defined_classes)
-        self.variables.extend(scope.defined_variables)
-        self.undefined_references.extend(
-            scope.undefined_references
-        )
-        self.assigned_self_members.extend(
-            scope.assigned_self_members
-        )
-        self.assigned_class_members.extend(
-            scope.assigned_class_members
-        )
+        self.read_out_scope(scope)
+        if scope.parent.is_builtin:
+            scope.builtin_scope.remove_unused_definitions()
+            self.read_out_scope(scope.builtin_scope)
 
     return wrapper
 
@@ -299,6 +286,21 @@ class CodeVisitor(ast.NodeVisitor):
             definition.to_json()
             for definition in definitions
         ]
+
+    def read_out_scope(self, scope: Scope):
+        self.imports.extend(scope.imported_names)
+        self.functions.extend(scope.defined_functions)
+        self.classes.extend(scope.defined_classes)
+        self.variables.extend(scope.defined_variables)
+        self.undefined_references.extend(
+            scope.undefined_references
+        )
+        self.assigned_self_members.extend(
+            scope.assigned_self_members
+        )
+        self.assigned_class_members.extend(
+            scope.assigned_class_members
+        )
 
     def to_json(self) -> Dict[str, Any]:
         return {
