@@ -119,21 +119,15 @@ For this code snippet the endpoint returns the following JSON object:
                 ],
                 "references": [
                     {
-                        "start_line_number": 21,
-                        "start_column_number": 8,
-                        "end_line_number": 21,
-                        "end_column_number": 13
-                    },
-                    {
                         "start_line_number": 31,
                         "start_column_number": 12,
                         "end_line_number": 31,
                         "end_column_number": 17
                     },
                     {
-                        "start_line_number": 17,
+                        "start_line_number": 21,
                         "start_column_number": 8,
-                        "end_line_number": 17,
+                        "end_line_number": 21,
                         "end_column_number": 13
                     },
                     {
@@ -141,6 +135,12 @@ For this code snippet the endpoint returns the following JSON object:
                         "start_column_number": 4,
                         "end_line_number": 6,
                         "end_column_number": 9
+                    },
+                    {
+                        "start_line_number": 17,
+                        "start_column_number": 8,
+                        "end_line_number": 17,
+                        "end_column_number": 13
                     }
                 ],
                 "is_builtin": true
@@ -500,15 +500,15 @@ For this code snippet the endpoint returns the following JSON object:
                 ],
                 "references": [
                     {
-                        "start_line_number": 34,
-                        "start_column_number": 8,
-                        "end_line_number": 34,
-                        "end_column_number": 12
-                    },
-                    {
                         "start_line_number": 35,
                         "start_column_number": 8,
                         "end_line_number": 35,
+                        "end_column_number": 12
+                    },
+                    {
+                        "start_line_number": 34,
+                        "start_column_number": 8,
+                        "end_line_number": 34,
                         "end_column_number": 12
                     }
                 ],
@@ -544,7 +544,32 @@ For this code snippet the endpoint returns the following JSON object:
                         "end_column_number": 6
                     }
                 ],
-                "references": [],
+                "references": [
+                    {
+                        "start_line_number": 30,
+                        "start_column_number": 34,
+                        "end_line_number": 30,
+                        "end_column_number": 41
+                    },
+                    {
+                        "start_line_number": 38,
+                        "start_column_number": 32,
+                        "end_line_number": 38,
+                        "end_column_number": 39
+                    },
+                    {
+                        "start_line_number": 30,
+                        "start_column_number": 50,
+                        "end_line_number": 30,
+                        "end_column_number": 57
+                    },
+                    {
+                        "start_line_number": 27,
+                        "start_column_number": 15,
+                        "end_line_number": 27,
+                        "end_column_number": 22
+                    }
+                ],
                 "is_builtin": false
             },
             {
