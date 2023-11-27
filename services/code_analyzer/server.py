@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=['GET'])
 def route_index():
-    return {'message': "Hello, world!\n This is 'code_analyzer'"}, 200
+    return {'message': "Hello, world!\n This is 'code_analyzer'."}, 200
 
 
 @app.route("/analyze", methods=['GET'])
