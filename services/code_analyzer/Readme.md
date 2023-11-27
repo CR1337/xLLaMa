@@ -651,11 +651,11 @@ This are the variables defined in the code snippet.
 
 ##### `assigned_self_members`
 
-This are the members of all `self` objects that a value was assigned to.
+This are the members of all `self` objects that a value was assigned to but only if that member was not defined in the class.
 
 ##### `assigned_class_members`
 
-This are the members of all `cls` objects that a value was assigned to.
+This are the members of all `cls` objects that a value was assigned to but only if that member was not defined in the class.
 
 ##### `undefined_references`
 
