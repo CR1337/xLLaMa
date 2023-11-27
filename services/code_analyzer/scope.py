@@ -11,16 +11,17 @@ class Definition:
     id: str
     nodes: List[ast.AST]
     references: Set[ast.AST]
+    is_builtin: bool
 
     def to_json(self) -> Dict[str, Any]:
         return {
             "id": self.id,
             "defined_at": [
                 {
-                    "start_line_number": node.lineno,
-                    "start_column_number": node.col_offset,
-                    "end_line_number": node.end_lineno,
-                    "end_column_number": node.end_col_offset
+                    "start_line_number": node.lineno if node else None,
+                    "start_column_number": node.col_offset if node else None,
+                    "end_line_number": node.end_lineno if node else None,
+                    "end_column_number": node.end_col_offset if node else None
                 }
                 for node in self.nodes
             ],
@@ -32,7 +33,8 @@ class Definition:
                     "end_column_number": reference.end_col_offset
                 }
                 for reference in self.references
-            ]
+            ],
+            "is_builtin": self.is_builtin
         }
 
 
@@ -69,7 +71,7 @@ class Scope:
     def create_builtin_scope(cls) -> Scope:
         scope = Scope(None, None)
         scope.imported_names = [
-            Definition(name, [None], set())
+            Definition(name, [None], set(), True)
             for name in builtins.__dict__.keys()
         ]
         scope.is_builtin = True
@@ -124,7 +126,7 @@ class Scope:
         self.is_builtin = False
 
     def add_imported_name(self, id: str, node: ast.AST):
-        self.imported_names.append(Definition(id, [node], set()))
+        self.imported_names.append(Definition(id, [node], set(), False))
 
     def add_defined_function(
         self,
@@ -132,20 +134,22 @@ class Scope:
         function_definition: ast.FunctionDef | ast.AsyncFunctionDef
     ):
         self.defined_functions.append(Definition(
-            id, [function_definition], set()
+            id, [function_definition], set(), False
         ))
 
     def add_defined_class(self, id: str, class_definition: ast.ClassDef):
-        self.defined_classes.append(Definition(id, [class_definition], set()))
+        self.defined_classes.append(Definition(
+            id, [class_definition], set(), False
+        ))
 
     def add_possibly_defined_variable(self, id: str, node: ast.AST):
         self.possibly_defined_variables.append(Definition(
-            id, [node], set()
+            id, [node], set(), False
         ))
 
     def add_defined_variable(self, id: str, node: ast.AST):
         self.defined_variables.append(Definition(
-            id, [node], set()
+            id, [node], set(), False
         ))
 
     def add_used_reference(self, reference: ast.Name):
@@ -210,40 +214,21 @@ class Scope:
             reference.id in global_name
             for global_name in self.global_names
         ):
-            if definition := self._find_definition_in_scope(
-                reference.id, self.global_scope
-            ):
-                definition.references.update([reference])
-            else:
-                self.undefined_references.append(reference)
+            self.global_scope.add_used_reference(reference)
         elif any(
             reference.id in nonlocal_name
             for nonlocal_name in self.nonlocal_names
         ):
-            if definition := self._find_definition_in_scope_chain(
-                reference.id, self.parent
-            ):
-                definition.references.update([reference])
-            else:
-                self.undefined_references.append(reference)
+            self.parent.add_used_reference(reference)
         elif definition := self._find_definition_in_scope(reference.id, self):
             if definition.nodes[0] is not reference:
                 definition.references.update([reference])
-        elif definition := self._find_definition_in_scope_chain(
-            reference.id, self.parent
-        ):
-            if definition.nodes[0] is not reference:
-                definition.references.update([reference])
-        elif definition := self._find_definition_in_scope(
-            reference.id, self.global_scope
-        ):
-            if definition.nodes[0] is not reference:
-                definition.references.update([reference])
+        elif self not in (self.global_scope, self.builtin_scope):
+            self.parent.add_used_reference(reference)
         elif definition := self._find_definition_in_scope(
             reference.id, self.builtin_scope
         ):
-            if definition.nodes[0] is not reference:
-                definition.references.update([reference])
+            definition.references.update([reference])
         else:
             self.undefined_references.append(reference)
 
@@ -264,7 +249,7 @@ class Scope:
             else:
                 remaining_members[id] = nodes
         for id, assign_nodes in member_assignments.items():
-            definition = Definition(id, assign_nodes, set())
+            definition = Definition(id, assign_nodes, set(), False)
             for nodes in remaining_members[id]:
                 definition.references.update(nodes)
                 del remaining_members[id]
@@ -289,3 +274,21 @@ class Scope:
         if self.is_builtin:
             child.is_global = True
         self.children.append(child)
+
+    def remove_unused_definitions(self):
+        to_remove = []
+        for definition in self.definitions:
+            if len(definition.references) == 0:
+                to_remove.append(definition)
+        self.imported_names = [
+            d for d in self.imported_names if d not in to_remove
+        ]
+        self.defined_functions = [
+            d for d in self.defined_functions if d not in to_remove
+        ]
+        self.defined_classes = [
+            d for d in self.defined_classes if d not in to_remove
+        ]
+        self.defined_variables = [
+            d for d in self.defined_variables if d not in to_remove
+        ]
