@@ -32,3 +32,9 @@ services:
       - ollama
     env_file:
       - services/llm_facade/.env
+
+  code_analyzer:
+    build: services/code_analyzer
+    container_name: code_analyzer
+    ports:
+      - 8082:5001
