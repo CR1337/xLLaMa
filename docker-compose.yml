@@ -22,6 +22,7 @@ services:
       - 8080:5173
     depends_on:
       - llm_facade
+      - code_analyzer
 
   llm_facade:
     build: services/llm_facade
@@ -30,7 +31,6 @@ services:
       - 8081:5000
     depends_on:
       - ollama
-      - code_analyzer
     env_file:
       - services/llm_facade/.env
 
