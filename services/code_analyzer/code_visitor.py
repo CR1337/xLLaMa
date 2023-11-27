@@ -135,7 +135,6 @@ class CodeVisitor(ast.NodeVisitor):
             node_copy = node
             while isinstance(node_copy.value, ast.Attribute):
                 node_copy = node_copy.value
-            print(node_copy.attr)
             if node_copy.value.id == "self":
                 self._handle_self_member(node, node_copy.attr)
             elif node_copy.value.id == "cls":
