@@ -64,6 +64,15 @@ class Scope:
     def builtin_scope(self) -> Scope:
         return self.global_scope.parent
 
+    @property
+    def parent_classdef_scope(self) -> Scope | None:
+        scope = self
+        while not isinstance(scope.node, ast.ClassDef):
+            scope = scope.parent
+            if scope.is_global or scope.is_builtin:
+                return None
+        return scope
+
     def __init__(self, node: ast.AST, parent: Scope):
         self.node = node
 
@@ -123,24 +132,36 @@ class Scope:
         self.used_references.append(reference)
 
     def add_self_member(self, node: ast.AST, id: str):
-        if id not in self.self_members:
-            self.self_members[id] = []
-        self.self_members[id].append(node)
+        scope = self.parent_classdef_scope
+        if scope is None:
+            return
+        if id not in scope.self_members:
+            scope.self_members[id] = []
+        scope.self_members[id].append(node)
 
     def add_class_member(self, node: ast.AST, id: str):
-        if id not in self.class_members:
-            self.class_members[id] = []
-        self.class_members[id].append(node)
+        scope = self.parent_classdef_scope
+        if scope is None:
+            return
+        if id not in scope.class_members:
+            scope.class_members[id] = []
+        scope.class_members[id].append(node)
 
     def add_self_member_assignment(self, node: ast.AST, id: str):
-        if id not in self.self_member_assignments:
-            self.self_member_assignments[id] = []
-        self.self_member_assignments[id].append(node)
+        scope = self.parent_classdef_scope
+        if scope is None:
+            return
+        if id not in scope.self_member_assignments:
+            scope.self_member_assignments[id] = []
+        scope.self_member_assignments[id].append(node)
 
     def add_class_member_assignment(self, node: ast.AST, id: str):
-        if id not in self.class_member_assignments:
-            self.class_member_assignments[id] = []
-        self.class_member_assignments[id].append(node)
+        scope = self.parent_classdef_scope
+        if scope is None:
+            return
+        if id not in scope.class_member_assignments:
+            scope.class_member_assignments[id] = []
+        scope.class_member_assignments[id].append(node)
 
     def handle_possibly_defined_variables(self):
         for definition in self.possibly_defined_variables:
@@ -217,13 +238,19 @@ class Scope:
                 remaining_members[id] = nodes
         for id, assign_nodes in member_assignments.items():
             definition = Definition(id, assign_nodes, set(), False)
-            for nodes in remaining_members[id]:
-                definition.references.update(nodes)
+            for nodes in remaining_members.get(id, []):
+                definition.references.update([nodes])
                 del remaining_members[id]
             assigned_members.append(definition)
         for nodes in remaining_members.values():
             for node in nodes:
                 self.undefined_references.append(node)
+        to_remove = []
+        for member in assigned_members:
+            if len(member.references) == 0:
+                to_remove.append(member)
+        for member in to_remove:
+            assigned_members.remove(member)
 
     def handle_members(self):
         self._handle_members(

@@ -11,7 +11,7 @@ def visit_sub_scope(func: Callable[[CodeVisitor, ast.AST], None]):
     @wraps(func)
     def wrapper(self, node: ast.AST):
         is_classdef = isinstance(node, ast.ClassDef)
-        is_functiondef = not is_classdef and isinstance(
+        is_functiondef = isinstance(
             node, (ast.FunctionDef, ast.AsyncFunctionDef)
         )
         scope = Scope(node, self.scopes.peek())
@@ -135,6 +135,7 @@ class CodeVisitor(ast.NodeVisitor):
             node_copy = node
             while isinstance(node_copy.value, ast.Attribute):
                 node_copy = node_copy.value
+            print(node_copy.attr)
             if node_copy.value.id == "self":
                 self._handle_self_member(node, node_copy.attr)
             elif node_copy.value.id == "cls":
@@ -223,8 +224,7 @@ class CodeVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Attribute(self, node: ast.Attribute):
-        if self.nested_attributes.is_empty():
-            self.scopes.peek().add_used_reference(node.value)
+        self._visit_attribute_or_name(node)
         self.nested_attributes.push(node)
         self.generic_visit(node)
         self.nested_attributes.pop()
