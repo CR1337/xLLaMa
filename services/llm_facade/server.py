@@ -54,7 +54,7 @@ def _build_llm_request(request_: Request) -> LlmRequest:
 
 @app.route('/', methods=['GET'])
 def route_index():
-    return {'message': 'Hello, world!'}, 200
+    return {'message': "Hello, world! This is 'llm_facade'."}, 200
 
 
 @app.route('/models', methods=['GET'])

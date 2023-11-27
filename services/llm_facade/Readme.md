@@ -10,7 +10,7 @@ This service provides an abstraction for the Open AI and the Ollama interface. I
 ### `GET /`
 This endpoint only exists for debugging purposes. It doesn't take any further parameters and always returns
 ```json
-{"message": "Hello, world!"}
+{"message": "Hello, world! This is 'llm_facade'."}
 ```
 
 ### `GET /models`
