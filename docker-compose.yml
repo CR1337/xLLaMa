@@ -7,6 +7,8 @@ services:
     container_name: ollama
     ports:
       - 12345:11434
+    volumes:
+      - ./volumes/ollama:/root/.ollama
     # deploy:
     #   resources:
     #     reservations:
@@ -39,3 +41,21 @@ services:
     container_name: code_analyzer
     ports:
       - 8082:5001
+
+  db:
+    image: postgres:12.1
+    container_name: db
+    ports:
+      - 5432:5432
+    env_file:
+      - services/db/.env
+    volumes:
+      - ./volumes/db-data:/var/lib/postgresql
+
+  db_interface:
+    build: services/db_interface
+    container_name: db_interface
+    ports:
+      - 8083:5002
+    depends_on:
+      - db

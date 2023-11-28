@@ -3,3 +3,5 @@
 *.pyc
 .vscode
 __pycache__
+volumes/**
+!volumes/.gitkeep
