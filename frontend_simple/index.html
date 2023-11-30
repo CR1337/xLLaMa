@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xLLaMa Example Generation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>xLLaMa</h1>
+    </header>
+
+    <div class="container">
+        <div id="leftColumn" class="column">
+
+            <div id="apiSection">
+                <label for="apiInput">API / Framework:</label>
+                <button onclick="showFunctions('pandas'); setAPIInputText('pandas')">pandas</button>
+                <button onclick="showFunctions('Hugging Face'); setAPIInputText('Hugging Face')">Hugging Face</button>
+                <button onclick="showFunctions('numpy'); setAPIInputText('numpy')">numpy</button>
+                <button onclick="clearFunctions(); setAPIInputText('')">other</button>
+                <input type="text" id="apiInput" name="API" placeholder="API / Framework">
+            </div>
+
+            <div id="functionContainer"></div>
+
+            <div id="functionForm">
+                <label for="selectedFunction">Function:</label>
+                <input type="text" id="selectedFunction" placeholder="Function name">
+                <button onclick="loadOutput()" id="generateButton" type="button">Generate Example</button>
+                <div id="tabsContainer">
+                    <button>GPT 4</button>
+                    <button>GPT 3.5</button>
+                    <button>codeLLama</button>
+                </div>
+                <div id="outputContainer">
+                    <p id="output">Generated example will appear here.</p>
+                </div>
+            </div>
+
+            <div id="ratingSection" class="hidden">
+                <button id="positive" type="button">👍</button>
+                <button id="negative" type="button" onclick="showNegativeFeedback()">👎</button>
+                <button id="tooLong" type="button" class="hidden">Too long</button>
+                <button id="tooShort" type="button" class="hidden">Too short</button>
+            </div>
+
+        </div>
+        <div id="rightColumn" class="column">
+            
+            <div id="contextSection">
+                <label for="contextInput">Context (optional):</label>
+                <input type="text" id="contextInput" placeholder="Context">
+            </div>
+
+            <div id="feedbackSection">
+                <div id="explanationSection">
+                    <button id="explainButton" onclick="loadExplanation()" disabled>Explain</button>
+                    <div id="explanationContainer">
+                        <p id="explanation">Explanation will appear here.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
