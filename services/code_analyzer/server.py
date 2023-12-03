@@ -1,5 +1,6 @@
 from flask import Flask, request
 from code_analyzer import CodeAnalyzer
+import os
 
 
 app = Flask(__name__)
@@ -23,4 +24,8 @@ def route_analyze():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(
+        host='0.0.0.0',
+        port=int(os.environ.get('CODE_ANALYZER_INTERNAL_PORT')),
+        debug=True
+    )

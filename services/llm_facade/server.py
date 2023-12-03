@@ -2,6 +2,7 @@ from flask import Flask, request, Request, Response
 from llm_request import LlmRequest, OpenAiRequest, OllamaRequest
 from config import Defaults
 from openai import AuthenticationError
+import os
 
 app = Flask(__name__)
 
@@ -108,4 +109,8 @@ def route_generate_stream():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get('LLM_FACADE_INTERNAL_PORT')),
+        debug=True
+    )
