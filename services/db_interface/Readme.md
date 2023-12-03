@@ -1,65 +1,80 @@
-# Entity Relationship Diagram of Database
+# Database Interface
+
+## Entity Relationship Diagram of Database
 
 ```mermaid
 erDiagram
-    framework {
+    Framework {
         text id PK
         datetime created_at
         datetime updated_at
         text name
         text url
     }
-    llm {
+    Llm {
         text id PK
         datetime created_at
         datetime updated_at
         text name
     }
-    framework_item {
+    FrameworkItem {
         text id PK
         datetime created_at
         datetime updated_at
         text name
         text url
         text description
-        text framework_id FK
+        text framework FK
     }
-    prompt_part {
+    PromptPart {
+        text id PK
+        datetime created_at
+        datetime updated_at
+        text text
+        text prompt_part_type FK
+    }
+    PromptPartType {
         text id PK
         datetime created_at
         datetime updated_at
         text name
-        text text
     }
-    prompt_part_usage {
+    PromptPartUsage {
         text id PK
         datetime created_at
         datetime updated_at
         integer position
-        text prompt_part_id FK
-        text prediction_id FK
+        text prompt_part FK
+        text prediction FK
     }
-    follow_up_reason {
+    FollowUp {
+        text id PK
+        datetime created_at
+        datetime updated_at
+        text parent_prediction FK
+        text follow_up_reason FK
+    }
+    FollowUpReason {
         text id PK
         datetime created_at
         datetime updated_at
         text name
     }
-    stop_sequence {
+    StopSequence {
         text id PK
         datetime created_at
         datetime updated_at
         text text
-        text prediction_id FK
+        text prediction FK
     }
-    stop_sequence_usage {
+    StopSequenceUsage {
         text id PK
         datetime created_at
         datetime updated_at
-        text stop_sequence_id FK
-        text prediction_id FK
+        text stop_sequence FK
+        text prediction FK
     }
-    prediction {
+    Prediction {
         text id PK
         datetime created_at
         datetime updated_at
@@ -69,12 +84,10 @@ erDiagram
         integer seed
         float temperature
         float top_p
-        text parent_id FK
-        text follow_up_reason_id FK
-        text framework_item_id FK
-        text llm_id FK
+        text framework_item FK
+        text llm FK
     }
-    code_snippet {
+    CodeSnippet {
         text id PK
         datetime created_at
         datetime updated_at
@@ -100,15 +113,15 @@ erDiagram
         text cyclomytic_complexity_rank
         float maintainability_index_score
         text maintainability_index_rank
-        text prediction_id FK
+        text prediction FK
     }
-    symbol_definition_type {
+    SymbolDefinitionType {
         text id PK
         datetime created_at
         datetime updated_at
         text name
     }
-    symbol_definition {
+    SymbolDefinition {
         text id PK
         datetime created_at
         datetime updated_at
@@ -118,17 +131,17 @@ erDiagram
         integer start_column
         integer end_column
         boolean is_builtin
-        text code_snippet_id FK
-        text symbol_definition_type_id FK
+        text code_snippet FK
+        text symbol_definition_type FK
     }
-    symbol_definition_reference {
+    SymbolDefinitionReference {
         text id PK
         datetime created_at
         datetime updated_at
-        text symbol_definition_id FK
-        text symbol_reference_id FK
+        text symbol_definition FK
+        text symbol_reference FK
     }
-    symbol_reference {
+    SymbolReference {
         text id PK
         datetime created_at
         datetime updated_at
@@ -137,7 +150,7 @@ erDiagram
         integer start_column
         integer end_column
     }
-    undefined_symbol_reference {
+    UndefinedSymbolReference {
         text id PK
         datetime created_at
         datetime updated_at
@@ -146,39 +159,46 @@ erDiagram
         integer end_line
         integer start_column
         integer end_column
-        text code_snippet_id FK
+        text code_snippet FK
     }
-    user_rating_type {
+    UserRatingType {
         text id PK
         datetime created_at
         datetime updated_at
         text name
     }
-    user_rating {
+    UserRating {
         text id PK
         datetime created_at
         datetime updated_at
         float value
         text user_rating_type FK
-        text prediction_id FK
+        text prediction FK
     }
 
-    framework ||--o{ framework_item : "has"
-    prediction ||--|{ prompt_part_usage: "was prompted with"
-    prompt_part ||--o{ prompt_part_usage: "is used in"
-    prediction ||--o{ code_snippet: "generated"
-    prediction ||--o| prediction: "is follow up"
-    follow_up_reason ||--o{ prediction: "is reason for"
-    framework_item ||--o{ prediction: "is target for"
-    llm ||--o{ prediction: "generated"
-    symbol_definition }o--|| code_snippet: "is defined in"
-    undefined_symbol_reference }o--|| code_snippet: "is used in"
-    symbol_reference }o--|| symbol_definition_reference: "references"
-    symbol_definition }o--|| symbol_definition_reference: "references"
-    prediction ||--o{ stop_sequence_usage: "uses"
-    stop_sequence ||--o{ stop_sequence_usage: "is used in"
-    user_rating }o--|| user_rating_type: "is of type"
-    prediction ||--o{ user_rating: "has"
-    symbol_definition }o--|| symbol_definition_type: "is of type"
+    Framework ||--o{ FrameworkItem : "has"
+    Prediction ||--|{ PromptPartUsage: "was prompted with"
+    PromptPart ||--o{ PromptPartUsage: "is used in"
+    Prediction ||--o{ CodeSnippet: "generated"
+
+
+    FollowUpReason ||--o{ FollowUp: "is reason for"
+    Prediction }o--|| FollowUp: "is follow up of"
+    Prediction ||--o{  FollowUp: "is parent of"
+
+
+    FrameworkItem ||--o{ Prediction: "is target for"
+    Llm ||--o{ Prediction: "generated"
+    SymbolDefinition }o--|| CodeSnippet: "is defined in"
+    UndefinedSymbolReference }o--|| CodeSnippet: "is used in"
+    SymbolReference }o--|| SymbolDefinitionReference: "references"
+    SymbolDefinition }o--|| SymbolDefinitionReference: "references"
+    Prediction ||--o{ StopSequenceUsage: "uses"
+    StopSequence ||--o{ StopSequenceUsage: "is used in"
+    UserRating }o--|| UserRatingType: "is of type"
+    Prediction ||--o{ UserRating: "has"
+    SymbolDefinition }o--|| SymbolDefinitionType: "is of type"
+    PromptPart }o--|| PromptPartType: "is of type"
 
 ```
+
