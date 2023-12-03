@@ -5,8 +5,8 @@ class Config:
 
     STREAM_RETRY_PERIOD: int = 3000  # ms
     OPENAI_API_KEY: str = os.getenv('OPENAI_API_KEY')
-    OLLAMA_ADDRESS: str = os.getenv('OLLAMA_ADDRESS')
-    OLLAMA_PORT: int = int(os.getenv('OLLAMA_PORT'))
+    OLLAMA_ADDRESS: str = "ollama"
+    OLLAMA_PORT: int = int(os.getenv('OLLAMA_INTERNAL_PORT'))
 
 
 class Defaults:

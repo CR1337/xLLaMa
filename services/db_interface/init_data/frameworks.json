@@ -1,0 +1,14 @@
+[
+    {
+        "name": "pandas",
+        "url": "https://pandas.pydata.org/docs/reference/index.html"
+    },
+    {
+        "name": "Hugging Face",
+        "url": "https://huggingface.co/docs"
+    },
+    {
+        "name": "numpy",
+        "url": "https://numpy.org/doc/stable/reference/index.html"
+    }
+]

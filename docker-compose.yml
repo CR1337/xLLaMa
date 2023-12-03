@@ -6,7 +6,11 @@ services:
     image: ollama/ollama
     container_name: ollama
     ports:
-      - 12345:11434
+      - ${OLLAMA_EXTERNAL_PORT}:${OLLAMA_INTERNAL_PORT}
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/ollama:/root/.ollama
     # deploy:
     #   resources:
     #     reservations:
@@ -19,23 +23,51 @@ services:
     build: services/frontend
     container_name: frontend
     ports:
-      - 8080:5173
+      - ${FRONTEND_EXTERNAL_PORT}:${FRONTEND_INTERNAL_PORT}
+    env_file:
+      - .env
     depends_on:
       - llm_facade
       - code_analyzer
+      - db_interface
 
   llm_facade:
     build: services/llm_facade
     container_name: llm_facade
     ports:
-      - 8081:5000
+      - ${LLM_FACADE_EXTERNAL_PORT}:${LLM_FACADE_INTERNAL_PORT}
     depends_on:
       - ollama
+      - db_interface
     env_file:
-      - services/llm_facade/.env
+      - .env
 
   code_analyzer:
     build: services/code_analyzer
     container_name: code_analyzer
     ports:
-      - 8082:5001
+      - ${CODE_ANALYZER_EXTERNAL_PORT}:${CODE_ANALYZER_INTERNAL_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - db_interface
+
+  db:
+    image: postgres:12.1
+    container_name: db
+    ports:
+      - ${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/db-data:/var/lib/postgresql
+
+  db_interface:
+    build: services/db_interface
+    container_name: db_interface
+    ports:
+      - ${DB_INTERFACE_EXTERNAL_PORT}:${DB_INTERFACE_INTERNAL_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - db
