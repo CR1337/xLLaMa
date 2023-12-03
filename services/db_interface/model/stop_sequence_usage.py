@@ -3,6 +3,8 @@ from peewee import DeferredForeignKey
 
 
 class StopSequenceUsage(BaseModel):
+    class Meta:
+        table_name = "StopSequenceUsage"
 
     stop_sequence = DeferredForeignKey(
         'StopSequence', backref='_stop_sequence_usages'

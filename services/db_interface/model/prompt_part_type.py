@@ -4,6 +4,8 @@ from typing import List
 
 
 class PromptPartType(BaseModel):
+    class Meta:
+        table_name = "PromptPartType"
 
     name = TextField(unique=True)
 

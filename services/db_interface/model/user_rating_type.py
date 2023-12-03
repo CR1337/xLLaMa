@@ -4,6 +4,8 @@ from typing import List
 
 
 class UserRatingType(BaseModel):
+    class Meta:
+        table_name = "UserRatingType"
 
     name = TextField(unique=True)
 

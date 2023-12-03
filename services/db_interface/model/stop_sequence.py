@@ -4,6 +4,8 @@ from typing import List
 
 
 class StopSequence(BaseModel):
+    class Meta:
+        table_name = 'StopSequence'
 
     text = TextField(unique=True)
 

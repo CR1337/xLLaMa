@@ -3,6 +3,8 @@ from peewee import IntegerField, DeferredForeignKey
 
 
 class PromptPartUsage(BaseModel):
+    class Meta:
+        table_name = "PromptPartUsage"
 
     position = IntegerField()
     prompt_part = DeferredForeignKey(

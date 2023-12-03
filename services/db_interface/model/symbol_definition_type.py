@@ -4,6 +4,8 @@ from typing import List
 
 
 class SymbolDefinitionType(BaseModel):
+    class Meta:
+        table_name = "SymbolDefinitionType"
 
     name = TextField(unique=True)
 

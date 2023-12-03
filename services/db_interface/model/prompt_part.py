@@ -4,6 +4,8 @@ from typing import List
 
 
 class PromptPart(BaseModel):
+    class Meta:
+        table_name = "PromptPart"
 
     text = TextField()
     prompt_part_type = DeferredForeignKey(

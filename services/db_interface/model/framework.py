@@ -4,6 +4,8 @@ from typing import List
 
 
 class Framework(BaseModel):
+    class Meta:
+        table_name = "Framework"
 
     name = TextField(unique=True)
     url = TextField(null=True)

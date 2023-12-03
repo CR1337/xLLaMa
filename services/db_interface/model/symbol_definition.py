@@ -4,6 +4,8 @@ from typing import List
 
 
 class SymbolDefinition(BaseModel):
+    class Meta:
+        table_name = "SymbolDefinition"
 
     symbol = TextField()
     start_line = IntegerField(null=True)

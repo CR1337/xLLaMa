@@ -3,6 +3,8 @@ from peewee import DeferredForeignKey
 
 
 class SymbolDefinitionReference(BaseModel):
+    class Meta:
+        table_name = "SymbolDefinitionReference"
 
     symbol_definition = DeferredForeignKey(
         'SymbolDefinition', backref='_symbol_definition_references'

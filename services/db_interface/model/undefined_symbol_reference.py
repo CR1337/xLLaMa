@@ -3,6 +3,8 @@ from peewee import TextField, IntegerField, DeferredForeignKey
 
 
 class UndefinedSymbolReference(BaseModel):
+    class Meta:
+        table_name = "UndefinedSymbolReference"
 
     symbol = TextField()
     start_line = IntegerField()

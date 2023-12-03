@@ -3,6 +3,8 @@ from peewee import FloatField, DeferredForeignKey
 
 
 class UserRating(BaseModel):
+    class Meta:
+        table_name = "UserRating"
 
     value = FloatField()
     user_rating_type = DeferredForeignKey(

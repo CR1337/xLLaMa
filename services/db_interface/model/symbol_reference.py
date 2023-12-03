@@ -4,6 +4,8 @@ from typing import List
 
 
 class SymbolReference(BaseModel):
+    class Meta:
+        table_name = "SymbolReference"
 
     start_line = IntegerField()
     end_line = IntegerField()
