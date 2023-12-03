@@ -1,8 +1,13 @@
-from model.base_model import db
+from model import (
+    db, BaseModel, PromptPartType, UserRatingType, Framework, FrameworkItem,
+    SymbolDefinitionType, FollowUpType
+)
+from models import models
 from functools import wraps
-from peewee import Model
 from typing import Callable, Dict, List, Type
 import sys
+from peewee import DeferredForeignKey
+import json
 
 
 def db_session(func):
@@ -19,14 +24,21 @@ def db_session(func):
     return wrapper
 
 
-TABLES: List[Type[Model]] = [
-
-]
+TABLES: List[Type[BaseModel]] = [
+    model for model in models.values()
+] + [BaseModel]
 
 
 @db_session
 def create_db():
+    for table in TABLES:
+        DeferredForeignKey.resolve(table)
     db.create_tables(TABLES)
+    for table in TABLES:
+        for key in dir(table):
+            attr = getattr(table, key)
+            if isinstance(attr, DeferredForeignKey):
+                table._schema.create_foreign_key(attr)
 
 
 @db_session
@@ -41,7 +53,37 @@ def reset_db():
 
 @db_session
 def populate_db():
-    ...  # TODO
+    with open("init_data/follow_up_types.json", 'r') as file:
+        follow_up_types_data = json.load(file)
+    for follow_up_type in follow_up_types_data:
+        FollowUpType.from_dict(follow_up_type)
+
+    with open("init_data/symbol_definition_types.json", 'r') as file:
+        symbol_definition_types_data = json.load(file)
+    for symbol_definition_type in symbol_definition_types_data:
+        SymbolDefinitionType.from_dict(symbol_definition_type)
+
+    with open("init_data/prompt_part_types.json", 'r') as file:
+        prompt_part_types_data = json.load(file)
+    for prompt_part_type in prompt_part_types_data:
+        PromptPartType.from_dict(prompt_part_type)
+
+    with open("init_data/user_rating_types.json", 'r') as file:
+        user_rating_types_data = json.load(file)
+    for user_rating_type in user_rating_types_data:
+        UserRatingType.from_dict(user_rating_type)
+
+    with open("init_data/frameworks.json", 'r') as file:
+        frameworks_data = json.load(file)
+    with open("init_data/framework_items.json", 'r') as file:
+        framework_items_data = json.load(file)
+    for framework, framework_items in zip(
+        frameworks_data, framework_items_data
+    ):
+        framework = Framework.from_dict(framework)
+        for framework_item in framework_items:
+            framework_item["framework_id"] = framework.id
+            FrameworkItem.from_dict(framework_item)
 
 
 COMMANDS: Dict[str, Callable[[None], None]] = {
