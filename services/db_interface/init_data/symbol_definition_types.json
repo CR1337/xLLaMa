@@ -1,0 +1,20 @@
+[
+    {
+        "name": "import"
+    },
+    {
+        "name": "class"
+    },
+    {
+        "name": "function"
+    },
+    {
+        "name": "variable"
+    },
+    {
+        "name": "self_assignment"
+    },
+    {
+        "name": "cls_assignment"
+    }
+]

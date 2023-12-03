@@ -626,7 +626,7 @@ For this code snippet the endpoint returns the following JSON object:
             "single_comments": 0,
             "blank": 15
         },
-        "halsted": {
+        "halstead": {
             "h1": 1,
             "h2": 2,
             "N1": 1,
@@ -720,9 +720,9 @@ This contains purely text based metrics that are desribed in the follwing table:
 |`single_comments`|The amount of single line comments.|
 |`blank`|The amount of blank lines.|
 
-##### `halsted`
+##### `halstead`
 
-This contains the Halsted metrics that are described in the follwing table:
+This contains the halstead metrics that are described in the follwing table:
 
 |Metric|Description|
 |------|-----------|
