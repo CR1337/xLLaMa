@@ -14,7 +14,7 @@ class FrameworkItem(BaseModel):
     framework = DeferredForeignKey('Framework', backref='_framework_items')
 
     @property
-    def preditions(self) -> List[BaseModel]:
+    def predictions(self) -> List[BaseModel]:
         from model import Prediction
         return self.get_backref_list_1_n(
             Prediction,

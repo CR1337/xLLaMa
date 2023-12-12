@@ -36,7 +36,7 @@ def route_model_by_name(model_name: str, name: str):
         return model_not_found_response(model_name)
 
     try:
-        instance = model.get_by_name(name)
+        instance = model.get(model.name == name)
     except DoesNotExist:
         return instance_not_found_response(model, name)
 

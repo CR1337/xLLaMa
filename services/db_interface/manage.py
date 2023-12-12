@@ -96,7 +96,7 @@ def main():
         exit(1)
     func = COMMANDS.get(args[0], None)
     if func is None:
-        print("Usage: python manage.py [drop|create|reset]")
+        print("Usage: python manage.py [drop|create|reset|populate]")
         exit(1)
     else:
         func()

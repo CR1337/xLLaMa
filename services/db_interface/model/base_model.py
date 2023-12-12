@@ -55,13 +55,26 @@ class BaseModel(Model):
         else:
             return value
 
+    def _models_to_ids(
+        self, models: List[BaseModel] | BaseModel
+    ) -> List[str] | str:
+        if isinstance(models, BaseModel):
+            return models.id
+        elif (
+            isinstance(models, list)
+            and isinstance(models[0] if len(models) else None, BaseModel)
+        ):
+            return [model.id for model in models]
+        else:
+            return models
+
     def to_dict(self) -> Dict[str, Any]:
         cls = self.__class__
         return {
             key: (
                 getattr(self, key).id
                 if isinstance(getattr(cls, key), DeferredForeignKey)
-                else getattr(self, key)
+                else self._models_to_ids(getattr(self, key))
             )
             for key in dir(cls)
             if (

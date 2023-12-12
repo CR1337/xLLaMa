@@ -87,3 +87,4 @@ services:
       - TEST=${TEST}
     depends_on:
       - db
+      - test_db

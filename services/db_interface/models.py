@@ -17,7 +17,6 @@ models: Dict[str, Type[BaseModel]] = {
     "code_snippets": CodeSnippet,
     "user_ratings": UserRating,
     "frameworks": Framework,
-    "follow_up_types": FollowUpType,
     "prompt_part_usages": PromptPartUsage,
     "stop_sequence_usages": StopSequenceUsage,
     "symbol_definitions": SymbolDefinition,
