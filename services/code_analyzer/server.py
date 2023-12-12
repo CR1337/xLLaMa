@@ -1,6 +1,8 @@
 from flask import Flask, request
 from code_analyzer import CodeAnalyzer
+from code_extractor import CodeExtractor
 import os
+from db_interface import DbInterface
 
 
 app = Flask(__name__)
@@ -11,16 +13,27 @@ def route_index():
     return {'message': "Hello, world!\n This is 'code_analyzer'."}, 200
 
 
-@app.route("/analyze", methods=['GET'])
-def route_analyze():
+@app.route("/analyze-prediction", methods=['POST'])
+def route_analyze_prediction():
     if (data := request.get_json()) is None:
         return {'message': "no json body"}, 400
-    if (code := data.get('code')) is None:
-        return {'message': "no code"}, 400
+    if (prediction_id := data.get('prediction')) is None:
+        return {'message': "no prediction_id"}, 400
 
-    analyzer = CodeAnalyzer(code)
-    analyzer.analyze()
-    return analyzer.to_json(), 200
+    prediction = DbInterface.get_prediction(prediction_id)
+
+    extractor = CodeExtractor(prediction['text'])
+    extractor.extract()
+
+    code_snippet_ids = []
+    for code_snippet in extractor.code_snippets:
+        analyzer = CodeAnalyzer(code_snippet)
+        analyzer.analyze()
+        code_snippet_id = DbInterface.persist_code_snippet(
+            code_snippet, analyzer, prediction_id
+        )
+        code_snippet_ids.append(code_snippet_id)
+    return {"code_snippet_ids": code_snippet_ids}, 200
 
 
 if __name__ == "__main__":

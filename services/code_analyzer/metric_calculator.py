@@ -1,23 +1,21 @@
 import radon.raw as radon_raw
 import radon.metrics as radon_metrics
 import radon.complexity as radon_complexity
-import ast
+from code_snippet import CodeSnippet
 from typing import Any, Dict
 
 
 class MetricCalculator:
 
-    code: str
-    tree: ast.Module
+    code_snippet: CodeSnippet
 
     raw_report: radon_raw.Module
     halstead_report: radon_metrics.HalsteadReport
     cyclometic_complexity: float
     maintainability_index: float
 
-    def __init__(self, code: str, tree: ast.Module):
-        self.tree = tree
-        self.code = code
+    def __init__(self, code_snippet: CodeSnippet):
+        self.code_snippet = code_snippet
 
         self.raw_report = None
         self.halstead_report = None
@@ -25,10 +23,12 @@ class MetricCalculator:
         self.maintainability_index = None
 
     def calculate(self):
-        self.raw_report = radon_raw.analyze(self.code)
-        self.halstead_report = radon_metrics.h_visit_ast(self.tree).total
+        self.raw_report = radon_raw.analyze(self.code_snippet.code)
+        self.halstead_report = radon_metrics.h_visit_ast(
+            self.code_snippet.tree
+        ).total
         self.cyclometic_complexity = radon_complexity.average_complexity(
-            radon_complexity.cc_visit_ast(self.tree)
+            radon_complexity.cc_visit_ast(self.code_snippet.tree)
         )
         self.maintainability_index = radon_metrics.mi_compute(
             self.halstead_report.volume,

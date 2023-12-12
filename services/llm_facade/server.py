@@ -1,10 +1,15 @@
-from flask import Flask, request, Request, Response
-from llm_request import LlmRequest, OpenAiRequest, OllamaRequest
-from config import Defaults
-from openai import AuthenticationError
+from flask import Flask, request, Response, Request
+from flask_cors import CORS
+from db_interface import DbInterface
 import os
+from typing import List, Type
+from llm_request import (
+    LlmRequest, OpenAiRequest, OllamaRequest, REQUEST_CLASSES
+)
+
 
 app = Flask(__name__)
+CORS(app)
 
 
 class RequestError(Exception):
@@ -17,39 +22,45 @@ class RequestError(Exception):
         super().__init__()
 
 
-def _build_llm_request(request_: Request) -> LlmRequest:
-    if (data := request_.get_json()) is None:
-        raise RequestError("no json body", 400)
-    if (model := data.get('model')) is None:
+def get_model_names() -> List[str]:
+    model_names = OllamaRequest.model_names()
+    if OpenAiRequest.available:
+        model_names += OpenAiRequest.model_names()
+    return model_names
+
+
+def persist_models():
+    persisted_models = DbInterface.llm_names()
+    for model in get_model_names():
+        if model not in persisted_models:
+            DbInterface.post_llm(model)
+
+
+def build_llm_request(request: Request) -> LlmRequest:
+    llm_id = request.args.get('model')
+    if llm_id is None:
         raise RequestError("no model", 400)
-    if (prompt := data.get('prompt')) is None:
-        raise RequestError("no prompt", 400)
+    llm = DbInterface.get_llm(llm_id)
 
-    system_prompt = data.get('system_prompt')
-    repeat_penalty = data.get('repeat_penalty', Defaults.REPEAT_PENALTY)
-    max_tokens = data.get('max_tokens', Defaults.MAX_TOKENS)
-    seed = data.get('seed', Defaults.SEED)
-    temperature = data.get('temperature', Defaults.TEMPERATURE)
-    top_p = data.get('top_p', Defaults.TOP_P)
-    stop = data.get('stop')
-
-    if OllamaRequest.has_model(model):
-        llm_request_class = OllamaRequest
-    elif OpenAiRequest.has_model(model):
-        llm_request_class = OpenAiRequest
-    else:
-        raise RequestError("model not available", 404)
+    for request_class in REQUEST_CLASSES:
+        if request_class.has_model(llm['name']):
+            llm_request_class: Type[LlmRequest] = request_class
+            break
+        else:
+            raise RequestError("model not available", 400)
 
     return llm_request_class(
-        model,
-        prompt,
-        system_prompt,
-        repeat_penalty,
-        max_tokens,
-        seed,
-        temperature,
-        top_p,
-        stop
+        repeat_penalty=request.args.get('repeat_penalty'),
+        max_tokens=request.args.get('max_tokens'),
+        seed=request.args.get('seed'),
+        temperature=request.args.get('temperature'),
+        top_p=request.args.get('top_p'),
+        llm=llm_id,
+        framework_item=request.args.get('framework_item'),
+        system_prompt=request.args.get('system_prompt'),
+        parent_follow_up=request.args.get('parent_follow_up'),
+        prompt_parts=request.args.get('prompt_parts'),
+        stop_sequences=request.args.get('stop_sequences')
     )
 
 
@@ -58,57 +69,47 @@ def route_index():
     return {'message': "Hello, world! This is 'llm_facade'."}, 200
 
 
-@app.route('/models', methods=['GET'])
+@app.route('/models', methods=['GET', 'POST'])
 def route_models():
-    models = OllamaRequest.models()
-    try:
-        models += OpenAiRequest.models()
-    except AuthenticationError:
-        pass
-    return {'models': models}, 200
+    if request.method == 'GET':
+        return {'models': get_model_names()}, 200
 
 
-@app.route("/install-model", methods=['GET'])
+@app.route("/models/install", methods=['GET'])
 def route_install_model():
-    model = request.get_json().get('model')
+    model = request.args.get('model')
     if model is None:
-        return {'error': 'no model'}, 400
-    stream = request.get_json().get('stream', True)
+        return {'message': 'no model'}, 400
+    stream = request.args.get('stream', True)
+    if model not in get_model_names():
+        DbInterface.post_llm(model)
     if stream:
         return Response(
-            OllamaRequest.install_model(model, stream),
+            OllamaRequest.install_model_stream(model),
             mimetype='text/event-stream'
         )
     else:
-        return OllamaRequest.install_model(model, stream)
+        return OllamaRequest.install_model(model)
 
 
 @app.route('/generate', methods=['GET'])
 def route_generate():
     try:
-        llm_request = _build_llm_request(request)
+        llm_request = build_llm_request(request)
     except RequestError as error:
         return {'message': error.message}, error.http_code
     else:
-        llm_response = llm_request.generate()
-        return llm_response.to_json(), 200
-
-
-@app.route("/generate-stream", methods=['GET'])
-def route_generate_stream():
-    try:
-        llm_request = _build_llm_request(request)
-    except RequestError as error:
-        return {'message': error.message}, error.http_code
-    else:
-        llm_response_stream = llm_request.generate_stream()
-        return Response(
-            llm_response_stream.sse_generator(),
-            mimetype='text/event-stream'
-        )
+        if request.args.get('stream', True):
+            return Response(
+                llm_request.generate_stream(),
+                mimetype='text/event-stream'
+            )
+        else:
+            return llm_request.generate()
 
 
 if __name__ == "__main__":
+    persist_models()
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get('LLM_FACADE_INTERNAL_PORT')),

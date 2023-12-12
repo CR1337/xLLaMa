@@ -9,6 +9,7 @@ class Prediction(BaseModel):
         table_name = 'Prediction'
 
     text = TextField()
+    token_amount = IntegerField()
     repeat_penalty = FloatField()
     max_tokens = IntegerField()
     seed = IntegerField()
@@ -21,6 +22,9 @@ class Prediction(BaseModel):
         'FrameworkItem', backref='_predictions'
     )
     llm = DeferredForeignKey('Llm', backref='_predictions')
+    system_prompt = DeferredForeignKey(
+        'SystemPrompt', backref='_predictions'
+    )
 
     @property
     def follow_up_children(self) -> List[BaseModel]:

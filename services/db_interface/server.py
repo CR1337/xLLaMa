@@ -1,6 +1,6 @@
 from flask import Flask, request
 from model.base_model import db, BaseModel
-from models import models
+from models import models, by_name_models
 from typing import Any, Dict, Type, Tuple
 from manage import create_db, drop_db, reset_db, populate_db
 from peewee import DoesNotExist
@@ -30,6 +30,19 @@ def instance_not_found_response(
     }, 404
 
 
+@app.route("/<model_name>/by-name/<name>", methods=['GET'])
+def route_model_by_name(model_name: str, name: str):
+    if (model := by_name_models.get(model_name, None)) is None:
+        return model_not_found_response(model_name)
+
+    try:
+        instance = model.get_by_name(name)
+    except DoesNotExist:
+        return instance_not_found_response(model, name)
+
+    return instance.to_dict(), 200
+
+
 @app.route("/<model_name>", methods=['GET', 'POST'])
 def route_model(model_name: str):
     if (model := models.get(model_name, None)) is None:
@@ -39,8 +52,14 @@ def route_model(model_name: str):
         return [instance.to_dict() for instance in model.select()], 200
 
     elif request.method == 'POST':
-        instance = model.from_dict(request.json)
-        return {"id": instance.id}, 201
+        if isinstance(request.json, dict):
+            instance = model.from_dict(request.json)
+            return {"id": instance.id}, 201
+        elif isinstance(request.json, list):
+            instances = [model.from_dict(data) for data in request.json]
+            return {"ids": [instance.id for instance in instances]}, 201
+        else:
+            return {"message": "Invalid json body."}, 400
 
 
 @app.route("/<model_name>/<id>", methods=['GET', 'PATCH', 'DELETE'])
@@ -98,7 +117,10 @@ if __name__ == "__main__":
             print(f"Waiting for database to be ready... ({i})", flush=True)
             sleep(1)
         else:
-            print("Connected to database.", flush=True)
+            if os.environ.get('TEST') == "1":
+                print("Connected to test database.", flush=True)
+            else:
+                print("Connected to database.", flush=True)
             break
 
     app.run(

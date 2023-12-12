@@ -33,12 +33,6 @@ erDiagram
         text text
         text prompt_part_type FK
     }
-    PromptPartType {
-        text id PK
-        datetime created_at
-        datetime updated_at
-        text name
-    }
     PromptPartUsage {
         text id PK
         datetime created_at
@@ -47,14 +41,20 @@ erDiagram
         text prompt_part FK
         text prediction FK
     }
+    SystemPrompt {
+        text id PK
+        datetime created_at
+        datetime updated_at
+        text text
+    }
     FollowUp {
         text id PK
         datetime created_at
         datetime updated_at
         text parent_prediction FK
-        text follow_up_reason FK
+        text follow_up_type FK
     }
-    FollowUpReason {
+    FollowUpType {
         text id PK
         datetime created_at
         datetime updated_at
@@ -79,6 +79,7 @@ erDiagram
         datetime created_at
         datetime updated_at
         text text
+        integer token_amount
         float repeat_penalty
         integer max_tokens
         integer seed
@@ -86,12 +87,15 @@ erDiagram
         float top_p
         text framework_item FK
         text llm FK
+        text system_prompt FK
     }
     CodeSnippet {
         text id PK
         datetime created_at
         datetime updated_at
         text code
+        integer start_line_number
+        integer end_line_number
         integer raw_loc
         integer raw_lloc
         integer raw_sloc
@@ -182,9 +186,11 @@ erDiagram
     Prediction ||--o{ CodeSnippet: "generated"
 
 
-    FollowUpReason ||--o{ FollowUp: "is reason for"
+    FollowUpType ||--o{ FollowUp: "is of type"
     Prediction }o--|| FollowUp: "is follow up of"
     Prediction ||--o{  FollowUp: "is parent of"
+
+    Prediction }o--|| SystemPrompt: "is prompted with"
 
 
     FrameworkItem ||--o{ Prediction: "is target for"
@@ -198,7 +204,6 @@ erDiagram
     UserRating }o--|| UserRatingType: "is of type"
     Prediction ||--o{ UserRating: "has"
     SymbolDefinition }o--|| SymbolDefinitionType: "is of type"
-    PromptPart }o--|| PromptPartType: "is of type"
 
 ```
 

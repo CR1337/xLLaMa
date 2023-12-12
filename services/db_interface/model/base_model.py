@@ -10,14 +10,26 @@ from peewee import (
     Field,
     DeferredForeignKey
 )
+import os
 
-db: PostgresqlDatabase = PostgresqlDatabase(
-    database="postgres",
-    user="postgres",
-    password="password",
-    host="db",
-    port=5432
-)
+db: PostgresqlDatabase
+
+if os.environ.get('TEST') == "1":
+    db = PostgresqlDatabase(
+        database=os.environ.get('POSTGRES_DB'),
+        user=os.environ.get('POSTGRES_USER'),
+        password=os.environ.get('POSTGRES_PASSWORD'),
+        host=os.environ.get('TEST_POSTGRES_HOST'),
+        port=os.environ.get('TEST_DB_INTERNAL_PORT')
+    )
+else:
+    db = PostgresqlDatabase(
+        database=os.environ.get('POSTGRES_DB'),
+        user=os.environ.get('POSTGRES_USER'),
+        password=os.environ.get('POSTGRES_PASSWORD'),
+        host=os.environ.get('POSTGRES_HOST'),
+        port=os.environ.get('DB_INTERNAL_PORT')
+    )
 
 
 class BaseModel(Model):

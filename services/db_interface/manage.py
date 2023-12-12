@@ -1,5 +1,5 @@
 from model import (
-    db, BaseModel, PromptPartType, UserRatingType, Framework, FrameworkItem,
+    db, BaseModel, UserRatingType, Framework, FrameworkItem,
     SymbolDefinitionType, FollowUpType
 )
 from models import models
@@ -62,11 +62,6 @@ def populate_db():
         symbol_definition_types_data = json.load(file)
     for symbol_definition_type in symbol_definition_types_data:
         SymbolDefinitionType.from_dict(symbol_definition_type)
-
-    with open("init_data/prompt_part_types.json", 'r') as file:
-        prompt_part_types_data = json.load(file)
-    for prompt_part_type in prompt_part_types_data:
-        PromptPartType.from_dict(prompt_part_type)
 
     with open("init_data/user_rating_types.json", 'r') as file:
         user_rating_types_data = json.load(file)

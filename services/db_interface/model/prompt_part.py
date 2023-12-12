@@ -1,5 +1,5 @@
 from model.base_model import BaseModel
-from peewee import TextField, DeferredForeignKey
+from peewee import TextField
 from typing import List
 
 
@@ -8,9 +8,6 @@ class PromptPart(BaseModel):
         table_name = "PromptPart"
 
     text = TextField()
-    prompt_part_type = DeferredForeignKey(
-        'PromptPartType', backref='_prompt_parts'
-    )
 
     @property
     def prompt_part_usages(self) -> List[BaseModel]:
