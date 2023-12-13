@@ -1,47 +1,16 @@
 import pytest
 from ..util.db_interaction import (
     reset_database, populate_database, get_instances, get_instance_by_name,
-    post_instance, get_instance
+    get_instance, post_dummy_data, DUMMY_DATA
 )
-import json
 from typing import Dict, Any
 
 
 class TestDatabaseInterfaceGet:
 
-    DUMMY_DATA_FILENAME: str = "tests/db_interface/test_02_get_db_dummy_data.json"
-    with open(DUMMY_DATA_FILENAME, "r") as file:
-        DUMMY_DATA = json.load(file)
-
     @pytest.fixture()
     def instance_ids(self, method_wrapper: None) -> Dict[str, Any]:
-        instance_ids = {}
-        for model_name, data in self.DUMMY_DATA.items():
-            processed_data = {}
-
-            for key, value in data.items():
-                if value is None:
-                    processed_data[key] = None
-                elif not isinstance(value, str):
-                    processed_data[key] = value
-                elif value.startswith("$"):
-                    processed_data[key] = instance_ids[value[1:]]
-                elif value.startswith("§"):
-                    data_model_name, type_name = value[1:].split(":")
-                    processed_data[key] = get_instance_by_name(
-                        data_model_name, type_name
-                    )[0]["id"]
-                else:
-                    processed_data[key] = value
-
-            model_name_for_post = (
-                model_name[1:] if model_name.startswith("@") else model_name
-            )
-
-            instance_ids[model_name] = post_instance(
-                model_name_for_post, processed_data
-            )[0]["id"]
-        return instance_ids
+        return post_dummy_data()
 
     @pytest.fixture(autouse=True)
     def method_wrapper(self):
@@ -52,10 +21,12 @@ class TestDatabaseInterfaceGet:
         populate_database()
 
     @pytest.mark.parametrize("model_name, instance_name", [
-        ("follow_up_types", "too_short"),
-        ("symbol_definition_types", "import"),
-        ("user_rating_types", "sentiment"),
-        ("llms", "llm_1")
+        ("follow_up_types", "test_follow_up_types"),
+        ("symbol_definition_types", "test_symbol_definition_types"),
+        ("user_rating_types", "test_user_rating_types"),
+        ("llms", "test_llms"),
+        ("frameworks", "test_frameworks"),
+        ("framework_items", "test_framework_items")
     ])
     def test_get_instance_by_name(
         self, model_name: str, instance_name: str, instance_ids: Dict[str, Any]
@@ -138,7 +109,7 @@ class TestDatabaseInterfaceGet:
         assert isinstance(response["created_at"], str)
         assert "updated_at" in response
         assert isinstance(response["updated_at"], str)
-        for key, value in self.DUMMY_DATA[model_name].items():
+        for key, value in DUMMY_DATA[model_name].items():
             if key.startswith("@"):
                 continue
             if value is None:
@@ -147,10 +118,5 @@ class TestDatabaseInterfaceGet:
                 assert response[key] == value
             elif value.startswith("$"):
                 assert response[key] == instance_ids[value[1:]]
-            elif value.startswith("§"):
-                data_model_name, type_name = value[1:].split(":")
-                assert response[key] == get_instance_by_name(
-                    data_model_name, type_name
-                )[0]["id"]
             else:
                 assert response[key] == value

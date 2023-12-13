@@ -1,16 +1,18 @@
 from model.base_model import BaseModel
-from peewee import DeferredForeignKey
+from model.prediction import Prediction
+from model.follow_up_type import FollowUpType
+from peewee import ForeignKeyField
 
 
 class FollowUp(BaseModel):
     class Meta:
         table_name = "FollowUp"
 
-    parent_prediction = DeferredForeignKey(
-        'Prediction', backref="_follow_up_children"
+    parent_prediction = ForeignKeyField(
+        Prediction, backref="_follow_up_children"
     )
-    follow_up_type = DeferredForeignKey(
-        'FollowUpType', backref="_follow_ups"
+    follow_up_type = ForeignKeyField(
+        FollowUpType, backref="_follow_ups"
     )
 
     @property

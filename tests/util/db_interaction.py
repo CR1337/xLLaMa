@@ -1,11 +1,16 @@
 import requests
 from tests.util.environment import environment
 from typing import Any, Dict, Tuple
+import json
 
 
 DB_INTERFACE_HOST = '127.0.0.1'
 DB_INTERFACE_PORT = environment['DB_INTERFACE_EXTERNAL_PORT']
 DB_INTERFACE_URL = f'http://{DB_INTERFACE_HOST}:{DB_INTERFACE_PORT}'
+
+DUMMY_DATA_FILENAME: str = "tests/util/dummy_data.json"
+with open(DUMMY_DATA_FILENAME, "r") as file:
+    DUMMY_DATA = json.load(file)
 
 
 def get_index() -> Tuple[Dict[str, Any], int]:
@@ -69,3 +74,25 @@ def patch_instance(
 def delete_instance(model_name: str, id: str) -> Tuple[Dict[str, Any], int]:
     response = requests.delete(f'{DB_INTERFACE_URL}/{model_name}/{id}')
     return response.json(), response.status_code
+
+
+def post_dummy_data() -> Dict[str, Any]:
+    instance_ids = {}
+    for model_name, data in DUMMY_DATA.items():
+        processed_data = {}
+        for key, value in data.items():
+            if value is None:
+                processed_data[key] = None
+            elif not isinstance(value, str):
+                processed_data[key] = value
+            elif value.startswith("$"):
+                processed_data[key] = instance_ids[value[1:]]
+            else:
+                processed_data[key] = value
+        model_name_for_post = (
+            model_name[1:] if model_name.startswith("@") else model_name
+        )
+        instance_ids[model_name] = post_instance(
+            model_name_for_post, processed_data
+        )[0]["id"]
+    return instance_ids

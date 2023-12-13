@@ -1,5 +1,6 @@
 from model.base_model import BaseModel
-from peewee import TextField, IntegerField, DeferredForeignKey
+from model.code_snippet import CodeSnippet
+from peewee import TextField, IntegerField, ForeignKeyField
 
 
 class UndefinedSymbolReference(BaseModel):
@@ -11,6 +12,6 @@ class UndefinedSymbolReference(BaseModel):
     end_line = IntegerField()
     start_column = IntegerField()
     end_column = IntegerField()
-    code_snippet = DeferredForeignKey(
-        'CodeSnippet', backref='_undefined_symbol_references'
+    code_snippet = ForeignKeyField(
+        CodeSnippet, backref='_undefined_symbol_references'
     )

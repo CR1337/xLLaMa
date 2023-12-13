@@ -1,6 +1,6 @@
 from model import (
     db, BaseModel, UserRatingType, Framework, FrameworkItem,
-    SymbolDefinitionType, FollowUpType
+    SymbolDefinitionType, FollowUpType, Prediction
 )
 from models import models
 from functools import wraps
@@ -31,14 +31,8 @@ TABLES: List[Type[BaseModel]] = [
 
 @db_session
 def create_db():
-    for table in TABLES:
-        DeferredForeignKey.resolve(table)
+    DeferredForeignKey.resolve(Prediction)
     db.create_tables(TABLES)
-    for table in TABLES:
-        for key in dir(table):
-            attr = getattr(table, key)
-            if isinstance(attr, DeferredForeignKey):
-                table._schema.create_foreign_key(attr)
 
 
 @db_session

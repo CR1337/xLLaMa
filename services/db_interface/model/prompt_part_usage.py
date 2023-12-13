@@ -1,5 +1,7 @@
 from model.base_model import BaseModel
-from peewee import IntegerField, DeferredForeignKey
+from model.prompt_part import PromptPart
+from model.prediction import Prediction
+from peewee import IntegerField, ForeignKeyField
 
 
 class PromptPartUsage(BaseModel):
@@ -7,9 +9,9 @@ class PromptPartUsage(BaseModel):
         table_name = "PromptPartUsage"
 
     position = IntegerField()
-    prompt_part = DeferredForeignKey(
-        'PromptPart', backref='_prompt_part_usages'
+    prompt_part = ForeignKeyField(
+        PromptPart, backref='_prompt_part_usages'
     )
-    prediction = DeferredForeignKey(
-        'Prediction', backref='_prompt_part_usages'
+    prediction = ForeignKeyField(
+        Prediction, backref='_prompt_part_usages'
     )

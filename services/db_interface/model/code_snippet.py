@@ -1,6 +1,7 @@
 from model.base_model import BaseModel
+from model.prediction import Prediction
 from peewee import (
-    TextField, IntegerField, FloatField, DeferredForeignKey, FixedCharField
+    TextField, IntegerField, FloatField, FixedCharField, ForeignKeyField
 )
 from typing import Tuple, List
 
@@ -42,7 +43,7 @@ class CodeSnippet(BaseModel):
     maintainability_index_rank = FixedCharField(
         max_length=1, choices=MAINTAINABILITY_INDEX_RANK_CHOICES
     )
-    prediction = DeferredForeignKey('Prediction', backref='_code_snippets')
+    prediction = ForeignKeyField(Prediction, backref='_code_snippets')
 
     @property
     def undefined_symbol_references(self) -> List[BaseModel]:

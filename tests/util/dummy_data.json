@@ -1,5 +1,27 @@
 {
-    "llms": {"name": "llm_1"},
+    "follow_up_types": {
+        "name": "test_follow_up_types"
+    },
+    "symbol_definition_types": {
+        "name": "test_symbol_definition_types"
+    },
+    "user_rating_types": {
+        "name": "test_user_rating_types"
+    },
+    "llms": {
+        "name": "test_llms"
+    },
+    "frameworks": {
+        "name": "test_frameworks",
+        "url": "https://example.com"
+    },
+    "framework_items": {
+        "name": "test_framework_items",
+        "url": "https://example.com/framework_items",
+        "description": "This is a framework item.",
+        "source": "This is a framework item source.",
+        "framework": "$frameworks"
+    },
     "@predictions": {
         "text": "This is a prediction.",
         "token_amount": 42,
@@ -9,7 +31,7 @@
         "temperature": 0.5,
         "top_p": 0.5,
         "parent_follow_up": null,
-        "framework_item": "§framework_items:DataFrame.size",
+        "framework_item": "$framework_items",
         "llm": "$llms",
         "system_prompt": null
     },
@@ -18,7 +40,7 @@
     },
     "follow_ups": {
         "parent_prediction": "$@predictions",
-        "follow_up_type": "§follow_up_types:too_short"
+        "follow_up_type": "$follow_up_types"
     },
     "stop_sequences": {
         "text": "This is a stop sequence."
@@ -35,7 +57,7 @@
         "temperature": 0.5,
         "top_p": 0.5,
         "parent_follow_up": "$follow_ups",
-        "framework_item": "§framework_items:DataFrame.size",
+        "framework_item": "$framework_items",
         "llm": "$llms",
         "system_prompt": "$system_prompts"
     },
@@ -44,13 +66,14 @@
         "prediction": "$predictions"
     },
     "prompt_part_usages": {
+        "position": 0,
         "prompt_part": "$prompt_parts",
         "prediction": "$predictions"
     },
     "user_ratings": {
         "prediction": "$predictions",
         "value": 1.0,
-        "user_rating_type": "§user_rating_types:sentiment"
+        "user_rating_type": "$user_rating_types"
     },
     "code_snippets": {
         "code": "This is a code snippet.",
@@ -93,8 +116,9 @@
         "end_line": 2,
         "start_column": 3,
         "end_column": 4,
+        "is_builtin": true,
         "code_snippet": "$code_snippets",
-        "symbol_definition_type": "§symbol_definition_types:import"
+        "symbol_definition_type": "$symbol_definition_types"
     },
     "symbol_references": {
         "start_line": 1,

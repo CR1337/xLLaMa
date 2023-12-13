@@ -3,7 +3,7 @@ from model.base_model import db, BaseModel
 from models import models, by_name_models
 from typing import Any, Dict, Type, Tuple
 from manage import create_db, drop_db, reset_db, populate_db
-from peewee import DoesNotExist
+from peewee import DoesNotExist, IntegrityError
 from time import sleep
 from itertools import count
 import os
@@ -52,14 +52,17 @@ def route_model(model_name: str):
         return [instance.to_dict() for instance in model.select()], 200
 
     elif request.method == 'POST':
-        if isinstance(request.json, dict):
-            instance = model.from_dict(request.json)
-            return {"id": instance.id}, 201
-        elif isinstance(request.json, list):
-            instances = [model.from_dict(data) for data in request.json]
-            return {"ids": [instance.id for instance in instances]}, 201
-        else:
-            return {"message": "Invalid json body."}, 400
+        try:
+            if isinstance(request.json, dict):
+                instance = model.from_dict(request.json)
+                return {"id": instance.id}, 201
+            elif isinstance(request.json, list):
+                instances = [model.from_dict(data) for data in request.json]
+                return {"ids": [instance.id for instance in instances]}, 201
+            else:
+                return {"message": "Invalid json body."}, 400
+        except IntegrityError as ex:
+            return {"message": str(ex)}, 400
 
 
 @app.route("/<model_name>/<id>", methods=['GET', 'PATCH', 'DELETE'])

@@ -1,5 +1,6 @@
 from model.base_model import BaseModel
-from peewee import TextField, DeferredForeignKey
+from model.framework import Framework
+from peewee import TextField, ForeignKeyField
 from typing import List
 
 
@@ -11,7 +12,7 @@ class FrameworkItem(BaseModel):
     url = TextField(null=True)
     description = TextField()
     source = TextField(null=True)
-    framework = DeferredForeignKey('Framework', backref='_framework_items')
+    framework = ForeignKeyField(Framework, backref='_framework_items')
 
     @property
     def predictions(self) -> List[BaseModel]:

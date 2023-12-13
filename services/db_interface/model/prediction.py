@@ -1,6 +1,11 @@
-from __future__ import annotations
 from model.base_model import BaseModel
-from peewee import TextField, FloatField, IntegerField, DeferredForeignKey
+from model.framework_item import FrameworkItem
+from model.llm import Llm
+from model.system_prompt import SystemPrompt
+# from model.follow_up import FollowUp
+from peewee import (
+    TextField, FloatField, IntegerField, ForeignKeyField, DeferredForeignKey
+)
 from typing import List
 
 
@@ -18,12 +23,12 @@ class Prediction(BaseModel):
     parent_follow_up = DeferredForeignKey(
         'FollowUp', backref='_follow_up_prediction', null=True
     )
-    framework_item = DeferredForeignKey(
-        'FrameworkItem', backref='_predictions'
+    framework_item = ForeignKeyField(
+        FrameworkItem, backref='_predictions'
     )
-    llm = DeferredForeignKey('Llm', backref='_predictions')
-    system_prompt = DeferredForeignKey(
-        'SystemPrompt', backref='_predictions', null=True
+    llm = ForeignKeyField(Llm, backref='_predictions')
+    system_prompt = ForeignKeyField(
+        SystemPrompt, backref='_predictions', null=True
     )
 
     @property

@@ -1,5 +1,7 @@
 from model.base_model import BaseModel
-from peewee import TextField, IntegerField, BooleanField, DeferredForeignKey
+from model.code_snippet import CodeSnippet
+from model.symbol_definition_type import SymbolDefinitionType
+from peewee import TextField, IntegerField, BooleanField, ForeignKeyField
 from typing import List
 
 
@@ -13,11 +15,11 @@ class SymbolDefinition(BaseModel):
     start_column = IntegerField(null=True)
     end_column = IntegerField(null=True)
     is_builtin = BooleanField()
-    code_snippet = DeferredForeignKey(
-        'CodeSnippet', backref='_symbol_definitions'
+    code_snippet = ForeignKeyField(
+        CodeSnippet, backref='_symbol_definitions'
     )
-    symbol_definition_type = DeferredForeignKey(
-        'SymbolDefinitionType', backref='_symbol_definitions'
+    symbol_definition_type = ForeignKeyField(
+        SymbolDefinitionType, backref='_symbol_definitions'
     )
 
     @property
