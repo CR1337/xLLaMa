@@ -1,0 +1,109 @@
+{
+    "llms": {"name": "llm_1"},
+    "@predictions": {
+        "text": "This is a prediction.",
+        "token_amount": 42,
+        "repeat_penalty": 0.5,
+        "max_tokens": 100,
+        "seed": 42,
+        "temperature": 0.5,
+        "top_p": 0.5,
+        "parent_follow_up": null,
+        "framework_item": "§framework_items:DataFrame.size",
+        "llm": "$llms",
+        "system_prompt": null
+    },
+    "prompt_parts": {
+        "text": "This is a prompt part."
+    },
+    "follow_ups": {
+        "parent_prediction": "$@predictions",
+        "follow_up_type": "§follow_up_types:too_short"
+    },
+    "stop_sequences": {
+        "text": "This is a stop sequence."
+    },
+    "system_prompts": {
+        "text": "This is a system prompt."
+    },
+    "predictions": {
+        "text": "This is a prediction.",
+        "token_amount": 42,
+        "repeat_penalty": 0.5,
+        "max_tokens": 100,
+        "seed": 42,
+        "temperature": 0.5,
+        "top_p": 0.5,
+        "parent_follow_up": "$follow_ups",
+        "framework_item": "§framework_items:DataFrame.size",
+        "llm": "$llms",
+        "system_prompt": "$system_prompts"
+    },
+    "stop_sequence_usages": {
+        "stop_sequence": "$stop_sequences",
+        "prediction": "$predictions"
+    },
+    "prompt_part_usages": {
+        "prompt_part": "$prompt_parts",
+        "prediction": "$predictions"
+    },
+    "user_ratings": {
+        "prediction": "$predictions",
+        "value": 1.0,
+        "user_rating_type": "§user_rating_types:sentiment"
+    },
+    "code_snippets": {
+        "code": "This is a code snippet.",
+        "start_line_number": 1,
+        "end_line_number": 2,
+        "raw_loc": 3,
+        "raw_lloc": 4,
+        "raw_sloc": 5,
+        "raw_comments": 6,
+        "raw_multi": 7,
+        "raw_single_comments": 8,
+        "raw_blank": 9,
+        "halstead_h1": 10,
+        "halstead_h2": 11,
+        "halstead_N1": 12,
+        "halstead_N2": 13,
+        "halstead_length": 14.0,
+        "halstead_volume": 15.0,
+        "halstead_difficulty": 16.0,
+        "halstead_effort": 17.0,
+        "halstead_time": 18.0,
+        "halstead_bugs": 19.0,
+        "cyclomatic_complexity_score": 20.0,
+        "cyclomatic_complexity_rank": "A",
+        "maintainability_index_score": 21.0,
+        "maintainability_index_rank": "A",
+        "prediction": "$predictions"
+    },
+    "undefined_symbol_references": {
+        "symbol": "This is an undefined symbol reference.",
+        "start_line": 1,
+        "end_line": 2,
+        "start_column": 3,
+        "end_column": 4,
+        "code_snippet": "$code_snippets"
+    },
+    "symbol_definitions": {
+        "symbol": "This is a symbol definition.",
+        "start_line": 1,
+        "end_line": 2,
+        "start_column": 3,
+        "end_column": 4,
+        "code_snippet": "$code_snippets",
+        "symbol_definition_type": "§symbol_definition_types:import"
+    },
+    "symbol_references": {
+        "start_line": 1,
+        "end_line": 2,
+        "start_column": 3,
+        "end_column": 4
+    },
+    "symbol_definition_references": {
+        "symbol_definition": "$symbol_definitions",
+        "symbol_reference": "$symbol_references"
+    }
+}

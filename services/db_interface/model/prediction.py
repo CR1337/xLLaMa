@@ -16,14 +16,14 @@ class Prediction(BaseModel):
     temperature = FloatField()
     top_p = FloatField()
     parent_follow_up = DeferredForeignKey(
-        'FollowUp', backref='_follow_up_prediction'
+        'FollowUp', backref='_follow_up_prediction', null=True
     )
     framework_item = DeferredForeignKey(
         'FrameworkItem', backref='_predictions'
     )
     llm = DeferredForeignKey('Llm', backref='_predictions')
     system_prompt = DeferredForeignKey(
-        'SystemPrompt', backref='_predictions'
+        'SystemPrompt', backref='_predictions', null=True
     )
 
     @property

@@ -22,9 +22,12 @@ class DockerController:
 
     @staticmethod
     def down():
+        environment = os.environ.copy()
+        environment["TEST"] = "1"
         process = subprocess.Popen(
             ['docker', 'compose', 'down'],
             stdout=subprocess.PIPE,
+            env=environment
         )
         process.wait()
         for line in process.stdout:

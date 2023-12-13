@@ -31,5 +31,7 @@ by_name_models: Dict[str, Type[BaseModel]] = {
     "follow_up_types": FollowUpType,
     "symbol_definition_types": SymbolDefinitionType,
     "user_rating_types": UserRatingType,
-    "llms": Llm
+    "llms": Llm,
+    "frameworks": Framework,
+    "framework_items": FrameworkItem
 }

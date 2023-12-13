@@ -10,7 +10,7 @@ class FrameworkItem(BaseModel):
     name = TextField(unique=True)
     url = TextField(null=True)
     description = TextField()
-    source = TextField()
+    source = TextField(null=True)
     framework = DeferredForeignKey('Framework', backref='_framework_items')
 
     @property

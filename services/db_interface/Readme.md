@@ -65,7 +65,6 @@ erDiagram
         datetime created_at
         datetime updated_at
         text text
-        text prediction FK
     }
     StopSequenceUsage {
         text id PK
