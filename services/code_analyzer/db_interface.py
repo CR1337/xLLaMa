@@ -3,7 +3,7 @@ import os
 from code_snippet import CodeSnippet
 from code_analyzer import CodeAnalyzer
 from itertools import product
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 
 class DbInterface:
