@@ -49,12 +49,9 @@ def build_llm_request(request: Request) -> LlmRequest:
         else:
             raise RequestError("model not available", 400)
 
-    print(request.args, flush=True)
-
     prompt_parts = request.args.get('prompt_parts')
     if prompt_parts is not None:
         prompt_parts = prompt_parts.split(',')
-    print("PROMPT_PARTS", prompt_parts, flush=True)
 
     stop_sequences = request.args.get('stop_sequences')
     if stop_sequences is not None:

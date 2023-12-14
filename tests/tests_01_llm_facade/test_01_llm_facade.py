@@ -1,4 +1,3 @@
-import requests
 import pytest
 from ..util.db_interaction import (
     post_instance, reset_database, populate_database, get_instance,
@@ -24,11 +23,11 @@ class TestLlmFacade:
         populate_database()
 
     def test_models(self):
-        response = requests.get("http://localhost:5001/models")
-        assert response.status_code == 200
-        assert "models" in response.json()
-        assert isinstance(response.json()["models"], list)
-        for model in response.json()["models"]:
+        response, status_code = get_models()
+        assert status_code == 200
+        assert "models" in response
+        assert isinstance(response["models"], list)
+        for model in response["models"]:
             assert isinstance(model, str)
 
     def test_generate(self, model_name: str):

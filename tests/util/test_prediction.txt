@@ -1,0 +1,28 @@
+Here is the first code snippet:
+
+```
+from itertools import product
+
+class Test:
+
+    def __init__(self):
+        self.x = [1, 2]
+        self.y = ['a', 'b']
+
+    def test(self):
+        for x, y in product(self.x, self.y):
+            print(x, y)
+```
+
+And here comes the second code snippet.
+This time without backticks:
+
+x = 42
+
+def test():
+    global x
+    x += 1
+    print(x)
+    print(y)
+
+This is some text at the end.

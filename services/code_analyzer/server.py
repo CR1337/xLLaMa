@@ -33,7 +33,7 @@ def route_analyze_prediction():
             code_snippet, analyzer, prediction_id
         )
         code_snippet_ids.append(code_snippet_id)
-    return {"code_snippet_ids": code_snippet_ids}, 200
+    return {"code_snippets": code_snippet_ids}, 200
 
 
 if __name__ == "__main__":

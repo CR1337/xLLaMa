@@ -27,12 +27,3 @@ class CodeAnalyzer:
             "analysis": self.code_visitor.to_json(),
             "metrics": self.metric_calculator.to_json()
         }
-
-
-if __name__ == "__main__":
-    import json
-    with open("services/code_analyzer/test.py") as f:
-        code = f.read()
-    analyzer = CodeAnalyzer(code)
-    analyzer.analyze()
-    print(json.dumps(analyzer.to_json()))

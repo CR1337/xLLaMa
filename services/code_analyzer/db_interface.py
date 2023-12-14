@@ -14,7 +14,7 @@ class DbInterface:
     @classmethod
     def symbol_definition_type_by_name(cls, name: str) -> Dict[str, Any]:
         return requests.get(
-            f"{cls.DB_INTERFACE_URL}/symbol_definition_types/by_name/{name}"
+            f"{cls.DB_INTERFACE_URL}/symbol_definition_types/by-name/{name}"
         ).json()
 
     @classmethod
@@ -199,10 +199,10 @@ class DbInterface:
             halstead_time=analyzer.metric_calculator.halstead_report.time,
             halstead_bugs=analyzer.metric_calculator.halstead_report.bugs,
             cyclomatic_complexity_score=(
-                analyzer.metric_calculator.cyclometic_complexity
+                analyzer.metric_calculator.cyclometric_complexity
             ),
             cyclomatic_complexity_rank=(
-                analyzer.metric_calculator.cyclometic_complexity_rank
+                analyzer.metric_calculator.cyclometric_complexity_rank
             ),
             maintainability_index_score=(
                 analyzer.metric_calculator.maintainability_index
@@ -218,7 +218,7 @@ class DbInterface:
                 symbol=undefined_reference.id,
                 start_line=undefined_reference.lineno,
                 end_line=undefined_reference.end_lineno,
-                start_column=undefined_reference.column,
+                start_column=undefined_reference.col_offset,
                 end_column=undefined_reference.end_col_offset,
                 code_snippet=code_snippet['id']
             )
@@ -227,7 +227,7 @@ class DbInterface:
             (analyzer.code_visitor.imports, "import"),
             (analyzer.code_visitor.functions, "function"),
             (analyzer.code_visitor.classes, "class"),
-            (analyzer.code_visitor.variables, "variable")
+            (analyzer.code_visitor.variables, "variable"),
             (analyzer.code_visitor.assigned_self_members, "self_assignment"),
             (analyzer.code_visitor.assigned_class_members, "cls_assignment")
         ):
@@ -238,10 +238,10 @@ class DbInterface:
                 symbol_definitions = [
                     cls.post_symbol_definition(
                         symbol=definition.id,
-                        start_line=node.lineno,
-                        end_line=node.end_lineno,
-                        start_column=node.col_offset,
-                        end_column=node.end_col_offset,
+                        start_line=node.lineno if node else None,
+                        end_line=node.end_lineno if node else None,
+                        start_column=node.col_offset if node else None,
+                        end_column=node.end_col_offset if node else None,
                         is_builtin=definition.is_builtin,
                         code_snippet=code_snippet['id'],
                         symbol_definition_type=symbol_definition_type['id']

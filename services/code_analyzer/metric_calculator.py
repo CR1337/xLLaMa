@@ -11,8 +11,16 @@ class MetricCalculator:
 
     raw_report: radon_raw.Module
     halstead_report: radon_metrics.HalsteadReport
-    cyclometic_complexity: float
+    cyclometric_complexity: float
     maintainability_index: float
+
+    @property
+    def cyclometric_complexity_rank(self) -> str:
+        return radon_complexity.cc_rank(self.cyclometric_complexity)
+
+    @property
+    def maintainability_index_rank(self) -> str:
+        return radon_metrics.mi_rank(self.maintainability_index)
 
     def __init__(self, code_snippet: CodeSnippet):
         self.code_snippet = code_snippet
@@ -27,12 +35,12 @@ class MetricCalculator:
         self.halstead_report = radon_metrics.h_visit_ast(
             self.code_snippet.tree
         ).total
-        self.cyclometic_complexity = radon_complexity.average_complexity(
+        self.cyclometric_complexity = radon_complexity.average_complexity(
             radon_complexity.cc_visit_ast(self.code_snippet.tree)
         )
         self.maintainability_index = radon_metrics.mi_compute(
             self.halstead_report.volume,
-            self.cyclometic_complexity,
+            self.cyclometric_complexity,
             self.raw_report.sloc,
             self.raw_report.comments
         )
@@ -61,13 +69,11 @@ class MetricCalculator:
                 'bugs': self.halstead_report.bugs
             },
             'cyclomatic_complexity': {
-                'score': self.cyclometic_complexity,
-                'rank': radon_complexity.cc_rank(
-                    self.cyclometic_complexity
-                ),
+                'score': self.cyclometric_complexity,
+                'rank': self.cyclometric_complexity_rank,
             },
             'maintainability_index': {
                 'score': self.maintainability_index,
-                'rank': radon_metrics.mi_rank(self.maintainability_index)
+                'rank': self.maintainability_index_rank
             }
         }

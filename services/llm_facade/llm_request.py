@@ -289,7 +289,6 @@ class OllamaRequest(LlmRequest):
         return server_sent_event_generator()
 
     def _translate_event(self, event: Any) -> Dict[str, Any]:
-        print(event, flush=True)
         return json.dumps({
             'token': json.loads(event)['response'],
         })
