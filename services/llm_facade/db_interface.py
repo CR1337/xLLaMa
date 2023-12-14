@@ -17,6 +17,13 @@ class DbInterface:
         return response.json()
 
     @classmethod
+    def delete_llm(cls, name: str) -> Dict[str, Any]:
+        response = requests.delete(
+            f"{cls.DB_INTERFACE_URL}/llms/by-name/{name}"
+        )
+        return response.json()
+
+    @classmethod
     def get_llms(cls) -> List[Dict[str, Any]]:
         response = requests.get(f"{cls.DB_INTERFACE_URL}/llms")
         return response.json()

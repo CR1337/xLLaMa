@@ -59,16 +59,18 @@ class LlmRequest(ABC):
         stop_sequences: List[str] | None
     ):
         self._repeat_penalty = (
-            repeat_penalty if repeat_penalty else self.DEFAULT_REPEAT_PENALTY
+            float(repeat_penalty)
+            if repeat_penalty
+            else self.DEFAULT_REPEAT_PENALTY
         )
         self._max_tokens = (
-            max_tokens if max_tokens else self.DEFAULT_MAX_TOKENS
+            int(max_tokens) if max_tokens else self.DEFAULT_MAX_TOKENS
         )
-        self._seed = seed if seed else self.DEFAULT_SEED
+        self._seed = int(seed) if seed else self.DEFAULT_SEED
         self._temperature = (
-            temperature if temperature else self.DEFAULT_TEMPERATURE
+            float(temperature) if temperature else self.DEFAULT_TEMPERATURE
         )
-        self._top_p = top_p if top_p else self.DEFAULT_TOP_P
+        self._top_p = float(top_p) if top_p else self.DEFAULT_TOP_P
         self._llm_id = llm
         self._framework_item_id = framework_item
         self._system_prompt_id = system_prompt
@@ -76,11 +78,9 @@ class LlmRequest(ABC):
         self._prompt_part_ids = prompt_parts
         self._stop_sequence_ids = stop_sequences
 
-        self._prompt = "\n".join([p['text'] for p in prompt_parts])
-
         self._text = ""
         self._token_amount = 0
-        self._prediction = None
+        self._prediction_id = None
 
         self._llm = DbInterface.get_llm(llm)
         self._framework_item = DbInterface.get_framework_item(framework_item)
@@ -96,13 +96,18 @@ class LlmRequest(ABC):
         )
 
         self._prompt_parts = [
-            DbInterface.get_prompt_part(id) for id in prompt_parts
+            DbInterface.get_prompt_part(id) for id in self._prompt_part_ids
         ]
         self._stop_sequences = (
-            [DbInterface.get_stop_sequence(id) for id in stop_sequences]
+            [
+                DbInterface.get_stop_sequence(id)
+                for id in self._stop_sequence_ids
+            ]
             if stop_sequences is not None
             else None
         )
+
+        self._prompt = "\n".join([p['text'] for p in self._prompt_parts])
 
     @abstractclassmethod
     def model_names(cls) -> List[str]:
@@ -142,7 +147,7 @@ class LlmRequest(ABC):
         self._persist_generation()
         yield ServerSentEvents.build_sse_data(
             "generation_success",
-            json.dumps({"prediction": self._prediction['id']}),
+            json.dumps({"prediction": self._prediction_id}),
             i + 1,
             OllamaRequest.STREAM_RETRY_PERIOD
         )
@@ -153,7 +158,7 @@ class LlmRequest(ABC):
         self._persist_stop_sequence_usages()
 
     def _persist_prediction(self) -> Dict[str, Any]:
-        self._prediction = DbInterface.post_prediction(
+        self._prediction_id = DbInterface.post_prediction(
             self._text,
             self._token_amount,
             self._repeat_penalty,
@@ -165,19 +170,21 @@ class LlmRequest(ABC):
             self._framework_item_id,
             self._llm_id,
             self._system_prompt_id
-        )
+        )['id']
 
     def _persist_prompt_part_usages(self) -> List[Dict[str, Any]]:
-        for prompt_part in self._prompt_parts:
+        for position, prompt_part in enumerate(self._prompt_parts):
             DbInterface.post_prompt_part_usage(
-                prompt_part['id'], self._prediction['id']
+                position,
+                prompt_part['id'],
+                self._prediction_id
             )
 
     def _persist_stop_sequence_usages(self) -> List[Dict[str, Any]]:
         if self._stop_sequences is not None:
             for stop_sequence in self._stop_sequences:
                 DbInterface.post_stop_sequence_usage(
-                    stop_sequence['id'], self._prediction['id']
+                    stop_sequence['id'], self._prediction_id
                 )
 
 
@@ -202,6 +209,14 @@ class OllamaRequest(LlmRequest):
             return {"status": status}, response.status_code
         llm = DbInterface.post_llm(name)
         return {"llm": llm['id']}, 200
+
+    @classmethod
+    def uninstall_model(cls, name: str) -> Tuple[Dict[str, Any], int]:
+        response = requests.delete(
+            f"{cls.URL}/api/delete",
+            json={"name": name}
+        )
+        return {}, response.status_code
 
     @classmethod
     def install_model_stream(cls, name: str) -> Generator[str, None, None]:
@@ -240,7 +255,7 @@ class OllamaRequest(LlmRequest):
             'stream': stream,
             'options': {
                 'repeat_penalty': self._repeat_penalty,
-                'max_tokens': self._max_tokens,
+                'num_predict': self._max_tokens,
                 'temperature': self._temperature,
                 'top_p': self._top_p
             }
@@ -259,7 +274,7 @@ class OllamaRequest(LlmRequest):
         self._text = response.json()['response']
         self._token_amount = response.json()['eval_count']
         self._persist_generation()
-        return {'prediction': self._prediction['id']}, 200
+        return {'prediction': self._prediction_id}, 200
 
     def generate_stream(self) -> Generator[str, None, None]:
         def server_sent_event_generator():
@@ -274,6 +289,7 @@ class OllamaRequest(LlmRequest):
         return server_sent_event_generator()
 
     def _translate_event(self, event: Any) -> Dict[str, Any]:
+        print(event, flush=True)
         return json.dumps({
             'token': json.loads(event)['response'],
         })
@@ -327,7 +343,7 @@ class OpenAiRequest(LlmRequest):
         self._text = response.choices[0].message.content
         self._token_amount = response.usage.completion_tokens
         self._persist_generation()
-        return {'prediction': self._prediction['id']}, 200
+        return {'prediction': self._prediction_id}, 200
 
     def generate_stream(self) -> Generator[str, None, None]:
         def server_sent_event_generator():

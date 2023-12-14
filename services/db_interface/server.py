@@ -30,7 +30,7 @@ def instance_not_found_response(
     }, 404
 
 
-@app.route("/<model_name>/by-name/<name>", methods=['GET'])
+@app.route("/<model_name>/by-name/<name>", methods=['GET', 'DELETE'])
 def route_model_by_name(model_name: str, name: str):
     if (model := by_name_models.get(model_name, None)) is None:
         return model_not_found_response(model_name)
@@ -40,7 +40,11 @@ def route_model_by_name(model_name: str, name: str):
     except DoesNotExist:
         return instance_not_found_response(model, name)
 
-    return instance.to_dict(), 200
+    if request.method == 'GET':
+        return instance.to_dict(), 200
+    elif request.method == 'DELETE':
+        instance.delete_instance()
+        return {}, 200
 
 
 @app.route("/<model_name>", methods=['GET', 'POST'])

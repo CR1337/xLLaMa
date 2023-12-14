@@ -49,6 +49,17 @@ def build_llm_request(request: Request) -> LlmRequest:
         else:
             raise RequestError("model not available", 400)
 
+    print(request.args, flush=True)
+
+    prompt_parts = request.args.get('prompt_parts')
+    if prompt_parts is not None:
+        prompt_parts = prompt_parts.split(',')
+    print("PROMPT_PARTS", prompt_parts, flush=True)
+
+    stop_sequences = request.args.get('stop_sequences')
+    if stop_sequences is not None:
+        stop_sequences = stop_sequences.split(',')
+
     return llm_request_class(
         repeat_penalty=request.args.get('repeat_penalty'),
         max_tokens=request.args.get('max_tokens'),
@@ -59,8 +70,8 @@ def build_llm_request(request: Request) -> LlmRequest:
         framework_item=request.args.get('framework_item'),
         system_prompt=request.args.get('system_prompt'),
         parent_follow_up=request.args.get('parent_follow_up'),
-        prompt_parts=request.args.get('prompt_parts'),
-        stop_sequences=request.args.get('stop_sequences')
+        prompt_parts=prompt_parts,
+        stop_sequences=stop_sequences,
     )
 
 
@@ -69,9 +80,10 @@ def route_index():
     return {'message': "Hello, world! This is 'llm_facade'."}, 200
 
 
-@app.route('/models', methods=['GET', 'POST'])
+@app.route('/models', methods=['GET'])
 def route_models():
     if request.method == 'GET':
+        persist_models()
         return {'models': get_model_names()}, 200
 
 
@@ -92,6 +104,19 @@ def route_install_model():
         return OllamaRequest.install_model(model)
 
 
+@app.route('/models/uninstall', methods=['GET'])
+def route_uninstall_model():
+    model = request.args.get('model')
+    if model is None:
+        return {'message': 'no model'}, 400
+    if model in get_model_names():
+        OllamaRequest.uninstall_model(model)
+        DbInterface.delete_llm(model)
+        return {}, 200
+    else:
+        return {'message': 'model not installed'}, 400
+
+
 @app.route('/generate', methods=['GET'])
 def route_generate():
     try:
@@ -99,7 +124,10 @@ def route_generate():
     except RequestError as error:
         return {'message': error.message}, error.http_code
     else:
-        if request.args.get('stream', True):
+        stream = request.args.get('stream', True) in (
+            'true', 'True', True, '1'
+        )
+        if stream:
             return Response(
                 llm_request.generate_stream(),
                 mimetype='text/event-stream'
