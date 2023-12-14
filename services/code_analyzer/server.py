@@ -15,9 +15,7 @@ def route_index():
 
 @app.route("/analyze-prediction", methods=['POST'])
 def route_analyze_prediction():
-    if (data := request.get_json()) is None:
-        return {'message': "no json body"}, 400
-    if (prediction_id := data.get('prediction')) is None:
+    if (prediction_id := request.args.get('prediction')) is None:
         return {'message': "no prediction_id"}, 400
 
     prediction = DbInterface.get_prediction(prediction_id)

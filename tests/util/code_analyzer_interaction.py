@@ -14,7 +14,6 @@ with open(TEST_PREDICTION_TEXT_FILENAME, "r") as file:
 
 def analyze_prediction(prediction_id: str) -> Tuple[Dict[str, Any], int]:
     response = requests.post(
-        f'{CODE_ANALYZER_URL}/analyze-prediction',
-        json={"prediction": prediction_id}
+        f'{CODE_ANALYZER_URL}/analyze-prediction?prediction={prediction_id}'
     )
     return response.json(), response.status_code
