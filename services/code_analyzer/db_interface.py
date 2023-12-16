@@ -28,8 +28,8 @@ class DbInterface:
     def post_code_snippet(
         cls,
         code: str,
-        start_line_number: int,
-        end_line_number: int,
+        start_line: int,
+        end_line: int,
         raw_loc: int,
         raw_lloc: int,
         raw_sloc: int,
@@ -57,8 +57,8 @@ class DbInterface:
             f"{cls.DB_INTERFACE_URL}/code_snippets",
             json={
                 "code": code,
-                "start_line_number": start_line_number,
-                "end_line_number": end_line_number,
+                "start_line": start_line,
+                "end_line": end_line,
                 "raw_loc": raw_loc,
                 "raw_lloc": raw_lloc,
                 "raw_sloc": raw_sloc,
@@ -175,8 +175,8 @@ class DbInterface:
     ) -> str:
         code_snippet = cls.post_code_snippet(
             code=code_snippet.code,
-            start_line_number=code_snippet.start_line_number,
-            end_line_number=code_snippet.end_line_number,
+            start_line=code_snippet.start_line,
+            end_line=code_snippet.end_line,
             raw_loc=analyzer.metric_calculator.raw_report.loc,
             raw_lloc=analyzer.metric_calculator.raw_report.lloc,
             raw_sloc=analyzer.metric_calculator.raw_report.sloc,

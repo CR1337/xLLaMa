@@ -80,8 +80,8 @@ class TestCodeAnalyzer:
         for code_snippet in (code_snippet_0, code_snippet_1):
             assert "code" in code_snippet
             assert code_snippet["code"] in TEST_PREDICTION_TEXT
-            assert "start_line_number" in code_snippet
-            assert "end_line_number" in code_snippet
+            assert "start_line" in code_snippet
+            assert "end_line" in code_snippet
 
             for column_name in (
                 "raw_loc", "raw_lloc", "raw_sloc", "raw_comments", "raw_multi",
@@ -115,11 +115,11 @@ class TestCodeAnalyzer:
         self._check_code_snippet_1(code_snippet_1)
 
     def _check_code_snippet_0(self, code_snippet: Dict[str, Any]):
-        assert code_snippet["start_line_number"] == 3
-        assert code_snippet["end_line_number"] == 13
+        assert code_snippet["start_line"] == 3
+        assert code_snippet["end_line"] == 13
         # TODO: check symbol definitions and references
 
     def _check_code_snippet_1(self, code_snippet: Dict[str, Any]):
-        assert code_snippet["start_line_number"] == 19
-        assert code_snippet["end_line_number"] == 25
+        assert code_snippet["start_line"] == 19
+        assert code_snippet["end_line"] == 25
         # TODO: check symbol definitions and references

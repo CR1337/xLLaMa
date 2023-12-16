@@ -45,8 +45,8 @@ class CodeExtractor:
                         CodeSnippet(
                             code=snippet,
                             tree=tree,
-                            start_line_number=start,
-                            end_line_number=end - 1,
+                            start_line=start,
+                            end_line=end - 1,
                         )
                     )
                     start = end

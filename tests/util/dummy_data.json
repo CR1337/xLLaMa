@@ -77,8 +77,8 @@
     },
     "code_snippets": {
         "code": "This is a code snippet.",
-        "start_line_number": 1,
-        "end_line_number": 2,
+        "start_line": 1,
+        "end_line": 2,
         "raw_loc": 3,
         "raw_lloc": 4,
         "raw_sloc": 5,

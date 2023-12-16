@@ -16,8 +16,8 @@ class CodeSnippet(BaseModel):
     MAINTAINABILITY_INDEX_RANK_CHOICES: Tuple[str, ...] = ("A", "B", "C")
 
     code = TextField()
-    start_line_number = IntegerField()
-    end_line_number = IntegerField()
+    start_line = IntegerField()
+    end_line = IntegerField()
     raw_loc = IntegerField()
     raw_lloc = IntegerField()
     raw_sloc = IntegerField()
