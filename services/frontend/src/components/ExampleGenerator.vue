@@ -4,44 +4,49 @@
 <template>
 <div>
     <template v-for="model in models" :key="model">
-        <input type="radio" :id="model" :value="model" v-on:click="selectionChanged(model)" name="model_selection" v-model="selectedModel">
+        <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
     <template v-for="model in disabled_models" :key="model">
-        <input type="radio" :id="model" :value="model" v-on:click="selectionChanged(model)" name="model_selection" disabled>
+        <input type="radio" :id="model" :value="model" name="model_selection" disabled>
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
-    <div>
-        <p>{{ generatedText }}</p>
-    </div>
-    <button v-on:click="generateExample()">Generate Example!</button>
+    <template v-for="model in models" :key="model">
+        <Model
+            :model="model"
+            :framework-item="frameworkItem"
+            v-if="model == selectedModel"
+        ></Model>
+    </template>
 </div>
 </template>
 
 <script>
+import Model from '@/components/Model.vue';
+
 export default {
     name: "ExampleGenerator",
+    components: {
+        Model
+    },
     data() {
         return {
             models: ["codellama:7b-instruct", "wizardcoder:13b-python"],
             disabled_models: ["GPT-3.5", "GPT-4"],
             selectedModel: "codellama:7b-instruct",
-            generatedText: "Generated example will appear here.",
+            // generatedText: "Generated example will appear here.",
 
             frameworkItem: null,
 
-            generatedPredictions: []
+            // generatedPredictions: [],
+            // generated: false
         }
     },
     methods: {
-        selectionChanged(model) {
-            const index = this.models.indexOf(model);
-            this.generatedText = this.generatedPredictions[index].text;
-        },
         frameworkItemChanged(frameworkItem) {
             this.frameworkItem = frameworkItem;
         },
-        generateExample() {
+        generateExample(generationReason="first") {
             fetch("http://localhost:5003/system_prompts/by-name/example_generation")
             .then((response) => response.json())
             .then((responseJson) => {
@@ -51,7 +56,7 @@ export default {
                 console.log(error);
             })
         },
-        setPromptParts(systemPromptId) {
+        setPromptParts(systemPromptId, generationReason) {
             Promise.all([
                 fetch("http://localhost:5003/prompt_parts", {
                     method: "POST",
@@ -131,6 +136,7 @@ export default {
             .then((responses) => Promise.all(responses.map(response => response.json())))
             .then((responseJson) => {
                 this.generatedPredictions = responseJson;
+                this.generated = true;
             });
         }
 
