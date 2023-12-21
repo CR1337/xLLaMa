@@ -139,7 +139,7 @@ export default {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (generationReason == "example_generation") {
-                    this.generatePrediction(systemPromptId, promptPartIds, responseJson.id, null, generationReason);
+                    this.generatePrediction(systemPromptId, promptPartIds, responseJson.id, null);
                 } else {
                     this.getUserRatingType(systemPromptId, promptPartIds, responseJson.id, generationReason);
                 }
@@ -167,7 +167,7 @@ export default {
                 },
                 body: JSON.stringify({
                     value: 0.0,
-                    prediction: this.generatePrediction.id,
+                    prediction: this.generatedPrediction.id,
                     user_rating_type: userRatingTypeId
                 })
             })
@@ -183,7 +183,7 @@ export default {
             fetch("http://localhost:5003/follow_up_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
-                this.generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId, generationReason);
+                this.generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId);
             })
             .catch((error) => {
                 console.log(error);
@@ -192,7 +192,7 @@ export default {
                 console.log(error);
             })
         },
-        generateFollowUp(systemPromptId, promptPartIds, llmId, userRatingTypeId, followUpTypeId, generationReason) {
+        generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId, followUpTypeId) {
             fetch("http://localhost:5003/follow_ups", {
                 method: "POST",
                 headers: {
@@ -206,13 +206,13 @@ export default {
             })
             .then((response) => response.json())
             .then((responseJson) => {
-                this.generatePrediction(systemPromptId, promptPartIds, llmId, responseJson.id, generationReason);
+                this.generatePrediction(systemPromptId, promptPartIds, llmId, responseJson.id);
             })
             .catch((error) => {
                 console.log(error);
             })
         },
-        generatePrediction(systemPromptId, promptPartIds, llmId, followUpId, generationReason) {
+        generatePrediction(systemPromptId, promptPartIds, llmId, followUpId) {
             let url = "http://localhost:5001/generate"
                 + "?model=" + llmId
                 + "&prompt_parts=" + promptPartIds.toString()
