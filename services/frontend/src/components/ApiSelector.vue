@@ -29,7 +29,7 @@ export default {
         }
     },
     mounted() {
-        fetch("http://localhost:5003/frameworks", )
+        fetch("http://" + this.host + ":5003/frameworks", )
         .then((response) => response.json())
         .then((responseJson) => {
             this.frameworks = responseJson;
@@ -37,6 +37,9 @@ export default {
         .catch((error) => {
             console.log(error);
         });
+    },
+    computed: {
+        host() { return window.location.origin.split("/")[2].split(":")[0]; }
     }
 }
 </script>

@@ -39,7 +39,7 @@ export default {
         },
         generateExample(generationReason="example_generation") {
             console.log("Generation started for " + this.model);
-            fetch("http://localhost:5003/system_prompts/by-name/" + generationReason)
+            fetch("http://" + this.host + ":5003/system_prompts/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setPromptParts(responseJson.id, generationReason);
@@ -50,7 +50,7 @@ export default {
         },
         setPromptParts(systemPromptId, generationReason) {
             let promises = [
-                fetch("http://localhost:5003/prompt_parts", {
+                fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -60,7 +60,7 @@ export default {
                         "text": "\n# Documentation:\n" + this.frameworkItem.description
                     })
                 }),
-                fetch("http://localhost:5003/prompt_parts", {
+                fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -72,7 +72,7 @@ export default {
                 })
             ]
             if (generationReason == "too_short") {
-                promises.push(fetch("http://localhost:5003/prompt_parts", {
+                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -82,7 +82,7 @@ export default {
                         "text": "\n# Your last generation:\n" + this.generatedText
                     })
                 }));
-                promises.push(fetch("http://localhost:5003/prompt_parts", {
+                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -93,7 +93,7 @@ export default {
                     })
                 }));
             } else if (generationReason == "too_long") {
-                promises.push(fetch("http://localhost:5003/prompt_parts", {
+                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -103,7 +103,7 @@ export default {
                         "text": "\n# Your last generation:\n" + this.generatedText
                     })
                 }));
-                promises.push(fetch("http://localhost:5003/prompt_parts", {
+                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -114,7 +114,7 @@ export default {
                     })
                 }));
             } else {
-                promises.push(fetch("http://localhost:5003/prompt_parts", {
+                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -136,7 +136,7 @@ export default {
             });
         },
         getLlmId(systemPromptId, promptPartIds, generationReason) {
-            fetch("http://localhost:5003/llms/by-name/" + this.model)
+            fetch("http://" + this.host + ":5003/llms/by-name/" + this.model)
             .then((response) => response.json())
             .then((responseJson) => {
                 if (generationReason == "example_generation") {
@@ -150,7 +150,7 @@ export default {
             })
         },
         getUserRatingType(systemPromptId, promptPartIds, llmId, generationReason) {
-            fetch("http://localhost:5003/user_rating_types/by-name/" + generationReason)
+            fetch("http://" + this.host + ":5003/user_rating_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.getFollowUpType(systemPromptId, promptPartIds, llmId, responseJson.id, generationReason);
@@ -160,7 +160,7 @@ export default {
             })
         },
         generateUserRating(systemPromptId, promptPartIds, llmId, userRatingTypeId, generationReason) {
-            fetch("http://localhost:5003/user_ratings", {
+            fetch("http://" + this.host + ":5003/user_ratings", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -181,7 +181,7 @@ export default {
             })
         },
         getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason) {
-            fetch("http://localhost:5003/follow_up_types/by-name/" + generationReason)
+            fetch("http://" + this.host + ":5003/follow_up_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.generateFollowUp(systemPromptId, promptPartIds, llmId, responseJson.id);
@@ -194,7 +194,7 @@ export default {
             })
         },
         generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId) {
-            fetch("http://localhost:5003/follow_ups", {
+            fetch("http://" + this.host + ":5003/follow_ups", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -214,7 +214,7 @@ export default {
             })
         },
         generatePrediction(systemPromptId, promptPartIds, llmId, followUpId) {
-            let url = "http://localhost:5001/generate"
+            let url = "http://" + this.host + ":5001/generate"
                 + "?model=" + llmId
                 + "&prompt_parts=" + promptPartIds.toString()
                 + "&system_prompt=" + systemPromptId
@@ -246,7 +246,7 @@ export default {
             }
         },
         displayPrediction(predictionId) {
-            fetch("http://localhost:5003/predictions/" + predictionId)
+            fetch("http://" + this.host + ":5003/predictions/" + predictionId)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.generatedPrediction = responseJson;
@@ -257,6 +257,9 @@ export default {
                 console.log(error);
             })
         }
+    },
+    computed: {
+        host() { return window.location.origin.split("/")[2].split(":")[0]; }
     }
 }
 </script>

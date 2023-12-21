@@ -51,7 +51,7 @@ export default {
             this.selectedFrameworkItem = null;
             this.selectionChanged();
             for (const frameworkItemId of framework.framework_items) {
-                fetch("http://localhost:5003/framework_items/" + frameworkItemId)
+                fetch("http://" + this.host + ":5003/framework_items/" + frameworkItemId)
                 .then((response) => response.json())
                 .then((responseJson) => {
                     this.frameworkItems.push(responseJson);
@@ -78,7 +78,8 @@ export default {
             return this.frameworkItems.slice(
                 0, Math.min(this.maxDisplayedFrameworkItems, this.frameworkItems.length + 1)
             );
-        }
+        },
+        host() { return window.location.origin.split("/")[2].split(":")[0]; }
     }
 }
 </script>
