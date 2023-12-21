@@ -40,12 +40,7 @@ export default {
             models: ["codellama:7b-instruct", "wizardcoder:13b-python"],
             disabled_models: ["GPT-3.5", "GPT-4"],
             selectedModel: "codellama:7b-instruct",
-            // generatedText: "Generated example will appear here.",
-
             frameworkItem: null,
-
-            // generatedPredictions: [],
-            // generated: false
         }
     },
     methods: {
@@ -54,10 +49,7 @@ export default {
         },
         generateExample() {
             for (const model of this.models) {
-                // const id = "id_" + model;
                 const component = this.$refs[`ref_${model}`][0];
-                console.log(component);
-                // console.log(id, component);
                 component.generateExample();
             }
         },
