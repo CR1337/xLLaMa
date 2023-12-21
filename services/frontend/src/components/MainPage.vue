@@ -35,7 +35,7 @@ label {
     margin-right: 10px;
 }
 
-.radio-container input {
+input {
     margin-right: 3px;
 }
 
