@@ -26,7 +26,8 @@ export default {
         return {
             generatedText: "Generated code from " + this.model + " will apear here.",
             generatedPrediction: null,
-            generated: false
+            generated: false,
+            stream: true
         }
     },
     methods: {
@@ -183,7 +184,7 @@ export default {
             fetch("http://localhost:5003/follow_up_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
-                this.generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId);
+                this.generateFollowUp(systemPromptId, promptPartIds, llmId, responseJson.id);
             })
             .catch((error) => {
                 console.log(error);
@@ -192,7 +193,7 @@ export default {
                 console.log(error);
             })
         },
-        generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId, followUpTypeId) {
+        generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId) {
             fetch("http://localhost:5003/follow_ups", {
                 method: "POST",
                 headers: {
@@ -218,18 +219,31 @@ export default {
                 + "&prompt_parts=" + promptPartIds.toString()
                 + "&system_prompt=" + systemPromptId
                 + "&framework_item=" + this.frameworkItem.id
-                + "&stream=false";
             if (followUpId != null) {
                 url += "&parent_follow_up=" + followUpId;
             }
-            fetch(url)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.displayPrediction(responseJson.prediction);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            if (!this.stream) {
+                url += "&stream=false";
+                fetch(url)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.displayPrediction(responseJson.prediction);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            } else {
+                this.generatedText = "";
+                const eventSource = new EventSource(url);
+                eventSource.addEventListener("generation_progress", (event) => {
+                    const token = JSON.parse(event.data).token;
+                    this.generatedText += token;
+                });
+                eventSource.addEventListener("generation_success", (event) => {
+                    const predictionId = JSON.parse(event.data).prediction;
+                    this.displayPrediction(predictionId);
+                });
+            }
         },
         displayPrediction(predictionId) {
             fetch("http://localhost:5003/predictions/" + predictionId)
@@ -243,9 +257,6 @@ export default {
                 console.log(error);
             })
         }
-
-
-
     }
 }
 </script>
