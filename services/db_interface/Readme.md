@@ -184,6 +184,7 @@ erDiagram
         datetime created_at
         datetime updated_at
         text text
+        text name
     }
 
     UndefinedSymbolReference {
@@ -231,6 +232,7 @@ This endpoint returns a database object from `<table_name>` with name `<name>`. 
 4. [`llms`](#llm)
 5. [`frameworks`](#framework)
 6. [`framework_items`](#frameworkitem)
+7. [`system_prompts`](#systemprompt)
 
 ### `DELETE /<table_name>/by-name/<name>`
 This endpoint deletes an existing database object from `<table_name>` with name `<name>`. Note that the object has to have a column called `name`. Possible tables names are:
@@ -240,6 +242,7 @@ This endpoint deletes an existing database object from `<table_name>` with name 
 4. [`llms`](#llm)
 5. [`frameworks`](#framework)
 6. [`framework_items`](#frameworkitem)
+7. [`system_prompts`](#systemprompt)
 
 ### `GET /<table_name>`
 This endpoint returns a list of all database objects from `<table_name>`. Possible tables names are:

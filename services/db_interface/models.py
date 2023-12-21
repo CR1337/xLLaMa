@@ -33,5 +33,6 @@ by_name_models: Dict[str, Type[BaseModel]] = {
     "user_rating_types": UserRatingType,
     "llms": Llm,
     "frameworks": Framework,
-    "framework_items": FrameworkItem
+    "framework_items": FrameworkItem,
+    "system_prompts": SystemPrompt
 }

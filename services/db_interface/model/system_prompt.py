@@ -8,6 +8,7 @@ class SystemPrompt(BaseModel):
         table_name = "SystemPrompt"
 
     text = TextField()
+    name = TextField()
 
     @property
     def predictions(self) -> List[BaseModel]:

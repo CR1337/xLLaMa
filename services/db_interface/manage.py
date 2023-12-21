@@ -1,6 +1,6 @@
 from model import (
     db, BaseModel, UserRatingType, Framework, FrameworkItem,
-    SymbolDefinitionType, FollowUpType, Prediction
+    SymbolDefinitionType, FollowUpType, Prediction, SystemPrompt
 )
 from models import models
 from functools import wraps
@@ -47,6 +47,11 @@ def reset_db():
 
 @db_session
 def populate_db():
+    with open("init_data/system_prompts.json", 'r') as file:
+        system_prompts_data = json.load(file)
+    for system_prompt in system_prompts_data:
+        SystemPrompt.from_dict(system_prompt)
+
     with open("init_data/follow_up_types.json", 'r') as file:
         follow_up_types_data = json.load(file)
     for follow_up_type in follow_up_types_data:
