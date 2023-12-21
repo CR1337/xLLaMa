@@ -27,7 +27,7 @@ export default {
             generatedText: "Generated code from " + this.model + " will apear here.",
             generatedPrediction: null,
             generated: false,
-            stream: true
+            stream: true  // This is a constant to dis/enable streaming
         }
     },
     methods: {
