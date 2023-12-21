@@ -1,16 +1,4 @@
-<style scoped>
-    .container {
-    max-width: 500px;
-    margin: 30px 0 30px;
-    overflow: auto;
-    min-height: 300px;
-    border: 1px solid steelblue;
-    padding: 30px;
-    border-radius: 5px;
-    background-color: black;
-    color:white;
-    font-family:'Courier New', Courier, monospace;
-    }
+<style>
 </style>
 
 <template>

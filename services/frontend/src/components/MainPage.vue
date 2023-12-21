@@ -5,16 +5,17 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', sans-serif;
 }
 
 h1 {
     padding: 5px;
+    font-family: 'Poppins', sans-serif;
 }
 
 div {
     margin: 5px;
     padding: 5px;
+    font-family: 'Poppins', sans-serif;
 }
 
 button {
@@ -28,19 +29,36 @@ button {
   cursor: pointer;
   text-decoration: none;
   font-size: 15px;
-  font-family: inherit;
+  font-family: 'Poppins', sans-serif;
 }
 
 label {
+    font-family: 'Poppins', sans-serif;
     margin-right: 10px;
 }
 
 input {
+    font-family: 'Poppins', sans-serif;
     margin-right: 3px;
 }
 
+.container {
+    max-width: 500px;
+    margin: 30px 0 30px;
+    overflow: auto;
+    min-height: 300px;
+    border: 1px solid steelblue;
+    padding: 30px;
+    border-radius: 5px;
+    background-color: black;
+    color:white;
+    font-family:'Courier New', Courier, monospace !important;
+    }
 
-
+.generate-example-button {
+    background-color: salmon;
+    color: black;
+}
 
 
 </style>
