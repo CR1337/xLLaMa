@@ -1,23 +1,34 @@
-<style>
+<style scoped>
+    .container {
+    max-width: 500px;
+    margin: 30px 0 30px;
+    overflow: auto;
+    min-height: 300px;
+    border: 1px solid steelblue;
+    padding: 30px;
+    border-radius: 5px;
+    background-color: black;
+    color:white;
+    font-family:'Courier New', Courier, monospace;
+    }
 </style>
 
 <template>
 <div>
-    <template v-for="model in models" :key="model">
-        <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
+    <div class="radio-container">
+        <template v-for="model in models" :key="model">
+        <input type="radio" :id="model" :value="model" v-on:click="selectionChanged(model)" name="model_selection" v-model="selectedModel">
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
     <template v-for="model in disabled_models" :key="model">
         <input type="radio" :id="model" :value="model" name="model_selection" disabled>
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
-    <template v-for="model in models" :key="model">
-        <Model
-            :model="model"
-            :framework-item="frameworkItem"
-            v-if="model == selectedModel"
-        ></Model>
-    </template>
+    </div>
+    <div class="container">
+        <p>{{ generatedText }}</p>
+    </div>
+    <button v-on:click="generateExample()">Generate Example!</button>
 </div>
 </template>
 
