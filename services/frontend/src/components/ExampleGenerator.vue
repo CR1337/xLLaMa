@@ -4,7 +4,7 @@
 <template>
 <div>
     <div>
-        <button v-on:click="generateExample()" class="generate-example-button">Generate Example!</button>
+        <button v-on:click="generateExample()" class="generate-example-button">Generate Examples!</button>
     </div>
     <div class="radio-container">
         <template v-for="model in models" :key="model">
