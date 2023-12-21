@@ -2,12 +2,9 @@
 </style>
 
 <template>
-<div>
+<div :hidden="!visible">
     <div class="container">
         <p>{{ generatedText }}</p>
-    </div>
-    <div>
-        <button v-on:click="generateExample()">Generate Example!</button>
     </div>
     <div>
         <button v-on:click="tooLong()" :disabled="!generated">Too long</button>
@@ -22,7 +19,8 @@ export default {
     name: "Model",
     props: {
         model: String,
-        frameworkItem: Object
+        frameworkItem: Object,
+        visible: Boolean
     },
     data() {
         return {
@@ -39,6 +37,7 @@ export default {
             this.generateExample("too_short");
         },
         generateExample(generationReason="example_generation") {
+            console.log("Generation started for " + this.model);
             fetch("http://localhost:5003/system_prompts/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {

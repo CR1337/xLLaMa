@@ -3,6 +3,9 @@
 
 <template>
 <div>
+    <div>
+        <button v-on:click="generateExample()" class="generate-example-button">Generate Example!</button>
+    </div>
     <div class="radio-container">
         <template v-for="model in models" :key="model">
         <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
@@ -17,8 +20,8 @@
         <Model
             :model="model"
             :framework-item="frameworkItem"
-            v-if="model == selectedModel"
-            :id="'id_' + model"
+            :visible="model == selectedModel"
+            :ref="`ref_${model}`"
         />
     </template>
 </div>
@@ -51,8 +54,10 @@ export default {
         },
         generateExample() {
             for (const model of this.models) {
-                const id = "id_" + model;
-                const component = document.getElementById(id);
+                // const id = "id_" + model;
+                const component = this.$refs[`ref_${model}`][0];
+                console.log(component);
+                // console.log(id, component);
                 component.generateExample();
             }
         },
