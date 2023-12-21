@@ -42,6 +42,10 @@ input {
     margin-right: 3px;
 }
 
+span {
+    white-space: pre;
+}
+
 .container {
     max-width: 500px;
     margin: 30px 0 30px;

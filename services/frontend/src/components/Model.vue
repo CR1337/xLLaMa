@@ -4,7 +4,7 @@
 <template>
 <div :hidden="!visible">
     <div class="container">
-        <p>{{ generatedText }}</p>
+        <span>{{ generatedText }}</span>
     </div>
     <div>
         <button v-on:click="tooLong()" :disabled="!generated">Too long</button>
