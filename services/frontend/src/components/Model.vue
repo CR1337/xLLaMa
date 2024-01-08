@@ -239,6 +239,7 @@ export default {
                 url += "&parent_follow_up=" + followUpId;
             }
             if (!this.stream) {
+                console.log("NO STREAM");
                 url += "&stream=false";
                 fetch(url)
                 .then((response) => response.json())
@@ -249,6 +250,7 @@ export default {
                     console.log(error);
                 });
             } else {
+                console.log("STREAM");
                 this.generatedText = "";
                 const eventSource = new EventSource(url);
                 eventSource.addEventListener("generation_progress", (event) => {
