@@ -140,16 +140,14 @@ class LlmRequest(ABC):
             yield ServerSentEvents.build_sse_data(
                 "generation_progress",
                 self._translate_event(event),
-                i,
-                OllamaRequest.STREAM_RETRY_PERIOD
+                i
             )
             self._process_event(event)
         self._persist_generation()
         yield ServerSentEvents.build_sse_data(
             "generation_success",
             json.dumps({"prediction": self._prediction_id}),
-            i + 1,
-            OllamaRequest.STREAM_RETRY_PERIOD
+            i + 1
         )
 
     def _persist_generation(self):
@@ -192,7 +190,7 @@ class OllamaRequest(LlmRequest):
 
     URL: str = f'http://ollama:{os.environ.get("OLLAMA_INTERNAL_PORT")}'
     STREAM_CHUNK_SIZE: int = 32
-    STREAM_RETRY_PERIOD: int = 3000  # ms
+    # STREAM_RETRY_PERIOD: int = 3000  # ms
 
     @classmethod
     def model_names(cls) -> List[str]:
@@ -234,8 +232,7 @@ class OllamaRequest(LlmRequest):
                     yield ServerSentEvents.build_sse_data(
                         "model_installation_progress",
                         event,
-                        i,
-                        cls.STREAM_RETRY_PERIOD
+                        i
                     )
                     success = "success" in event.decode()
                 if success:
@@ -243,8 +240,7 @@ class OllamaRequest(LlmRequest):
                     yield ServerSentEvents.build_sse_data(
                         "model_installation_success",
                         json.dumps({"llm": llm['id']}),
-                        i + 1,
-                        cls.STREAM_RETRY_PERIOD
+                        i + 1
                     )
         return server_sent_event_generator()
 

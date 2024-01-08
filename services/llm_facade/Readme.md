@@ -46,10 +46,9 @@ If `stream` is `true` a event stream will be returned where each event looks lik
 event: model_installation_progress
 data: <JSON_DATA>
 id: <ID>
-retry: <RETRY_PERIOD>
 
 ```
-Here `<ID>` is a continuously increasing integer starting at `0`. `<RETRY_PERIOD>` instructs the browser to retry connecting if no event was sent for this amount of milliseconds. `<JSON_OBJECT>` contains information about the progress which is described [here](https://github.com/jmorganca/ollama/blob/main/docs/api.md#response-10).
+Here `<ID>` is a continuously increasing integer starting at `0`. `<JSON_OBJECT>` contains information about the progress which is described [here](https://github.com/jmorganca/ollama/blob/main/docs/api.md#response-10).
 
 
 ### `GET /models/uninstall`
@@ -96,17 +95,15 @@ If `stream` is `true`, an event stream is returned where each event looks like t
 event: generation_progress
 data: {"token": TOKEN}
 id: ID
-retry: RETRY
 
 ```
-where `TOKEN` is the currently generated token, `ID` is an increasing integer and `RETRY` is the amount of milliseconds the browser should wait before trying to reconnect in case of connection loss.
+where `TOKEN` is the currently generated token, `ID` is an increasing integer.
 
 The last event of the event stream looks different:
 ```
 event: generation_success
 data: {"prediction": PREDICTION_ID}
 id: ID
-retry: RETRY
 
 ```
 where `PREDICTION_ID` is the database id of the generated prediction.
