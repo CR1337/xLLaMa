@@ -125,10 +125,13 @@ def route_generate():
             'true', 'True', True, '1'
         )
         if stream:
-            return Response(
+            response = Response(
                 llm_request.generate_stream(),
                 mimetype='text/event-stream'
             )
+            response.headers['Cache-Control'] = 'no-cache'
+            response.headers['Connection'] = 'keep-alive'
+            return response
         else:
             return llm_request.generate()
 
