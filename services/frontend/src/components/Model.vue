@@ -32,12 +32,15 @@ export default {
     },
     methods: {
         tooLong() {
+            console.log("function: tooLong()");
             this.generateExample("too_long");
         },
         tooShort() {
+            console.log("function: tooShort()");
             this.generateExample("too_short");
         },
         generateExample(generationReason="example_generation") {
+            console.log("function: generateExample(" + generationReason + ")");
             console.log("Generation started for " + this.model);
             fetch("http://" + this.host + ":5003/system_prompts/by-name/" + generationReason)
             .then((response) => response.json())
@@ -49,6 +52,7 @@ export default {
             });
         },
         setPromptParts(systemPromptId, generationReason) {
+            console.log("function: setPromptParts(" + systemPromptId + ", " + generationReason + ")");
             let promises = [
                 fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
@@ -135,7 +139,9 @@ export default {
                 console.log(error);
             });
         },
+
         getLlmId(systemPromptId, promptPartIds, generationReason) {
+            console.log("function: getLlmId(" + systemPromptId + ", " + promptPartIds + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/llms/by-name/" + this.model)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -149,7 +155,9 @@ export default {
                 console.log(error);
             })
         },
+
         getUserRatingType(systemPromptId, promptPartIds, llmId, generationReason) {
+            console.log("function: getUserRatingType(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/user_rating_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -159,7 +167,9 @@ export default {
                 console.log(error);
             })
         },
+
         generateUserRating(systemPromptId, promptPartIds, llmId, userRatingTypeId, generationReason) {
+            console.log("function: generateUserRating(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + userRatingTypeId + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/user_ratings", {
                 method: "POST",
                 headers: {
@@ -180,7 +190,9 @@ export default {
                 console.log(error);
             })
         },
+
         getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason) {
+            console.log("function: getFollowUpType(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/follow_up_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -193,7 +205,9 @@ export default {
                 console.log(error);
             })
         },
+
         generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId) {
+            console.log("function: generateFollowUp(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + followUpTypeId + ")");
             fetch("http://" + this.host + ":5003/follow_ups", {
                 method: "POST",
                 headers: {
@@ -201,7 +215,7 @@ export default {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    parent_prediction: this.generatePrediction.id,
+                    parent_prediction: this.generatedPrediction.id,
                     follow_up_type: followUpTypeId
                 })
             })
@@ -213,7 +227,9 @@ export default {
                 console.log(error);
             })
         },
+
         generatePrediction(systemPromptId, promptPartIds, llmId, followUpId) {
+            console.log("function: generatePrediction(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + followUpId + ")");
             let url = "http://" + this.host + ":5001/generate"
                 + "?model=" + llmId
                 + "&prompt_parts=" + promptPartIds.toString()
@@ -245,7 +261,9 @@ export default {
                 });
             }
         },
+
         displayPrediction(predictionId) {
+            console.log("function: displayPrediction(" + predictionId + ")");
             fetch("http://" + this.host + ":5003/predictions/" + predictionId)
             .then((response) => response.json())
             .then((responseJson) => {
