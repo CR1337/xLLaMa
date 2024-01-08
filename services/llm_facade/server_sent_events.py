@@ -1,6 +1,6 @@
 class ServerSentEvents:
 
-    RETRY_PERIOD: int = 240000  # ms (4 minutes)
+    RETRY_PERIOD: int = 2000  # ms
 
     @classmethod
     def build_sse_data(
