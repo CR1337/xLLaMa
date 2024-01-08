@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS
 from code_analyzer import CodeAnalyzer
 from code_extractor import CodeExtractor
 import os
@@ -6,6 +7,7 @@ from db_interface import DbInterface
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/", methods=['GET'])
