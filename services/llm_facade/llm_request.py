@@ -272,16 +272,56 @@ class OllamaRequest(LlmRequest):
         self._persist_generation()
         return {'prediction': self._prediction_id}, 200
 
+    # def generate_stream(self) -> Generator[str, None, None]:
+    #     def server_sent_event_generator():
+    #         with requests.Session().post(
+    #             f"{self.URL}/api/generate",
+    #             json=self._build_generate_request_body(stream=True),
+    #             headers=None,
+    #             stream=True
+    #         ) as response:  # FIXME: response is cut at 128 Bytes
+    #             for event in self._server_sent_even_loop(response):
+    #                 yield event
+    #     return server_sent_event_generator()
+
+    def _generate_event(self, json_event: Dict[str, Any], index: int) -> str:
+        return ServerSentEvents.build_sse_data(
+            event=(
+                "generation_success"
+                if json_event['done']
+                else "generation_progress"
+            ),
+            data=json_event['response'],
+            id=index
+        )
+
     def generate_stream(self) -> Generator[str, None, None]:
         def server_sent_event_generator():
+            response_content = b""
             with requests.Session().post(
                 f"{self.URL}/api/generate",
                 json=self._build_generate_request_body(stream=True),
                 headers=None,
                 stream=True
             ) as response:
-                for event in self._server_sent_even_loop(response):
-                    yield event
+                index = 0
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:
+                        response_content += chunk
+                        decoded_content = response_content.decode('utf-8')
+                        try:
+                            json_response = json.loads(decoded_content)
+                        except json.JSONDecodeError:
+                            # Continue accumulating chunks
+                            # until a complete JSON is formed
+                            pass
+                        else:
+                            yield self._generate_event(json_response, index)
+                            if json_response['done']:
+                                return
+                            index += 1
+                            # Reset content after successful parsing
+                            response_content = b""
         return server_sent_event_generator()
 
     def _translate_event(self, event: Any) -> Dict[str, Any]:
