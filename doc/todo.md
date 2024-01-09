@@ -1,6 +1,6 @@
 ## Backend
 - [] Gleichzeitige Generierung
-- [] Streaming reparieren
+- [x] Streaming reparieren
 
 ## Frontend
 - [] Dropdown schön machen
