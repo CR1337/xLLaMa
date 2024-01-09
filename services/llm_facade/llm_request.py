@@ -190,7 +190,6 @@ class OllamaRequest(LlmRequest):
 
     URL: str = f'http://ollama:{os.environ.get("OLLAMA_INTERNAL_PORT")}'
     STREAM_CHUNK_SIZE: int = 32
-    # STREAM_RETRY_PERIOD: int = 3000  # ms
 
     @classmethod
     def model_names(cls) -> List[str]:
@@ -271,18 +270,6 @@ class OllamaRequest(LlmRequest):
         self._token_amount = response.json()['eval_count']
         self._persist_generation()
         return {'prediction': self._prediction_id}, 200
-
-    # def generate_stream(self) -> Generator[str, None, None]:
-    #     def server_sent_event_generator():
-    #         with requests.Session().post(
-    #             f"{self.URL}/api/generate",
-    #             json=self._build_generate_request_body(stream=True),
-    #             headers=None,
-    #             stream=True
-    #         ) as response:  # FIXME: response is cut at 128 Bytes
-    #             for event in self._server_sent_even_loop(response):
-    #                 yield event
-    #     return server_sent_event_generator()
 
     def _generate_event(self, json_event: Dict[str, Any], index: int) -> str:
         return ServerSentEvents.build_sse_data(

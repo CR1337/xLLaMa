@@ -35,8 +35,6 @@ services:
     build: services/llm_facade
     container_name: llm_facade
     command: gunicorn -w 8 --timeout 0 --bind 0.0.0.0:${LLM_FACADE_INTERNAL_PORT} manage:app
-    # ports:
-    #   - ${LLM_FACADE_EXTERNAL_PORT}:${LLM_FACADE_INTERNAL_PORT}
     expose:
       - ${LLM_FACADE_INTERNAL_PORT}
     depends_on:
