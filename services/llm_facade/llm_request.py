@@ -291,7 +291,11 @@ class OllamaRequest(LlmRequest):
                 if json_event['done']
                 else "generation_progress"
             ),
-            data=json.dumps({'token': json_event['response']}),
+            data=(
+                json.dumps({'prediction': self._prediction_id})
+                if json_event['done']
+                else json.dumps({'token': json_event['response']})
+            ),
             id=index
         )
 
