@@ -14,7 +14,6 @@
         dropdown
         :disabled="!enabled"
     />
-    <button v-on:click="updateSuggestions()" :disabled="!enabled">🔎</button>
     <button
         v-for="frameworkItem in displayedFrameworkItems"
         :key="frameworkItem.id"

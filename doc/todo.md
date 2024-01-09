@@ -5,5 +5,5 @@
 ## Frontend
 - [] Dropdown schön machen
 - [x] Seitentitel ändern
-- [] Lupenbutton entfernen
+- [x] Lupenbutton entfernen
 - [] Syntaxhighlighting
