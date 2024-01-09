@@ -320,10 +320,13 @@ class OllamaRequest(LlmRequest):
                             # until a complete JSON is formed
                             pass
                         else:
-                            self._text += json.loads(json_response)['response']
-                            self._token_amount += 1
                             if json_response['done']:
                                 self._persist_generation()
+                            else:
+                                self._text += json.loads(json_response)[
+                                    'response'
+                                ]
+                                self._token_amount += 1
                             yield self._generate_event(json_response, index)
                             if json_response['done']:
                                 return
