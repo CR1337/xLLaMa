@@ -323,7 +323,7 @@ class OllamaRequest(LlmRequest):
                             if json_response['done']:
                                 self._persist_generation()
                             else:
-                                self._text += json.loads(json_response)[
+                                self._text += json_response[
                                     'response'
                                 ]
                                 self._token_amount += 1
