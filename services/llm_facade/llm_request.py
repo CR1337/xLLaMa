@@ -291,7 +291,7 @@ class OllamaRequest(LlmRequest):
                 if json_event['done']
                 else "generation_progress"
             ),
-            data=json_event['response'],
+            data=json.dumps({'token': json_event['response']}),
             id=index
         )
 
