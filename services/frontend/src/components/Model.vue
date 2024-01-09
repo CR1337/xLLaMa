@@ -258,6 +258,7 @@ export default {
                     this.generatedText += token;
                 });
                 eventSource.addEventListener("generation_success", (event) => {
+                    eventSource.close();
                     const predictionId = JSON.parse(event.data).prediction;
                     this.displayPrediction(predictionId);
                 });
