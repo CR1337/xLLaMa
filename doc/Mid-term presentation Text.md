@@ -12,8 +12,8 @@ Nach der Generierung kann man sich das Beispiel erklären lassen, oder eine erne
 
 Unser Ziel ist es, einen guten Kompromiss aus Geschwindigkeit und Qualität zu finden. Die Generierung soll möglichst schnell mit nur wenigen Klicks geschehen, die Qualität des Beispiels soll allerdings hoch genug sein, damit die Beispiele tatsächlich hilfreich sind. Wir können dies am besten an uns selbst testen, indem wir das Tool während unserer Arbeit benutzen.
 
-Zu unseren größten Herausforderungen gehörte bislang die Verbindung von Frontend und Backend. (-> evtl auch im Backend Text nennen.)
-(Anmerkung: Wenn wir es hier nennen, wäre die Begründung hier auch schon angebracht. Wir können dabei denke ich auch ruhig ein wenig Selbstkritik üben.)
+Zu unseren größten Herausforderungen gehörte bislang die Verbindung von Frontend und Backend, da wir beide Teile zunächst separat implementiert haben. Außerdem haben wir das Frontend zunächst in Plain HTML und Javascript implementiert, was auf Dauer allerdings nicht gut funktioniert- und vieles zu kompliziert gemacht hat.
+Nun haben wir es erneut auf Basis von Vue.js implementiert.
 
 ## Christians Teil
 
