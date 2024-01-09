@@ -34,8 +34,11 @@ services:
   llm_facade:
     build: services/llm_facade
     container_name: llm_facade
-    ports:
-      - ${LLM_FACADE_EXTERNAL_PORT}:${LLM_FACADE_INTERNAL_PORT}
+    command: gunicorn --bind 0.0.0.0:${LLM_FACADE_INTERNAL_PORT} manage:app
+    # ports:
+    #   - ${LLM_FACADE_EXTERNAL_PORT}:${LLM_FACADE_INTERNAL_PORT}
+    expose:
+      - ${LLM_FACADE_INTERNAL_PORT}
     depends_on:
       - ollama
       - db_interface
@@ -88,3 +91,13 @@ services:
     depends_on:
       - db
       - test_db
+
+  llm_facade_nginx:
+    build: services/llm_facade_nginx
+    container_name: llm_facade_nginx
+    ports:
+      - ${LLM_FACADE_NGINX_EXTERNAL_PORT}:${LLM_FACADE_NGINX_INTERNAL_PORT}
+    volumes:
+      - ./services/llm_facade_nginx:/etc/nginx/conf.d
+    depends_on:
+      - llm_facade
