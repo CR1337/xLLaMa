@@ -29,7 +29,7 @@ Außerdem berechnet der Code Analyzer eine Reihe an Codemetriken, die in Zukunft
 
 Eine Herausforderung, vor der wir aktuell stehen ist, dass die Codegenerierung lokal sehr langsam ist. Die Portierung auf den Server mit der stärkeren Hardware zieht noch einiges an Debugging-Arbeit nach sich (Stichwort: It works on my machine).
 
-Ist das gelöst, soll unser nächster Schritt sein, im Frontend die Definitionen von und Referenzen auf Variablen, Funktionen und Klassen zu highlighten und Kontextaktionen bereitzustellen. So soll es möglich sein, sich bswp. ein Beispiel für die Verwendung einer Funktion anzeigen zu lassen, die im aktuellen generierten Codebeispiel vorkam.
+Ist das gelöst, soll unser nächster Schritt sein, im Frontend die Definitionen von und Referenzen auf Variablen, Funktionen und Klassen zu highlighten und Kontextaktionen bereitzustellen. So soll es möglich sein, sich ein Beispiel für die Verwendung einer Funktion anzeigen zu lassen, die im aktuellen generierten Codebeispiel vorkam.
 
 ```mermaid
 flowchart LR
