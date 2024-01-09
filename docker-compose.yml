@@ -98,6 +98,6 @@ services:
     ports:
       - ${LLM_FACADE_NGINX_EXTERNAL_PORT}:${LLM_FACADE_NGINX_INTERNAL_PORT}
     volumes:
-      - ./services/llm_facade_nginx:/etc/nginx/conf.d
+      - ./services/llm_facade_nginx:/etc/nginx
     depends_on:
       - llm_facade
