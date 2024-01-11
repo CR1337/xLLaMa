@@ -1,6 +1,8 @@
 ## Backend
 - [] Gleichzeitige Generierung
 - [x] Streaming reparieren
+- [ ] Mehr Funktion Documentation (pandas, HF, ...) in Datenbank einfügen
+- [ ] Mehr Vorschläge für Funktionen
 
 ## Frontend
 - [] Dropdown schön machen
