@@ -4,6 +4,7 @@
 - [ ] Mehr Funktion Documentation (pandas, HF, ...) in Datenbank einfügen
 - [ ] Mehr Vorschläge für Funktionen
 - [ ] Kontexteingabe?
+- [ ] Code Explaination by LLM?
 
 ## Frontend
 - [ ] Dropdown schön machen
