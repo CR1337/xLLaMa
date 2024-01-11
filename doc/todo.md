@@ -1,19 +1,26 @@
 ## Backend
-- [ ] Gleichzeitige Generierung
 - [x] Streaming reparieren
+- [ ] Gleichzeitige Generierung
 - [ ] Mehr Funktion Documentation (pandas, HF, ...) in Datenbank einfügen
-- [ ] Mehr Vorschläge für Funktionen
-- [ ] Kontexteingabe?
-- [ ] Code Explaination by LLM?
+- [ ] (Autocomplete)
+- [ ] (Code Explaination by LLM)
+- [ ] (GPT)
 
 ## Frontend
-- [ ] Dropdown schön machen
-- [x] Seitentitel ändern
-- [x] Lupenbutton entfernen
+- [ ] Neues Beispiel für markierte Funktion aus Beispiel
 - [ ] Syntaxhighlighting
+- [ ] Generate Example ausgrauen bis valid input
+- [ ] (Dropdown schön machen)
+
+-------------------------------------------------------------------------------
 
 ## Endpres
 - [ ] KW4 Präsentation anfangen
 
 ## Abgabe
 - [ ] ab KW6 Abgabe fertig machen
+
+
+## Remember
+- [ ] Tokenlimit anpassen
+- [ ] Prompt anpassen
