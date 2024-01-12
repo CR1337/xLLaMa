@@ -14,7 +14,7 @@ services:
         reservations:
           devices:
           - driver: nvidia
-            device_ids: ['2']
+            device_ids: ['0']
             capabilities: [gpu]
 
     ollama_1:
@@ -29,7 +29,7 @@ services:
           reservations:
             devices:
             - driver: nvidia
-              device_ids: ['3']
+              device_ids: ['0']
               capabilities: [gpu]
 
   frontend:
@@ -112,8 +112,3 @@ services:
       - ./services/llm_facade_nginx:/etc/nginx
     depends_on:
       - llm_facade
-
-  cache:
-    image: redis:6.2-alpine
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning
