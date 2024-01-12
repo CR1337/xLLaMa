@@ -47,24 +47,24 @@ span {
 }
 
 .container {
-    max-width: 500px;
+    max-width: 700px;
     margin: 30px 0 30px;
     overflow: auto;
     min-height: 300px;
     border: 1px solid steelblue;
-    padding: 30px;
     border-radius: 5px;
-    background-color: black;
-    color:white;
-    font-family:'Courier New', Courier, monospace !important;
-    }
+    background-color: white;
+}
+
+.container pre {
+    font-family: 'Courier New', Courier, monospace !important;
+    background-color: white;
+}
 
 .generate-example-button {
     background-color: salmon;
     color: black;
 }
-
-
 </style>
 
 <template>

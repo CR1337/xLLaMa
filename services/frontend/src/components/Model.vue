@@ -4,7 +4,7 @@
 <template>
 <div :hidden="!visible">
     <div class="container">
-        <span>{{ generatedText }}</span>
+        <pre><code class="language-python">{{ generatedText }}</code></pre>
     </div>
     <div>
         <button v-on:click="tooLong()" :disabled="!generated">Too long</button>
@@ -15,6 +15,9 @@
 </template>
 
 <script>
+import Prism from 'prismjs';
+import 'prismjs/themes/prism.css';
+import 'prismjs/components/prism-python';
 export default {
     name: "Model",
     props: {
@@ -24,7 +27,7 @@ export default {
     },
     data() {
         return {
-            generatedText: "Generated code from " + this.model + " will apear here.",
+            generatedText: "Generated code by " + this.model + " will apear here.",
             generatedPrediction: null,
             generated: false,
             stream: true  // This is a constant to dis/enable streaming
@@ -272,6 +275,12 @@ export default {
             .then((responseJson) => {
                 this.generatedPrediction = responseJson;
                 this.generatedText = this.generatedPrediction.text;
+
+                this.$nextTick(() => {
+                    Prism.highlightAll();
+                });
+
+
                 this.generated = true;
             })
             .catch((error) => {
