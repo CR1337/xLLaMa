@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "primevue": "^3.44.0",
+    "prismjs": "^1.29.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
