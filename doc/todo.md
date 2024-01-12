@@ -7,10 +7,10 @@
 
 ## Frontend
 - [ ] Neues Beispiel für markierte Funktion aus Beispiel (neuer Tab) + Doku anzeigen - C + L am DO
-- [ ] Syntaxhighlighting - L bis DO
+- [x] Syntaxhighlighting - L bis DO
 - [ ] Frontend Layout überlegen - L bis DO
-- [ ] (Autocomplete) - C bis DO
-- [ ] Generate Example ausgrauen bis valid input - C bis DO
+- [x] (Autocomplete) - C bis DO
+- [x] Generate Example ausgrauen bis valid input - C bis DO
 - [ ] (Dropdown schön machen)
 
 -------------------------------------------------------------------------------
