@@ -17,20 +17,20 @@ services:
             device_ids: ['2']
             capabilities: [gpu]
 
-    ollama_1:
-      image: ollama/ollama
-      container_name: ollama_1
-      env_file:
-        - .env
-      volumes:
-        - ./volumes/ollama_1:/root/.ollama
-      deploy:
-        resources:
-          reservations:
-            devices:
-            - driver: nvidia
-              device_ids: ['3']
-              capabilities: [gpu]
+  ollama_1:
+    image: ollama/ollama
+    container_name: ollama_1
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/ollama_1:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            device_ids: ['3']
+            capabilities: [gpu]
 
   frontend:
     build: services/frontend
@@ -51,7 +51,8 @@ services:
     expose:
       - ${LLM_FACADE_INTERNAL_PORT}
     depends_on:
-      - ollama
+      - ollama_0
+      - ollama_1
       - db_interface
     env_file:
       - .env
