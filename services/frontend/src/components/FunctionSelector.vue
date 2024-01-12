@@ -66,7 +66,10 @@ export default {
             this.selectionChanged();
         },
         updateSuggestions(event) {
-            this.suggestions = this.frameworkItems.map((e) => e);
+            const query = event.query.toLowerCase();
+            this.suggestions = this.frameworkItems.filter((item) => {
+                return item.name.toLowerCase().includes(query);
+            });
         },
         selectionChanged() {
             this.$emit("frameworkItemSelected", this.selectedFrameworkItem);
