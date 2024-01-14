@@ -13,7 +13,7 @@ h1 {
 }
 
 div {
-    margin: 5px;
+    margin: 0px 5px;
     padding: 5px;
     font-family: 'Poppins', sans-serif;
 }
@@ -23,8 +23,8 @@ button {
   background: #000;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  margin: 5px;
+  padding: 10px 15px;
+  margin: 1px 5px;
   border-radius: 5px;
   cursor: pointer;
   text-decoration: none;
@@ -47,8 +47,7 @@ span {
 }
 
 .container {
-    max-width: 700px;
-    margin: 30px 0 30px;
+    max-width: 600px;
     overflow: auto;
     min-height: 300px;
     border: 1px solid steelblue;
@@ -64,6 +63,7 @@ span {
 .generate-example-button {
     background-color: salmon;
     color: black;
+    margin: 0px 0px 20px
 }
 </style>
 
