@@ -1,16 +1,16 @@
 ## Backend
 - [x] Streaming reparieren
 - [ ] Gleichzeitige Generierung - C bis DO
-- [ ] Mehr Funktion Documentation (pandas, HF, ...) in Datenbank einfügen - L bis DO
+- [x] Mehr Funktion Documentation (pandas, HF, ...) in Datenbank einfügen
 - [ ] (Code Explaination by LLM)
 - [ ] (GPT)
 
 ## Frontend
 - [ ] Neues Beispiel für markierte Funktion aus Beispiel (neuer Tab) + Doku anzeigen - C + L am DO
-- [x] Syntaxhighlighting - L bis DO
-- [ ] Frontend Layout überlegen - L bis DO
-- [x] (Autocomplete) - C bis DO
-- [x] Generate Example ausgrauen bis valid input - C bis DO
+- [x] Syntaxhighlighting
+- [x] Frontend Layout überlegen
+- [x] (Autocomplete)
+- [x] Generate Example ausgrauen bis valid input
 - [ ] (Dropdown schön machen)
 
 -------------------------------------------------------------------------------
