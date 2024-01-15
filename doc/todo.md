@@ -1,13 +1,13 @@
 ## Backend
 - [x] Streaming reparieren
-- [ ] Gleichzeitige Generierung - C bis DO
+- [x] Gleichzeitige Generierung - C bis DO
 - [x] Mehr Funktion Documentation (pandas, HF, ...) in Datenbank einfügen
 - [ ] (Code Explaination by LLM)
 - [ ] (GPT)
 
 ## Frontend
 - [ ] Neues Beispiel für markierte Funktion aus Beispiel (neuer Tab) + Doku anzeigen - C + L am DO
-- [ ] Neue Funktionen aus DB suchbar machen
+- [x] Neue Funktionen aus DB suchbar machen
 - [ ] Show link to documentation after generation
 - [x] Syntaxhighlighting
 - [x] Frontend Layout überlegen
