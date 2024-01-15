@@ -8,6 +8,7 @@
 ## Frontend
 - [ ] Neues Beispiel für markierte Funktion aus Beispiel (neuer Tab) + Doku anzeigen - C + L am DO
 - [ ] Neue Funktionen aus DB suchbar machen
+- [ ] Show link to documentation after generation
 - [x] Syntaxhighlighting
 - [x] Frontend Layout überlegen
 - [x] (Autocomplete)
