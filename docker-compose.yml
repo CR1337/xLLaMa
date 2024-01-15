@@ -7,6 +7,8 @@ services:
     container_name: ollama_0
     env_file:
       - .env
+    ports:
+      - ${OLLAMA_0_EXTERNAL_PORT}:${OLLAMA_INTERNAL_PORT}
     volumes:
       - ./volumes/ollama_0:/root/.ollama
     deploy:
@@ -22,6 +24,8 @@ services:
     container_name: ollama_1
     env_file:
       - .env
+    ports:
+      - ${OLLAMA_1_EXTERNAL_PORT}:${OLLAMA_INTERNAL_PORT}
     volumes:
       - ./volumes/ollama_1:/root/.ollama
     deploy:

@@ -40,6 +40,7 @@ class OllamaScheduler:
                     continue
                 finally:
                     pipe.reset()
+                    break
 
     def _allocate(self, pipe: redis.client.Pipeline):
         usage = pipe.hgetall(self.REDIS_KEY)
