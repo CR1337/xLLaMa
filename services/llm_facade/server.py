@@ -136,6 +136,11 @@ def route_generate():
             return llm_request.generate()
 
 
+@app.route('/ollama/instances', methods=['GET'])
+def route_ollama_instances():
+    return {'instances': OllamaRequest.OLLAMA_INSTANCES}, 200
+
+
 if __name__ == "__main__":
     persist_models()
     app.run(

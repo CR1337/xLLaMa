@@ -16,24 +16,7 @@ services:
         reservations:
           devices:
           - driver: nvidia
-            device_ids: ['2']
-            capabilities: [gpu]
-
-  ollama_1:
-    image: ollama/ollama
-    container_name: ollama_1
-    env_file:
-      - .env
-    ports:
-      - ${OLLAMA_1_EXTERNAL_PORT}:${OLLAMA_INTERNAL_PORT}
-    volumes:
-      - ./volumes/ollama_1:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            device_ids: ['3']
+            device_ids: ['0']
             capabilities: [gpu]
 
   frontend:
@@ -56,7 +39,6 @@ services:
       - ${LLM_FACADE_INTERNAL_PORT}
     depends_on:
       - ollama_0
-      - ollama_1
       - db_interface
     env_file:
       - .env
@@ -119,6 +101,6 @@ services:
       - llm_facade
 
   cache:
-    image: redis:6.2-alpine
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning
+    image: redis:5.0.7
+    container_name: cache
+    command: redis-server

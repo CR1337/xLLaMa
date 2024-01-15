@@ -4,8 +4,13 @@ from openai import OpenAI, ChatCompletion, AuthenticationError
 import requests
 import json
 import os
+import threading
+import time
+from queue import Queue
 from db_interface import DbInterface
 from server_sent_events import ServerSentEvents
+from concurrent.futures import ThreadPoolExecutor
+from ollama_scheduler import OllamaScheduler
 
 
 class LlmRequest(ABC):
@@ -186,62 +191,192 @@ class LlmRequest(ABC):
                 )
 
 
+# PORTS: List[int] = [
+
+#     int(os.environ.get(f"OLLAMA_{i}_INTERNAL_PORT"))
+
+#     for i in range(2)
+
+# ]
+
+
 class OllamaRequest(LlmRequest):
 
-    URL: str = f'http://ollama:{os.environ.get("OLLAMA_INTERNAL_PORT")}'
+    OLLAMA_INSTANCES: int = int(os.environ['OLLAMA_INSTANCES'])
+
+    URLS: List[str] = [
+        f'http://ollama_{i}:{int(os.environ.get("OLLAMA_INTERNAL_PORT"))}'
+        # f'http://localhost:{PORTS[i]}'
+        for i in range(OLLAMA_INSTANCES)
+    ]
     STREAM_CHUNK_SIZE: int = 32
 
     @classmethod
     def model_names(cls) -> List[str]:
-        response = requests.get(f"{cls.URL}/api/tags")
-        return [m['name'] for m in response.json()['models'] if 'name' in m]
+        with ThreadPoolExecutor(max_workers=cls.OLLAMA_INSTANCES) as executor:
+            responses = executor.map(
+                lambda i: requests.get(f"{cls.URLS[i]}/api/tags"),
+                range(cls.OLLAMA_INSTANCES)
+            )
+        model_name_sets = [
+            set(m['name'] for m in r.json()['models']) for r in responses
+        ]
+        return list(set.intersection(*model_name_sets))
 
     @classmethod
     def install_model(cls, name: str) -> Tuple[Dict[str, Any], int]:
-        response = requests.post(
-            f"{cls.URL}/api/pull",
-            json={"name": name, 'stream': False}
-        )
-        if (status := response.json().get('status')) != 'success':
-            return {"status": status}, response.status_code
+        with ThreadPoolExecutor(max_workers=cls.OLLAMA_INSTANCES) as executor:
+            responses = executor.map(
+                lambda i: requests.post(
+                    f"{cls.URLS[i]}/api/pull",
+                    json={"name": name, 'stream': False}
+                ),
+                range(cls.OLLAMA_INSTANCES)
+            )
+        statusses = [r.json().get('status') for r in responses]
+        if not all(status == 'success' for status in statusses):
+            return {"status": "failed"}, 500
         llm = DbInterface.post_llm(name)
         return {"llm": llm['id']}, 200
 
     @classmethod
     def uninstall_model(cls, name: str) -> Tuple[Dict[str, Any], int]:
-        response = requests.delete(
-            f"{cls.URL}/api/delete",
-            json={"name": name}
-        )
-        return {}, response.status_code
+        with ThreadPoolExecutor(max_workers=cls.OLLAMA_INSTANCES) as executor:
+            responses = executor.map(
+                lambda i: requests.delete(
+                    f"{cls.URLS[i]}/api/delete",
+                    json={"name": name}
+                ),
+                range(cls.OLLAMA_INSTANCES)
+            )
+        statusses = [r.json().get('status') for r in responses]
+        if not all(status == 'success' for status in statusses):
+            return {}, 500
+        return {}, 200
+
+    @classmethod
+    def install_model_stream_single(
+        cls, name: str, ollama_index: int, message_queue: Queue
+    ) -> Generator[str, None, None]:
+        response_content = b""
+        with requests.Session().post(
+            f"{cls.URLS[ollama_index]}/api/pull",
+            json={"name": name, 'stream': True},
+            headers=None,
+            stream=True
+        ) as response:
+            index = 0
+            for chunk in response.iter_content(
+                chunk_size=cls.STREAM_CHUNK_SIZE
+            ):
+                if chunk:
+                    response_content += chunk
+                    decoded_content = response_content.decode('utf-8')
+                    try:
+                        json_response = json.loads(decoded_content)
+                    except json.JSONDecodeError:
+                        # Continue accumulating chunks
+                        # until a complete JSON is formed
+                        pass
+                    else:
+                        if json_response['status'] != 'success':
+                            event = ServerSentEvents.build_sse_data(
+                                "model_installation_progress",
+                                json.dumps(
+                                    json_response | {
+                                        'ollama_index': ollama_index
+                                    }
+                                ),
+                                index
+                            )
+                            message_queue.put(event)
+                            index += 1
+                        else:
+                            llm = DbInterface.post_llm(name)
+                            event = ServerSentEvents.build_sse_data(
+                                "model_installation_success",
+                                json.dumps({
+                                    "llm": llm['id'],
+                                    'ollama_index': ollama_index
+                                }),
+                                index
+                            )
+                            message_queue.put(event)
+                            break
+                        response_content = b""
+
+    @classmethod
+    def install_model_stream_all(cls, name: str) -> Generator[str, None, None]:
+        message_queues = [Queue() for _ in range(cls.OLLAMA_INSTANCES)]
+        threads = [threading.Thread(
+            target=cls.install_model_stream_single,
+            args=(name, i, message_queues[i])
+        ) for i in range(cls.OLLAMA_INSTANCES)]
+
+        for thread in threads:
+            thread.start()
+
+        alive_threads = [True for _ in range(len(threads))]
+        while any(alive_threads):
+            for i, queue in enumerate(message_queues):
+                try:
+                    event = queue.get(block=False)
+                except Exception:
+                    pass
+                else:
+                    yield event
+                if not threads[i].is_alive():
+                    alive_threads[i] = False
+            time.sleep(0.1)
+
+        for thread in threads:
+            thread.join()
 
     @classmethod
     def install_model_stream(cls, name: str) -> Generator[str, None, None]:
         def server_sent_event_generator():
-            with requests.Session().post(
-                f"{cls.URL}/api/pull",
-                json={"name": name, 'stream': True},
-                headers=None,
-                stream=True
-            ) as response:
-                success = False
-                for i, event in enumerate(
-                    response.iter_lines(chunk_size=cls.STREAM_CHUNK_SIZE)
-                ):
-                    yield ServerSentEvents.build_sse_data(
-                        "model_installation_progress",
-                        event,
-                        i
-                    )
-                    success = "success" in event.decode()
-                if success:
-                    llm = DbInterface.post_llm(name)
-                    yield ServerSentEvents.build_sse_data(
-                        "model_installation_success",
-                        json.dumps({"llm": llm['id']}),
-                        i + 1
-                    )
+            for event in cls.install_model_stream_all(name):
+                yield event
         return server_sent_event_generator()
+
+        # # TODO: distribute to all ollama services
+        # def server_sent_event_generator():
+        #     response_content = b""
+        #     with requests.Session().post(
+        #         f"{cls.URL}/api/pull",
+        #         json={"name": name, 'stream': True},
+        #         headers=None,
+        #         stream=True
+        #     ) as response:
+        #         index = 0
+        #         for chunk in response.iter_content(chunk_size=8192):
+        #             if chunk:
+        #                 response_content += chunk
+        #                 decoded_content = response_content.decode('utf-8')
+        #                 try:
+        #                     json_response = json.loads(decoded_content)
+        #                 except json.JSONDecodeError:
+        #                     # Continue accumulating chunks
+        #                     # until a complete JSON is formed
+        #                     pass
+        #                 else:
+        #                     if json_response['status'] != 'success':
+        #                         yield ServerSentEvents.build_sse_data(
+        #                             "model_installation_progress",
+        #                             json.dumps(json_response),
+        #                             index
+        #                         )
+        #                         index += 1
+        #                     else:
+        #                         llm = DbInterface.post_llm(name)
+        #                         yield ServerSentEvents.build_sse_data(
+        #                             "model_installation_success",
+        #                             json.dumps({"llm": llm['id']}),
+        #                             index
+        #                         )
+        #                         break
+        #                     response_content = b""
+        # return server_sent_event_generator()
 
     def _build_generate_request_body(self, stream: bool) -> Dict[str, Any]:
         request_body = {
@@ -265,7 +400,14 @@ class OllamaRequest(LlmRequest):
 
     def generate(self) -> Tuple[Dict[str, Any], int]:
         request_body = self._build_generate_request_body(stream=False)
-        response = requests.post(f"{self.URL}/api/generate", json=request_body)
+
+        with OllamaScheduler() as ollama_scheduler:
+            response = requests.post(
+                f"{self.URLS[ollama_scheduler.ollama_instance_index]}"
+                "/api/generate",
+                json=request_body
+            )
+
         self._text = response.json()['response']
         self._token_amount = response.json()['eval_count']
         self._persist_generation()
@@ -289,37 +431,40 @@ class OllamaRequest(LlmRequest):
     def generate_stream(self) -> Generator[str, None, None]:
         def server_sent_event_generator():
             response_content = b""
-            with requests.Session().post(
-                f"{self.URL}/api/generate",
-                json=self._build_generate_request_body(stream=True),
-                headers=None,
-                stream=True
-            ) as response:
-                index = 0
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:
-                        response_content += chunk
-                        decoded_content = response_content.decode('utf-8')
-                        try:
-                            json_response = json.loads(decoded_content)
-                        except json.JSONDecodeError:
-                            # Continue accumulating chunks
-                            # until a complete JSON is formed
-                            pass
-                        else:
-                            if json_response['done']:
-                                self._persist_generation()
+            with OllamaScheduler() as ollama_scheduler:
+                with requests.Session().post(
+                    f"{self.URLS[ollama_scheduler.ollama_instance_index]}"
+                    "/api/generate",
+                    json=self._build_generate_request_body(stream=True),
+                    headers=None,
+                    stream=True
+                ) as response:
+                    index = 0
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if chunk:
+                            response_content += chunk
+                            decoded_content = response_content.decode('utf-8')
+                            try:
+                                json_response = json.loads(decoded_content)
+                            except json.JSONDecodeError:
+                                # Continue accumulating chunks
+                                # until a complete JSON is formed
+                                pass
                             else:
-                                self._text += json_response[
-                                    'response'
-                                ]
-                                self._token_amount += 1
-                            yield self._generate_event(json_response, index)
-                            if json_response['done']:
-                                return
-                            index += 1
-                            # Reset content after successful parsing
-                            response_content = b""
+                                if json_response['done']:
+                                    self._persist_generation()
+                                else:
+                                    self._text += json_response[
+                                        'response'
+                                    ]
+                                    self._token_amount += 1
+                                yield self._generate_event(
+                                    json_response, index
+                                )
+                                if json_response['done']:
+                                    break
+                                index += 1
+                                response_content = b""
         return server_sent_event_generator()
 
     def _translate_event(self, event: Any) -> Dict[str, Any]:

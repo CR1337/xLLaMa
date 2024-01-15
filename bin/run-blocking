@@ -1,2 +1,2 @@
 #/bin/sh
-TEST=0 docker compose up --scale test_db=0
+TEST=0 docker compose up --scale test_db=0 "$@"

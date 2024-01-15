@@ -1,20 +1,21 @@
 import subprocess
 import os
+from tests.util.environment import environment
 
 
 class DockerController:
 
     @staticmethod
     def up():
-        environment = os.environ.copy()
-        environment["TEST"] = "1"
+        environ = os.environ.copy()
+        environ["TEST"] = "1"
+        command = 'run-local' if environment['LOCAL'] == '1' else 'run'
         process = subprocess.Popen(
             [
-                'docker', 'compose', 'up', '-d', '--wait',
-                '--scale', 'db=0', '--scale', 'frontend=0'
+                'sh', '-c', f'bin/{command}'
             ],
             stdout=subprocess.PIPE,
-            env=environment
+            env=environ
         )
         process.wait()
         for line in process.stdout:
@@ -22,12 +23,13 @@ class DockerController:
 
     @staticmethod
     def down():
-        environment = os.environ.copy()
-        environment["TEST"] = "1"
+        environ = os.environ.copy()
+        environ["TEST"] = "1"
+        command = 'stop-local' if environment['LOCAL'] == '1' else 'stop'
         process = subprocess.Popen(
-            ['docker', 'compose', 'down'],
+            ['sh', '-c', f'bin/{command}'],
             stdout=subprocess.PIPE,
-            env=environment
+            env=environ
         )
         process.wait()
         for line in process.stdout:

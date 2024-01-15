@@ -4,7 +4,7 @@ from typing import Any, Dict, Tuple, List
 
 
 LLM_FACADE_HOST = '127.0.0.1'
-LLM_FACADE_PORT = environment['LLM_FACADE_EXTERNAL_PORT']
+LLM_FACADE_PORT = environment['LLM_FACADE_NGINX_EXTERNAL_PORT']
 LLM_FACADE_URL = f'http://{LLM_FACADE_HOST}:{LLM_FACADE_PORT}'
 
 
