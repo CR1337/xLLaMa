@@ -66,21 +66,13 @@ span {
     white-space: pre;
 }
 
-.container {
-    overflow: auto;
-    min-height: 300px;
-    border: 1px solid #015c63;
-    border-radius: 5px;
-    background-color: white;
-    margin: 0px 0px 0px;
-}
-
 .p-autocomplete-panel {
     background-color: white;
 }
 
 .p-autocomplete {
-    min-width: 350px;
+    min-width: 300px;
+    margin: 2px 2px;
 }
 
 .p-component {
@@ -95,12 +87,26 @@ span {
 }
 
 .wrapper {
-    overflow: auto;
+    display: flex;
+}
+
+.coder {
+    margin-right: 75px;
+    flex: 1;
 }
 
 .explainer {
-    float:left;
-    width: 700px;
+    flex: 1;
+}
+
+.container {
+    overflow: auto;
+    min-height: 300px;
+    border: 1px solid #015c63;
+    border-radius: 5px;
+    background-color: white;
+    margin: 0px 0px 0px;
+    padding-left: 5px;
 }
 
 .container_explain {
@@ -112,10 +118,4 @@ span {
     margin: 0px 0px 0px;
     padding-left: 5px;
     white-space: pre-wrap;
-}
-
-.coder {
-    float: left;
-    margin-right: 50px;
-    width: 700px;
 }
