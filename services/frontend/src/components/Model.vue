@@ -7,18 +7,23 @@
 
 <template>
 <div :hidden="!visible">
-    <div class="container">
-        <pre><code class="language-python">{{ generatedText }}</code></pre>
-    </div>
-    <div>
-        <div>
-            <button @click="explain" :disabled="!generated || isDummy">Explain!</button>
+    <div class="wrapper">
+        <div class="coder">
+            <div class="container">
+                <pre><code class="language-python">{{ generatedText }}</code></pre>
+            </div>
         </div>
-        <div class="container">
-            <pre>{{ explanation }}</pre>
+        <div class="explainer">
+            <div>
+                <button @click="explain" :disabled="!generated || isDummy">Explain!</button>
+            </div>
+            <div class="container_explain">
+                <div>{{ explanation }}</div>
+            </div>
         </div>
     </div>
-    <div>
+    
+    <div class="codebuttons">
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
         <button v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">Documentation</button>
