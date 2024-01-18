@@ -3,7 +3,7 @@
 
 <template>
 <div>
-    <div class="radio-container">
+    <div class="top-row">
         <template v-for="model in models" :key="model">
         <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
         <label :for="model">{{ model.split(":")[0] }}</label>
@@ -12,6 +12,7 @@
         <input type="radio" :id="model" :value="model" name="model_selection" disabled>
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
+    <button @click="close" style="float: right;">X</button>
     </div>
     <template v-for="model in models" :key="model">
         <Model
@@ -58,6 +59,9 @@ export default {
         },
         generateFollowUpExample(frameworkItem) {
             this.$emit('generateFollowUpExample', frameworkItem, this.id);
+        },
+        close() {
+            this.$emit('close', this.id);
         }
     }
 }
