@@ -58,16 +58,18 @@ export default {
             this._generateExample(frameworkItem, index + 1);
         },
         _generateExample(frameworkItem, index) {
-            if (this.ununsed) {
+            if (this.unused) {
                 this.unused = false;
                 this.modelSelectionIds = [];
             }
-            const id = this.uuidv4();
-            this.modelSelectionIds.splice(index, 0, id);
             this.$nextTick(() => {
-                this.$refs[`modelSelection_${id}`][0].generateExample(frameworkItem);
-                const modelSelection = this.$refs[`modelSelection_${id}`][0];
-                modelSelection.generateExample(frameworkItem);
+                const id = this.uuidv4();
+                this.modelSelectionIds.splice(index, 0, id);
+                this.$nextTick(() => {
+                    this.$refs[`modelSelection_${id}`][0].generateExample(frameworkItem);
+                    const modelSelection = this.$refs[`modelSelection_${id}`][0];
+                    modelSelection.generateExample(frameworkItem);
+                });
             });
         },
         uuidv4() {
