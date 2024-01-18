@@ -19,6 +19,8 @@
             :framework-item="frameworkItem"
             :visible="model == selectedModel"
             :ref="`ref_${model}`"
+            :all-framework-items="allFrameworkItems"
+            @generateFollowUpExample="generateFollowUpExample"
         />
     </template>
 </div>
@@ -32,6 +34,10 @@ export default {
     components: {
         Model
     },
+    props: {
+        allFrameworkItems: Array,
+        id: Number
+    },
     data() {
         return {
             models: ["codellama:7b-instruct", "wizardcoder:13b-python"],
@@ -41,16 +47,16 @@ export default {
         }
     },
     methods: {
-        frameworkItemChanged(frameworkItem) {
+        generateExample(frameworkItem) {
             this.frameworkItem = frameworkItem;
-        },
-        generateExample() {
-            console.log("generateExmaple in ModelSelection");
             for (const model of this.models) {
                 const component = this.$refs[`ref_${model}`][0];
                 component.generateExample();
             }
         },
+        generateFollowUpExample(frameworkItem) {
+            this.$emit('generateFollowUpExample', frameworkItem, this.id);
+        }
     }
 }
 </script>

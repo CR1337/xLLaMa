@@ -1,4 +1,4 @@
-<style>
+<!-- <style>
 </style>
 
 <template>
@@ -6,36 +6,23 @@
     <div>
         <button v-on:click="generateExample()" class="generate-example-button" :disabled="frameworkItem == null">Generate Examples!</button>
     </div>
-    <ModelSelection ref="modelSelection"></ModelSelection>
-    <!-- <div class="radio-container">
-        <template v-for="model in models" :key="model">
-        <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
-        <label :for="model">{{ model.split(":")[0] }}</label>
-    </template>
-    <template v-for="model in disabled_models" :key="model">
-        <input type="radio" :id="model" :value="model" name="model_selection" disabled>
-        <label :for="model">{{ model.split(":")[0] }}</label>
-    </template>
-    </div>
-    <template v-for="model in models" :key="model">
-        <Model
-            :model="model"
-            :framework-item="frameworkItem"
-            :visible="model == selectedModel"
-            :ref="`ref_${model}`"
-        />
-    </template> -->
+    <ModelSelection
+        ref="modelSelection"
+        :all-framework-items="allFrameworkItems"
+    />
 </div>
 </template>
 
 <script>
-// import Model from '@/components/Model.vue';
 import ModelSelection from '@/components/ModelSelection.vue'
 
 export default {
     name: "ExampleGenerator",
     components: {
         ModelSelection
+    },
+    props: {
+        allFrameworkItems: Array
     },
     data() {
         return {
@@ -53,4 +40,4 @@ export default {
         },
     }
 }
-</script>
+</script> -->

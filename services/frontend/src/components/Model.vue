@@ -15,7 +15,17 @@
         <button v-on:click="tooLong()" :disabled="!generated">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated">Too short</button>
         <button v-on:click="openDocumentation()" :disabled="frameworkItem == null">Documentation</button>
-        <button v-on:click="generateNextExample()" :disabled="!generated || selectedCodeObject == null">New example for {{ (selectedCodeObject == null) ? '________' : selectedCodeObject.name }}</button>
+        <!-- TODO: disable -->
+        <AutoComplete
+            v-model="selectedCodeFrameworkItem"
+            :suggestions="suggestedCodeFrameworkItem"
+            @complete="updateSuggestedCodeFrameworkItems"
+            optionLabel="name"
+            force-selection
+            dropdown
+        />
+        <!-- TODO: check generated for disabled -->
+        <button v-on:click="generateNextExample()" :disabled="selectedCodeFrameworkItem == null">Generate next</button>
     </div>
 
 </div>
@@ -25,12 +35,18 @@
 import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
 import 'prismjs/components/prism-python';
+import AutoComplete from 'primevue/autocomplete';
+
 export default {
     name: "Model",
+    components: {
+        AutoComplete
+    },
     props: {
         model: String,
         frameworkItem: Object,
-        visible: Boolean
+        visible: Boolean,
+        allFrameworkItems: Array
     },
     data() {
         return {
@@ -38,23 +54,21 @@ export default {
             generatedPrediction: null,
             generated: false,
 
-            selectedCodeObject: null,
+            codeFrameworkItems: [],
+            selectedCodeFrameworkItem: null,
+            suggestedCodeFrameworkItem: [],
 
             stream: true  // This is a constant to dis/enable streaming
         }
     },
     methods: {
         tooLong() {
-            console.log("function: tooLong()");
             this.generateExample("too_long");
         },
         tooShort() {
-            console.log("function: tooShort()");
             this.generateExample("too_short");
         },
         generateExample(generationReason="example_generation") {
-            console.log("function: generateExample(" + generationReason + ")");
-            console.log("Generation started for " + this.model);
             fetch("http://" + this.host + ":5003/system_prompts/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -65,7 +79,6 @@ export default {
             });
         },
         setPromptParts(systemPromptId, generationReason) {
-            console.log("function: setPromptParts(" + systemPromptId + ", " + generationReason + ")");
             let promises = [
                 fetch("http://" + this.host + ":5003/prompt_parts", {
                     method: "POST",
@@ -154,7 +167,6 @@ export default {
         },
 
         getLlmId(systemPromptId, promptPartIds, generationReason) {
-            console.log("function: getLlmId(" + systemPromptId + ", " + promptPartIds + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/llms/by-name/" + this.model)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -170,7 +182,6 @@ export default {
         },
 
         getUserRatingType(systemPromptId, promptPartIds, llmId, generationReason) {
-            console.log("function: getUserRatingType(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/user_rating_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -182,7 +193,6 @@ export default {
         },
 
         generateUserRating(systemPromptId, promptPartIds, llmId, userRatingTypeId, generationReason) {
-            console.log("function: generateUserRating(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + userRatingTypeId + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/user_ratings", {
                 method: "POST",
                 headers: {
@@ -205,7 +215,6 @@ export default {
         },
 
         getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason) {
-            console.log("function: getFollowUpType(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + generationReason + ")");
             fetch("http://" + this.host + ":5003/follow_up_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -220,7 +229,6 @@ export default {
         },
 
         generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId) {
-            console.log("function: generateFollowUp(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + followUpTypeId + ")");
             fetch("http://" + this.host + ":5003/follow_ups", {
                 method: "POST",
                 headers: {
@@ -242,7 +250,6 @@ export default {
         },
 
         generatePrediction(systemPromptId, promptPartIds, llmId, followUpId) {
-            console.log("function: generatePrediction(" + systemPromptId + ", " + promptPartIds + ", " + llmId + ", " + followUpId + ")");
             let url = "http://" + this.host + ":5001/generate"
                 + "?model=" + llmId
                 + "&prompt_parts=" + promptPartIds.toString()
@@ -251,8 +258,11 @@ export default {
             if (followUpId != null) {
                 url += "&parent_follow_up=" + followUpId;
             }
+
+            this.codeFrameworkItems = [];
+            this.selectedCodeFrameworkItem = null;
+
             if (!this.stream) {
-                console.log("NO STREAM");
                 url += "&stream=false";
                 fetch(url)
                 .then((response) => response.json())
@@ -263,7 +273,6 @@ export default {
                     console.log(error);
                 });
             } else {
-                console.log("STREAM");
                 this.generatedText = "";
                 const eventSource = new EventSource(url);
                 eventSource.addEventListener("generation_progress", (event) => {
@@ -279,7 +288,6 @@ export default {
         },
 
         displayPrediction(predictionId) {
-            console.log("function: displayPrediction(" + predictionId + ")");
             fetch("http://" + this.host + ":5003/predictions/" + predictionId)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -290,11 +298,83 @@ export default {
                     Prism.highlightAll();
                 });
 
-
+                this.getCodeSymbols();
                 this.generated = true;
             })
             .catch((error) => {
                 console.log(error);
+            })
+        },
+
+        getCodeSymbols() {
+            fetch("http://" + this.host + ":5002/analyze-prediction?prediction=" + this.generatedPrediction.id)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                const codeSnippetIds = responseJson.code_snippets;
+                for (const codeSnippetId of codeSnippetIds) {
+                    fetch("http://" + this.host + ":5003/code_snippets/" + codeSnippetId)
+                    .then((response) => response.json())
+                    .then((codeSnippet) => {
+                        const symbolDefinitionIds = codeSnippet.symbol_definitions;
+                        const undefinedSymbolReferenceIds = codeSnippet.undefined_symbol_references;
+                        for (const symbolDefinitionId of symbolDefinitionIds) {
+                            fetch("http://" + this.host + ":5003/symbol_definitions/" + symbolDefinitionId)
+                            .then((response) => response.json())
+                            .then((symbolDefinition) => {
+                                const frameworkItem = this.getFrameworkItemForSymbol(symbolDefinition);
+                                if (frameworkItem == null) return;
+                                if (frameworkItem.framework != this.frameworkItem.framework) return;
+                                this.codeFrameworkItems.push(frameworkItem);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            })
+                        }
+                        for (const undefinedSymbolReferenceId of undefinedSymbolReferenceIds) {
+                            fetch("http://" + this.host + ":5003/undefined_symbol_references/" + undefinedSymbolReferenceId)
+                            .then((response) => response.json())
+                            .then((undefinedSymbolReference) => {
+                                const frameworkItem = this.getFrameworkItemForSymbol(undefinedSymbolReference);
+                                if (frameworkItem == null) return;
+                                if (frameworkItem.framework != this.frameworkItem.framework) return;
+                                this.codeFrameworkItems.push(frameworkItem);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            })
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+        },
+
+        getFrameworkItemForSymbol(symbol) {
+            const symbolName = symbol.symbol.toLowerCase();
+            for (const frameworkItem of this.allFrameworkItems) {
+                const frameworkItemName = frameworkItem.name.toLowerCase();
+                if (frameworkItemName.includes(symbolName)) {
+                    return frameworkItem;
+                }
+            }
+            return null;
+        },
+
+        updateSuggestedCodeFrameworkItems(event) {
+            // TODO: implement
+            // This should return a list of all framework items that were found in generated code
+
+            // TODO: backend needs to find symbols after dots
+
+            console.log(this.allFrameworkItems);
+            this.suggestedCodeFrameworkItem = this.allFrameworkItems.map((item) => {
+                return item;
             })
         },
 
@@ -303,7 +383,7 @@ export default {
         },
 
         generateNextExample() {
-            alert("Not implemented yet!"); // TODO
+            this.$emit("generateFollowUpExample", this.selectedCodeFrameworkItem);
         }
     },
     computed: {
