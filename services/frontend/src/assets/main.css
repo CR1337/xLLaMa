@@ -100,7 +100,7 @@ span {
 }
 
 .container {
-    overflow: auto;
+    overflow: scroll;
     min-height: 300px;
     border: 1px solid #015c63;
     border-radius: 5px;
@@ -110,7 +110,7 @@ span {
 }
 
 .container_explain {
-    overflow: auto;
+    overflow: scroll;
     min-height: 255px;
     border: 1px solid #015c63;
     border-radius: 5px;
