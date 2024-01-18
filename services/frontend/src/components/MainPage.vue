@@ -1,7 +1,30 @@
 <style>
+.image-link {
+    margin-right: 10px;
+    margin-top: 10px;
+    float: right;
+}
 </style>
 
 <template>
+<div>
+<a class="image-link" href="https://hpi.de/studium/im-studium/lehrveranstaltungen/it-systems-engineering-ma/lehrveranstaltung/wise-23-24-3872-future-of-programming.html" target="_blank">
+<img
+    src="https://hpi.de/favicon.ico"
+    alt="Future of Programming"
+    width="16"
+    height="16"
+/>
+</a>
+<a class="image-link" href="https://github.com/CR1337/xLLaMa" target="_blank">
+    <img
+        src="https://github.githubassets.com/favicon.ico"
+        alt="GitHub"
+        width="16"
+        height="16"
+    />
+</a>
+</div>
 <h1>xLLaMa</h1>
 <ApiSelector @frameworkChanged="frameworkChanged"></ApiSelector>
 <FunctionSelector ref="functionSelector" @frameworkItemSelected="frameworkItemSelected"></FunctionSelector>
