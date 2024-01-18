@@ -2,11 +2,11 @@
 - [x] Streaming reparieren
 - [x] Gleichzeitige Generierung
 - [x] Mehr Funktionen in Datenbank einfügen
-- [ ] (Code Explaination by LLM)
+- [x] Code Explaination by LLM
+- [ ] Find more functions in generated Code
 - [ ] (GPT)
 
 ## Frontend
-- [ ] Neues Beispiel für Funktion aus generiertem Beispiel
 - [x] Neue Funktionen aus DB suchbar machen
 - [x] Link zu Dokumentation von generierter Funktion anzeigen
 - [x] Syntaxhighlighting
@@ -16,6 +16,10 @@
 - [x] Dropdown schön machen (Background weiß statt durchsichtig?)
 - [ ] Tokenlimit anpassen
 - [ ] Nur example Code im linken Feld anzeigen, keine Erklärungen
+- [ ] Close Button anpassen
+- [ ] Fix Text Wrap
+- [ ] Überschrift für Beispiele mit Funktionsname
+- [ ] Add Github link
 
 -------------------------------------------------------------------------------
 
