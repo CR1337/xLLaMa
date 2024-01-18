@@ -1,4 +1,9 @@
 <style>
+.container pre {
+    background-color: white;
+    margin: 0px 0px 0px
+}
+
 </style>
 
 <template>
