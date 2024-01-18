@@ -12,7 +12,7 @@
         <input type="radio" :id="model" :value="model" name="model_selection" disabled>
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
-    <button @click="close" style="float: right;">X</button>
+    <button class="closeButton" @click="close" style="float: right;">✖</button>
     </div>
     <template v-for="model in models" :key="model">
         <Model

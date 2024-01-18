@@ -54,6 +54,16 @@ button:disabled {
     background-color: rgb(210, 107, 95);
 }
 
+.closeButton, .closeButton:hover {
+    background-color: #f4f4f4;
+    color: #b5b5b5;
+    border:none;
+    font-size: larger;
+}
+
+
+
+
 label {
     margin-right: 10px;
 }
