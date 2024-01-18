@@ -18,14 +18,15 @@
                 <button @click="explain" :disabled="!generated || isDummy">Explain!</button>
             </div>
             <div class="container_explain">
-                <div>{{ explanation }}</div>
+                <div>{{ explanationText }}</div>
             </div>
         </div>
     </div>
-    
+
     <div class="codebuttons">
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
+        <button v-on:click="copyToClipboard()" :disabled="!generated || isDummy">Copy to clipboard</button>
         <button v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">Documentation</button>
         <!-- TODO: imporove disabled -->
         <AutoComplete
@@ -72,7 +73,7 @@ export default {
             selectedCodeFrameworkItem: null,
             suggestedCodeFrameworkItem: [],
 
-            explanation: "This is a example explanation.",
+            explanationText: "This is a example explanation.",
 
             stream: true  // This is a constant to dis/enable streaming
         }
@@ -382,6 +383,71 @@ export default {
             return null;
         },
 
+        explain() {
+            fetch("http://" + this.host + ":5003/prompt_parts", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "text": "Please explain this code:\n\n```python\n" + this.generatedText + "\n```"
+                })
+            })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                const promptPartIds = [responseJson.id];
+                fetch("http://" + this.host + ":5003/llms/by-name/" + this.explanationModel)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    const llmId = responseJson.id;
+                    let url = "http://" + this.host + ":5001/generate"
+                        + "?model=" + llmId
+                        + "&prompt_parts=" + [promptPartIds].toString()
+                        + "&framework_item=" + this.frameworkItem.id;
+                        if (!this.stream) {
+                            url += "&stream=false";
+                            fetch(url)
+                            .then((response) => response.json())
+                            .then((responseJson) => {
+                                this.displayExplanation(responseJson.prediction);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                        } else {
+                            this.explanationText = "";
+                            const eventSource = new EventSource(url);
+                            eventSource.addEventListener("generation_progress", (event) => {
+                                const token = JSON.parse(event.data).token;
+                                this.explanationText += token;
+                            });
+                            eventSource.addEventListener("generation_success", (event) => {
+                                eventSource.close();
+                                const predictionId = JSON.parse(event.data).prediction;
+                                this.displayExplanation(predictionId);
+                            });
+                        }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        },
+        displayExplanation(predictionId) {
+            fetch("http://" + this.host + ":5003/predictions/" + predictionId)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.explanationText = responseJson.text;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        },
+
         updateSuggestedCodeFrameworkItems(event) {
             // TODO: implement
             // This should return a list of all framework items that were found in generated code
@@ -400,6 +466,10 @@ export default {
 
         generateNextExample() {
             this.$emit("generateFollowUpExample", this.selectedCodeFrameworkItem);
+        },
+
+        copyToClipboard() {
+            navigator.clipboard.writeText(this.generatedText);
         }
     },
     computed: {
