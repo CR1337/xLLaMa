@@ -7,12 +7,12 @@
     <button title="close this example" class="closeButton" @click="close" style="float: right;">✖</button>
     <div class="top-row">
         <template v-for="model in models" :key="model">
-        <input type="radio" :id="model" :value="model" :name="'model_selection_' + id" v-model="selectedModel">
-        <label :for="model">{{ model.split(":")[0] }}</label>
+        <input type="radio" :id="model + '_' + id" :value="model" :name="'model_selection_' + id" v-model="selectedModel">
+        <label :for="model + '_' + id">{{ model.split(":")[0] }}</label>
     </template>
     <template v-for="model in disabled_models" :key="model">
-        <input type="radio" :id="model" :value="model" :name="'model_selection_' + id" disabled>
-        <label :for="model">{{ model.split(":")[0] }}</label>
+        <input type="radio" :id="model + '_' + id" :value="model" :name="'model_selection_' + id" disabled>
+        <label :for="model + '_' + id">{{ model.split(":")[0] }}</label>
     </template>
     </div>
     <template v-for="model in models" :key="model">
