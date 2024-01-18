@@ -4,6 +4,14 @@
     margin-top: 10px;
     float: right;
 }
+
+.copyright-info{
+    bottom: 0;
+    position: fixed;
+    z-index: -1000;
+    font-size: x-small;
+    color: #b5b5b5;
+}
 </style>
 
 <template>
@@ -41,6 +49,9 @@
     @generateFollowUpExample="generateFollowUpExample"
     @close="close"
 />
+<div class="copyright-info">
+    Copyright (c) 2024 Lara Kursawe, Christian Raue
+</div>
 </template>
 
 <script>
