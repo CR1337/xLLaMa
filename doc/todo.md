@@ -8,12 +8,12 @@
 ## Frontend
 - [ ] Neues Beispiel für Funktion aus generiertem Beispiel
 - [x] Neue Funktionen aus DB suchbar machen
-- [ ] Link zu Dokumentation von generierter Funktion anzeigen
+- [x] Link zu Dokumentation von generierter Funktion anzeigen
 - [x] Syntaxhighlighting
 - [x] Frontend Layout überlegen
 - [x] Autocomplete
 - [x] Generate Example ausgrauen bis valid input
-- [ ] Dropdown schön machen (Background weiß statt durchsichtig?)
+- [x] Dropdown schön machen (Background weiß statt durchsichtig?)
 - [ ] Tokenlimit anpassen
 - [ ] Nur example Code im linken Feld anzeigen, keine Erklärungen
 
