@@ -1,4 +1,5 @@
-from code_visitor import CodeVisitor
+# from code_visitor import CodeVisitor
+from simple_code_visitor import SimpleCodeVisitor
 from metric_calculator import MetricCalculator
 from typing import Any, Dict
 from code_snippet import CodeSnippet
@@ -7,7 +8,7 @@ from code_snippet import CodeSnippet
 class CodeAnalyzer:
 
     code_snippet: CodeSnippet
-    code_visitor: CodeVisitor
+    code_visitor: SimpleCodeVisitor
     metric_calculator: MetricCalculator
 
     def __init__(self, code_snippet: CodeSnippet):
@@ -16,7 +17,7 @@ class CodeAnalyzer:
         self.metric_calculator = None
 
     def analyze(self):
-        self.code_visitor = CodeVisitor()
+        self.code_visitor = SimpleCodeVisitor()
         self.code_visitor.visit(self.code_snippet.tree)
         self.metric_calculator = MetricCalculator(self.code_snippet)
         self.metric_calculator.calculate()

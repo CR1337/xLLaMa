@@ -3,7 +3,7 @@
 - [x] Gleichzeitige Generierung
 - [x] Mehr Funktionen in Datenbank einfügen
 - [x] Code Explaination by LLM
-- [ ] Find more functions in generated Code
+- [x] Find more functions in generated Code
 - [ ] (GPT)
 
 ## Frontend
