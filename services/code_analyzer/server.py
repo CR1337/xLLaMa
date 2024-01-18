@@ -15,7 +15,7 @@ def route_index():
     return {'message': "Hello, world!\n This is 'code_analyzer'."}, 200
 
 
-@app.route("/analyze-prediction", methods=['POST'])
+@app.route("/analyze-prediction", methods=['GET'])
 def route_analyze_prediction():
     if (prediction_id := request.args.get('prediction')) is None:
         return {'message': "no prediction_id"}, 400
