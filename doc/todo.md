@@ -16,10 +16,15 @@
 - [x] Dropdown schön machen (Background weiß statt durchsichtig?)
 - [ ] Tokenlimit anpassen
 - [ ] Nur example Code im linken Feld anzeigen, keine Erklärungen
-- [ ] Close Button anpassen
-- [ ] Fix Text Wrap
+- [x] Close Button anpassen
+- [x] Fix Text Wrap
 - [ ] Überschrift für Beispiele mit Funktionsname
-- [ ] Add Github link
+- [x] Add Github link
+- [ ] Action Buttons schöner machen
+- [ ] (Radio Button styling)
+- [ ] Tab Logo
+- [ ] Fix Radio Button Grouping
+- [ ] Add Logo to Header
 
 -------------------------------------------------------------------------------
 
