@@ -12,10 +12,10 @@
         <pre><code class="language-python">{{ generatedText }}</code></pre>
     </div>
     <div>
-        <button v-on:click="tooLong()" :disabled="!generated">Too long</button>
-        <button v-on:click="tooShort()" :disabled="!generated">Too short</button>
-        <button v-on:click="openDocumentation()" :disabled="frameworkItem == null">Documentation</button>
-        <!-- TODO: disable -->
+        <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
+        <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
+        <button v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">Documentation</button>
+        <!-- TODO: imporove disabled -->
         <AutoComplete
             v-model="selectedCodeFrameworkItem"
             :suggestions="suggestedCodeFrameworkItem"
@@ -23,9 +23,10 @@
             optionLabel="name"
             force-selection
             dropdown
+            :disabled="isDummy"
         />
         <!-- TODO: check generated for disabled -->
-        <button v-on:click="generateNextExample()" :disabled="selectedCodeFrameworkItem == null">Generate next</button>
+        <button v-on:click="generateNextExample()" :disabled="selectedCodeFrameworkItem == null || isDummy">Generate next</button>
     </div>
 
 </div>
@@ -46,7 +47,8 @@ export default {
         model: String,
         frameworkItem: Object,
         visible: Boolean,
-        allFrameworkItems: Array
+        allFrameworkItems: Array,
+        isDummy: Boolean
     },
     data() {
         return {

@@ -5,7 +5,6 @@
 <h1>xLLaMa</h1>
 <ApiSelector @frameworkChanged="frameworkChanged"></ApiSelector>
 <FunctionSelector ref="functionSelector" @frameworkItemSelected="frameworkItemSelected"></FunctionSelector>
-<!-- <ExampleGenerator ref="exampleGenerator" :all-framework-items="allFrameworkItems"></ExampleGenerator> -->
 <div>
     <button v-on:click="generateExample()" class="generate-example-button" :disabled="selectedFrameworkItem == null">Generate Examples!</button>
 </div>
@@ -15,6 +14,7 @@
     :all-framework-items="allFrameworkItems"
     :ref="`modelSelection_${modelSelectionId}`"
     :id="modelSelectionId"
+    :is-dummy="modelSelectionId == dummyModelSelectionId"
     @generateFollowUpExample="generateFollowUpExample"
 />
 </template>
@@ -22,7 +22,6 @@
 <script>
 import ApiSelector from '@/components/ApiSelector.vue';
 import FunctionSelector from '@/components/FunctionSelector.vue'
-// import ExampleGenerator from '@/components/ExampleGenerator.vue';
 import ModelSelection from '@/components/ModelSelection.vue'
 
 export default {
@@ -30,7 +29,6 @@ export default {
     components: {
         ApiSelector,
         FunctionSelector,
-        // ExampleGenerator,
         ModelSelection
     },
     data() {
@@ -39,7 +37,9 @@ export default {
             selectedFrameworkItem: null,
             allFrameworkItems: [],
 
-            modelSelectionIds: []
+            dummyModelSelectionId: '<<<DUMMY>>>',
+            modelSelectionIds: [],
+            unused: true
         }
     },
     methods: {
@@ -49,7 +49,6 @@ export default {
         },
         frameworkItemSelected(frameworkItem) {
             this.selectedFrameworkItem = frameworkItem;
-            // this.$refs.exampleGenerator.frameworkItemChanged(frameworkItem);
         },
         generateExample() {
             this._generateExample(this.selectedFrameworkItem, 0);
@@ -59,10 +58,15 @@ export default {
             this._generateExample(frameworkItem, index + 1);
         },
         _generateExample(frameworkItem, index) {
+            if (this.ununsed) {
+                this.unused = false;
+                this.modelSelectionIds = [];
+            }
             const id = this.uuidv4();
             this.modelSelectionIds.splice(index, 0, id);
             this.$nextTick(() => {
-                this.$refs[`modelSelection_${id}`][0].generateExample(frameworkItem);            const modelSelection = this.$refs[`modelSelection_${id}`][0];
+                this.$refs[`modelSelection_${id}`][0].generateExample(frameworkItem);
+                const modelSelection = this.$refs[`modelSelection_${id}`][0];
                 modelSelection.generateExample(frameworkItem);
             });
         },
@@ -82,6 +86,8 @@ export default {
         .catch((error) => {
             console.log(error);
         });
+
+        this.modelSelectionIds.push(this.dummyModelSelectionId);
     },
     computed: {
         host() { return window.location.origin.split("/")[2].split(":")[0]; }

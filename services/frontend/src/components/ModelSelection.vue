@@ -20,6 +20,7 @@
             :visible="model == selectedModel"
             :ref="`ref_${model}`"
             :all-framework-items="allFrameworkItems"
+            :is-dummy="isDummy"
             @generateFollowUpExample="generateFollowUpExample"
         />
     </template>
@@ -36,7 +37,8 @@ export default {
     },
     props: {
         allFrameworkItems: Array,
-        id: Number
+        id: Number,
+        isDummy: Boolean
     },
     data() {
         return {
