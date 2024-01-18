@@ -3,6 +3,7 @@
 
 <template>
 <div>
+    <h2>{{ frameworkItem.name }}</h2>
     <div class="top-row">
         <template v-for="model in models" :key="model">
         <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">

@@ -67,7 +67,6 @@ export default {
                 const id = this.uuidv4();
                 this.modelSelectionIds.splice(index, 0, id);
                 this.$nextTick(() => {
-                    this.$refs[`modelSelection_${id}`][0].generateExample(frameworkItem);
                     const modelSelection = this.$refs[`modelSelection_${id}`][0];
                     modelSelection.generateExample(frameworkItem);
                 });

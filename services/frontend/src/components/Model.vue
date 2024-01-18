@@ -15,7 +15,7 @@
         </div>
         <div class="explainer">
             <div>
-                <button @click="explain" :disabled="!generated || isDummy">Explain!</button>
+                <button @click="explain" :disabled="!generated || isDummy || explainClicked">Explain!</button>
             </div>
             <div class="container_explain">
                 <div>{{ explanationText }}</div>
@@ -73,7 +73,9 @@ export default {
             selectedCodeFrameworkItem: null,
             suggestedCodeFrameworkItem: [],
 
-            explanationText: "This is a example explanation.",
+            explanationText: "",
+            explanationModel: "codellama:7b-instruct",
+            explainClicked: false,
 
             stream: true  // This is a constant to dis/enable streaming
         }
@@ -384,6 +386,7 @@ export default {
         },
 
         explain() {
+            this.explainClicked = true;
             fetch("http://" + this.host + ":5003/prompt_parts", {
                 method: "POST",
                 headers: {
