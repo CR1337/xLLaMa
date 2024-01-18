@@ -3,13 +3,20 @@
     background-color: white;
     margin: 0px 0px 0px
 }
-
 </style>
 
 <template>
 <div :hidden="!visible">
     <div class="container">
         <pre><code class="language-python">{{ generatedText }}</code></pre>
+    </div>
+    <div>
+        <div>
+            <button @click="explain" :disabled="!generated || isDummy">Explain!</button>
+        </div>
+        <div class="container">
+            <pre>{{ explanation }}</pre>
+        </div>
     </div>
     <div>
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
@@ -59,6 +66,8 @@ export default {
             codeFrameworkItems: [],
             selectedCodeFrameworkItem: null,
             suggestedCodeFrameworkItem: [],
+
+            explanation: "This is a example explanation.",
 
             stream: true  // This is a constant to dis/enable streaming
         }
