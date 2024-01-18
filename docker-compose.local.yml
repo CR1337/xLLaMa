@@ -11,13 +11,13 @@ services:
       - ${OLLAMA_0_EXTERNAL_PORT}:${OLLAMA_INTERNAL_PORT}
     volumes:
       - ./volumes/ollama_0:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            device_ids: ['0']
-            capabilities: [gpu]
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         device_ids: ['0']
+    #         capabilities: [gpu]
 
   frontend:
     build: services/frontend
