@@ -7,10 +7,10 @@
 
 <template>
 <div :hidden="!visible">
-    <div class="container">
-        <pre><code class="language-python">{{ generatedText }}</code></pre>
-    </div>
-    <div>
+                <div class="container">
+                <pre><code class="language-python">{{ generatedText }}</code></pre>
+            </div>
+<div>
         <div>
             <button @click="explain" :disabled="!generated || isDummy">Explain!</button>
         </div>
