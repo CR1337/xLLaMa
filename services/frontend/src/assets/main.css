@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+    padding: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+div {
+    margin: 0px 5px;
+    padding: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+button {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  margin: 1px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+}
+
+label {
+    font-family: 'Poppins', sans-serif;
+    margin-right: 10px;
+}
+
+input {
+    font-family: 'Poppins', sans-serif;
+    margin-right: 3px;
+}
+
+span {
+    white-space: pre;
+}
+
+.container {
+    max-width: 600px;
+    overflow: auto;
+    min-height: 300px;
+    border: 1px solid steelblue;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.language-python {
+    background-color: white;
+}
+
+.generate-example-button {
+    background-color: salmon;
+    color: black;
+    margin: 0px 0px 20px
+}
+
+.generate-example-button:disabled {
+    background-color: rgb(170, 170, 170);
+    color: black;
+    margin: 0px 0px 20px;
+    cursor: not-allowed;
+}
+
+.p-autocomplete-panel {
+    background-color: white;
+}
+
+.p-autocomplete {
+    min-width: 350px;
+}
