@@ -23,7 +23,7 @@
 - [ ] Action Buttons schöner machen
 - [ ] (Radio Button styling)
 - [ ] Tab Logo
-- [ ] Fix Radio Button Grouping
+- [x] Fix Radio Button Grouping
 - [ ] Add Logo to Header
 
 -------------------------------------------------------------------------------

@@ -6,11 +6,11 @@
     <!-- <h3> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? hourglassEmojis[currentHourglassEmojiIndex] : frameworkItem.name }} </h3> -->
     <div class="top-row">
         <template v-for="model in models" :key="model">
-        <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
+        <input type="radio" :id="model" :value="model" :name="'model_selection_' + id" v-model="selectedModel">
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
     <template v-for="model in disabled_models" :key="model">
-        <input type="radio" :id="model" :value="model" name="model_selection" disabled>
+        <input type="radio" :id="model" :value="model" :name="'model_selection_' + id" disabled>
         <label :for="model">{{ model.split(":")[0] }}</label>
     </template>
     <button title="close this example" class="closeButton" @click="close" style="float: right;">✖</button>
