@@ -7,7 +7,6 @@
 
 <template>
 <div :hidden="!visible">
-    <button @click="debugFillMe()">FILL ME!</button>
     <div class="wrapper">
         <div class="coder">
             <div class="container">
@@ -16,6 +15,8 @@
         </div>
         <div class="explainer">
             <div>
+                <button v-on:click="copyToClipboard()" :disabled="!generated || isDummy">Copy to clipboard</button>
+                <button v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">Documentation</button>
                 <button @click="explain" :disabled="!generated || isDummy || explainClicked">Explain!</button>
             </div>
             <div class="container_explain">
@@ -27,8 +28,6 @@
     <div class="codebuttons">
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
-        <button v-on:click="copyToClipboard()" :disabled="!generated || isDummy">Copy to clipboard</button>
-        <button v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">Documentation</button>
         <!-- TODO: imporove disabled -->
         <AutoComplete
             v-model="selectedCodeFrameworkItem"
@@ -474,15 +473,6 @@ export default {
 
         copyToClipboard() {
             navigator.clipboard.writeText(this.generatedText);
-        },
-
-        debugFillMe() {
-            for (let j = 0; j < 100; ++j) {
-                this.generatedText += "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-                this.explanationText += "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-                this.generatedText += "\n";
-                this.explanationText += "\n";
-            }
         }
     },
     computed: {
