@@ -21,7 +21,7 @@ button {
   display: inline-block;
   background: #000;
   color: #fff;
-  border: none;
+  border: 1px solid rgb(110, 110, 110);
   padding: 10px 15px;
   margin: 1px 5px;
   border-radius: 5px;
@@ -29,6 +29,14 @@ button {
   text-decoration: none;
   font-size: 15px;
   font-family: 'Poppins', sans-serif;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    background-color: rgb(170, 170, 170);
+    color: black;
+    border: 1px solid rgb(110, 110, 110);
+    border-radius: 5px;
 }
 
 label {
@@ -52,6 +60,7 @@ span {
     border: 1px solid steelblue;
     border-radius: 5px;
     background-color: white;
+    margin: 0px 0px 0px;
 }
 
 .generate-example-button {
@@ -64,7 +73,6 @@ span {
     background-color: rgb(170, 170, 170);
     color: black;
     margin: 0px 0px 20px;
-    cursor: not-allowed;
 }
 
 .p-autocomplete-panel {
