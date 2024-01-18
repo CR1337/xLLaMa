@@ -1,19 +1,21 @@
 ## Backend
 - [x] Streaming reparieren
-- [x] Gleichzeitige Generierung - C bis DO
-- [x] Mehr Funktion Documentation (pandas, HF, ...) in Datenbank einfügen
+- [x] Gleichzeitige Generierung
+- [x] Mehr Funktionen in Datenbank einfügen
 - [ ] (Code Explaination by LLM)
 - [ ] (GPT)
 
 ## Frontend
-- [ ] Neues Beispiel für markierte Funktion aus Beispiel (neuer Tab) + Doku anzeigen - C + L am DO
+- [ ] Neues Beispiel für Funktion aus generiertem Beispiel
 - [x] Neue Funktionen aus DB suchbar machen
-- [ ] Show link to documentation after generation
+- [ ] Link zu Dokumentation von generierter Funktion anzeigen
 - [x] Syntaxhighlighting
 - [x] Frontend Layout überlegen
-- [x] (Autocomplete)
+- [x] Autocomplete
 - [x] Generate Example ausgrauen bis valid input
-- [ ] (Dropdown schön machen)
+- [ ] Dropdown schön machen (Background weiß statt durchsichtig?)
+- [ ] Tokenlimit anpassen
+- [ ] Nur example Code im linken Feld anzeigen, keine Erklärungen
 
 -------------------------------------------------------------------------------
 
@@ -27,8 +29,3 @@
 ## Abgabe
 - [ ] ab KW6 Abgabe fertig machen
 - [ ] Repo vermutlich okay, mit Commit Hash
-
-
-## Remember
-- [ ] Tokenlimit anpassen
-- [ ] Prompt anpassen
