@@ -19,8 +19,6 @@
         :key="frameworkItem.id"
         v-on:click="buttonClicked(frameworkItem)"
     >{{ frameworkItem.name }}</button>
-    <br>
-    <a>Selected Function: </a><a>{{ (selectedFrameworkItem == null) ? "No Item selected!" : selectedFrameworkItem.name }}</a>
 </div>
 </template>
 
