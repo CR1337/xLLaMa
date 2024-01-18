@@ -3,6 +3,7 @@
 
 <template>
 <div>
+    <!-- <h3> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? hourglassEmojis[currentHourglassEmojiIndex] : frameworkItem.name }} </h3> -->
     <div class="top-row">
         <template v-for="model in models" :key="model">
         <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
@@ -47,6 +48,9 @@ export default {
             disabled_models: ["GPT-3.5", "GPT-4"],
             selectedModel: "codellama:7b-instruct",
             frameworkItem: null,
+
+            hourglassEmojis: ['⏳', '⌛'],
+            currentHourglassEmojiIndex: 0
         }
     },
     methods: {
@@ -62,7 +66,13 @@ export default {
         },
         close() {
             this.$emit('close', this.id);
+        },
+        flipHourglassEmoji() {
+            this.currentHourglassEmojiIndex = (this.currentHourglassEmojiIndex + 1) % this.hourglassEmojis.length;
         }
-    }
+    },
+    mounted() {
+        window.setInterval(this.flipHourglassEmoji, 500);
+    },
 }
 </script>
