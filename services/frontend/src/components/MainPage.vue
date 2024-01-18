@@ -65,6 +65,10 @@ span {
     color: black;
     margin: 0px 0px 20px
 }
+
+.p-autocomplete-panel {
+    background-color: white;
+}
 </style>
 
 <template>
