@@ -7,6 +7,7 @@
 
 <template>
 <div :hidden="!visible">
+    <button @click="debugFillMe()">FILL ME!</button>
     <div class="wrapper">
         <div class="coder">
             <div class="container">
@@ -473,6 +474,15 @@ export default {
 
         copyToClipboard() {
             navigator.clipboard.writeText(this.generatedText);
+        },
+
+        debugFillMe() {
+            for (let j = 0; j < 100; ++j) {
+                this.generatedText += "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                this.explanationText += "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                this.generatedText += "\n";
+                this.explanationText += "\n";
+            }
         }
     },
     computed: {
