@@ -14,7 +14,7 @@
 - [x] Autocomplete
 - [x] Generate Example ausgrauen bis valid input
 - [x] Dropdown schön machen (Background weiß statt durchsichtig?)
-- [ ] Tokenlimit anpassen
+- [x] Tokenlimit anpassen
 - [ ] Nur example Code im linken Feld anzeigen, keine Erklärungen
 - [x] Close Button anpassen
 - [x] Fix Text Wrap

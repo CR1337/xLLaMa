@@ -83,7 +83,9 @@ export default {
             explanationModel: "codellama:7b-instruct",
             explainClicked: false,
 
-            stream: true  // This is a constant to dis/enable streaming
+            stream: true,  // This is a constant to dis/enable streaming
+            max_tokens: 1024,
+            temperature: 0.0
         }
     },
     methods: {
@@ -280,6 +282,8 @@ export default {
                 + "&prompt_parts=" + promptPartIds.toString()
                 + "&system_prompt=" + systemPromptId
                 + "&framework_item=" + this.frameworkItem.id
+                + "&max_tokens=" + this.max_tokens
+                + "&temperature=" + this.temperature;
             if (followUpId != null) {
                 url += "&parent_follow_up=" + followUpId;
             }
@@ -413,7 +417,9 @@ export default {
                     let url = "http://" + this.host + ":5001/generate"
                         + "?model=" + llmId
                         + "&prompt_parts=" + [promptPartIds].toString()
-                        + "&framework_item=" + this.frameworkItem.id;
+                        + "&framework_item=" + this.frameworkItem.id
+                        + "&max_tokens=" + this.max_tokens
+                        + "&temperature=" + this.temperature;
                         if (!this.stream) {
                             url += "&stream=false";
                             fetch(url)
