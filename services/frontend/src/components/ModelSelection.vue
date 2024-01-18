@@ -3,11 +3,7 @@
 
 <template>
 <div>
-    <div>
-        <button v-on:click="generateExample()" class="generate-example-button" :disabled="frameworkItem == null">Generate Examples!</button>
-    </div>
-    <ModelSelection ref="modelSelection"></ModelSelection>
-    <!-- <div class="radio-container">
+    <div class="radio-container">
         <template v-for="model in models" :key="model">
         <input type="radio" :id="model" :value="model" name="model_selection" v-model="selectedModel">
         <label :for="model">{{ model.split(":")[0] }}</label>
@@ -24,32 +20,36 @@
             :visible="model == selectedModel"
             :ref="`ref_${model}`"
         />
-    </template> -->
+    </template>
 </div>
 </template>
 
 <script>
-// import Model from '@/components/Model.vue';
-import ModelSelection from '@/components/ModelSelection.vue'
+import Model from '@/components/Model.vue'
 
 export default {
-    name: "ExampleGenerator",
+    name: "ModelSelection",
     components: {
-        ModelSelection
+        Model
     },
     data() {
         return {
-            frameworkItem: null
+            models: ["codellama:7b-instruct", "wizardcoder:13b-python"],
+            disabled_models: ["GPT-3.5", "GPT-4"],
+            selectedModel: "codellama:7b-instruct",
+            frameworkItem: null,
         }
     },
     methods: {
         frameworkItemChanged(frameworkItem) {
-            this.$refs.modelSelection.frameworkItemChanged(frameworkItem);
             this.frameworkItem = frameworkItem;
         },
         generateExample() {
-            console.log("generateExample in ExampleGenerator");
-            this.$refs.modelSelection.generateExample();
+            console.log("generateExmaple in ModelSelection");
+            for (const model of this.models) {
+                const component = this.$refs[`ref_${model}`][0];
+                component.generateExample();
+            }
         },
     }
 }

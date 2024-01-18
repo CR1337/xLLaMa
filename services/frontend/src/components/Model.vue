@@ -9,6 +9,8 @@
     <div>
         <button v-on:click="tooLong()" :disabled="!generated">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated">Too short</button>
+        <button v-on:click="openDocumentation()" :disabled="frameworkItem == null">Documentation</button>
+        <button v-on:click="generateNextExample()" :disabled="!generated || selectedCodeObject == null">New example for {{ (selectedCodeObject == null) ? '________' : selectedCodeObject.name }}</button>
     </div>
 
 </div>
@@ -30,6 +32,9 @@ export default {
             generatedText: "Generated code by " + this.model + " will apear here.",
             generatedPrediction: null,
             generated: false,
+
+            selectedCodeObject: null,
+
             stream: true  // This is a constant to dis/enable streaming
         }
     },
@@ -286,6 +291,14 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
+        },
+
+        openDocumentation() {
+            window.open(this.frameworkItem.url, "_blank");
+        },
+
+        generateNextExample() {
+            alert("Not implemented yet!"); // TODO
         }
     },
     computed: {
