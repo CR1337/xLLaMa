@@ -18,7 +18,7 @@
 - [x] Nur example Code im linken Feld anzeigen, keine Erklärungen
 - [x] Close Button anpassen
 - [x] Fix Text Wrap
-- [ ] Überschrift für Beispiele mit Funktionsname
+- [x] Überschrift für Beispiele mit Funktionsname
 - [x] Add Github link
 - [ ] Action Buttons schöner machen
 - [ ] (Radio Button styling)
