@@ -93,15 +93,18 @@ span {
 .coder {
     margin-right: 75px;
     flex: 1;
+    overflow: hidden;
 }
 
 .explainer {
+    margin-right: 5px;
     flex: 1;
+    overflow: hidden;
 }
 
 .container {
-    overflow: scroll;
-    min-height: 300px;
+    overflow-y: auto;
+    height: 300px;
     border: 1px solid #015c63;
     border-radius: 5px;
     background-color: white;
@@ -110,12 +113,11 @@ span {
 }
 
 .container_explain {
-    overflow: scroll;
-    min-height: 255px;
+    overflow-y: auto;
+    height: 255px;
     border: 1px solid #015c63;
     border-radius: 5px;
     background-color: white;
     margin: 0px 0px 0px;
     padding-left: 5px;
-    white-space: pre-wrap;
 }
