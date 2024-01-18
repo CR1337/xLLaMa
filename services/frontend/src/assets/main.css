@@ -111,6 +111,7 @@ span {
     background-color: white;
     margin: 0px 0px 0px;
     padding-left: 5px;
+    white-space: pre-wrap;
 }
 
 .coder {
