@@ -1,51 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
 }
 
 h1 {
-    padding: 5px;
     font-family: 'Poppins', sans-serif;
+    font-size: 55px;
+    margin: 0 0px;
+    padding-left: 10px;
+    background-color: #015c63;
+    color: #fff;
+    text-shadow: -1px 0 #034c52, 0 1px #034c52, 1px 0 #034c52, 0 -1px #034c52;
+
 }
 
 div {
-    margin: 0px 5px;
-    padding: 5px;
-    font-family: 'Poppins', sans-serif;
+    margin: 5px 0px;
 }
 
 button {
-  display: inline-block;
-  background: #000;
+  background-color: #333;
   color: #fff;
-  border: 1px solid rgb(110, 110, 110);
-  padding: 10px 15px;
-  margin: 1px 5px;
+  padding: 7px 14px;
+  border: 1px solid #333;
   border-radius: 5px;
+  margin: 2px 2px;
   cursor: pointer;
-  text-decoration: none;
-  font-size: 15px;
-  font-family: 'Poppins', sans-serif;
+}
+
+button:hover {
+    background-color: #555;
 }
 
 button:disabled {
     cursor: not-allowed;
-    background-color: rgb(170, 170, 170);
+    background-color: #b5b5b5;
+    border: 1px solid #929292;
+}
+
+.generate-example-button {
+    background-color: salmon;
     color: black;
-    border: 1px solid rgb(110, 110, 110);
-    border-radius: 5px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.generate-example-button:enabled:hover {
+    background-color: rgb(210, 107, 95);
 }
 
 label {
-    font-family: 'Poppins', sans-serif;
     margin-right: 10px;
 }
 
 input {
-    font-family: 'Poppins', sans-serif;
     margin-right: 3px;
 }
 
@@ -57,22 +69,10 @@ span {
     max-width: 600px;
     overflow: auto;
     min-height: 300px;
-    border: 1px solid steelblue;
+    border: 1px solid #015c63;
     border-radius: 5px;
     background-color: white;
     margin: 0px 0px 0px;
-}
-
-.generate-example-button {
-    background-color: salmon;
-    color: black;
-    margin: 0px 0px 20px
-}
-
-.generate-example-button:disabled {
-    background-color: rgb(170, 170, 170);
-    color: black;
-    margin: 0px 0px 20px;
 }
 
 .p-autocomplete-panel {
