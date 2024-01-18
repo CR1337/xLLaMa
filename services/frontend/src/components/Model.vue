@@ -9,14 +9,20 @@
 <div :hidden="!visible">
     <div class="wrapper">
         <div class="coder">
+            <div class="helper_buttons" style="float: right;">
+                <div><button class="copy" title="Copy to clipboard" v-on:click="copyToClipboard()" :disabled="!generated || isDummy">
+                    <img class="copyimg" v-bind:src="'src/assets/copy-icon.png'">
+                </button></div>
+                <div><button class="documentation" title="Open documentation" v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">
+                    <img class="clipboardimg" v-bind:src="'src/assets/read-book-icon.png'">
+                </button></div>
+            </div>
             <div class="container">
                 <pre><code class="language-python">{{ generatedText }}</code></pre>
             </div>
         </div>
         <div class="explainer">
             <div>
-                <button v-on:click="copyToClipboard()" :disabled="!generated || isDummy">Copy to clipboard</button>
-                <button v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">Documentation</button>
                 <button @click="explain" :disabled="!generated || isDummy || explainClicked">Explain!</button>
             </div>
             <div class="container_explain">

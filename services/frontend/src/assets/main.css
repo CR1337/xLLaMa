@@ -61,6 +61,37 @@ button:disabled {
     font-size: larger;
 }
 
+.documentation {
+    padding-top: 4px;
+    padding-bottom: 0px;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-bottom: 0px;
+}
+
+.copy {
+    padding-top: 4px;
+    padding-bottom: 0px;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-bottom: 0px;
+}
+
+.copyimg {
+    -webkit-filter: invert(1);
+    filter:invert(1);
+    height: 20px;
+}
+
+.clipboardimg {
+    -webkit-filter: invert(1);
+    filter:invert(1);
+}
+
+img {
+    width : 20px;
+    height: auto;
+}
 
 
 
@@ -101,7 +132,7 @@ span {
 }
 
 .coder {
-    margin-right: 75px;
+    margin-right: 50px;
     flex: 1;
     overflow: hidden;
 }
