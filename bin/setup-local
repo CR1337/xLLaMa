@@ -1,0 +1,32 @@
+#!/bin/sh
+
+CYAN='\033[1;96m'
+GREEN='\033[1;92m'
+RESET_COLOR='\033[0m'
+
+printf "${CYAN}Building docker services...${RESET_COLOR}\n"
+bin/build-local
+
+printf "\n${CYAN}Running docker services...${RESET_COLOR}\n"
+bin/run-local
+
+printf "\n${CYAN}Setting up database...${RESET_COLOR}\n"
+curl http://localhost:5003/db/reset -X POST 2>&1 1>/dev/null
+curl http://localhost:5003/db/populate -X POST 2>&1 1>/dev/null
+
+printf "\n${CYAN}Installing model codellama:7b-instruct...${RESET_COLOR}\n"
+curl http://localhost:5001/models/install?model=codellama:7b-instruct 2>&1 1>/dev/null
+printf "\n${GREEN}Done installing.${RESET_COLOR}\n"
+
+printf "\n${CYAN}Installing model wizardcoder:13b-python...${RESET_COLOR}\n"
+curl http://localhost:5001/models/install?model=wizardcoder:13b-python 2>&1 1>/dev/null
+printf "\n${GREEN}Done installing.${RESET_COLOR}\n"
+
+printf "\n${CYAN}Installing model llama2:7b...${RESET_COLOR}\n"
+curl http://localhost:5001/models/install?model=llama2:7b 2>&1 1>/dev/null
+printf "\n${GREEN}Done installing.${RESET_COLOR}\n"
+
+printf "\n${CYAN}Stopping docker services...${RESET_COLOR}\n"
+bin/stop-local
+
+printf "\n${GREEN}Done.${RESET_COLOR}\n"
