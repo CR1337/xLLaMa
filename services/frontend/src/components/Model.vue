@@ -88,9 +88,11 @@ export default {
     },
     methods: {
         tooLong() {
+            this.generated = false;
             this.generateExample("too_long");
         },
         tooShort() {
+            this.generated = false;
             this.generateExample("too_short");
         },
         generateExample(generationReason="example_generation") {
