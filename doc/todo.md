@@ -5,6 +5,7 @@
 - [x] Code Explaination by LLM
 - [x] Find more functions in generated Code
 - [ ] (GPT)
+- [ ] Fix tests
 
 ## Frontend
 - [x] Neue Funktionen aus DB suchbar machen
