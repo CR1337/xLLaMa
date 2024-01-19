@@ -4,6 +4,9 @@ CYAN='\033[1;96m'
 GREEN='\033[1;92m'
 RESET_COLOR='\033[0m'
 
+printf "${CYAN}Installing python dependencies...${RESET_COLOR}\n"
+pip3 install -r requirements.txt
+
 printf "${CYAN}Building docker services...${RESET_COLOR}\n"
 bin/build
 
