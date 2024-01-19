@@ -1,0 +1,5 @@
+#!/bin/sh
+
+bin/stop-local
+bin/build-local
+bin/run-local
