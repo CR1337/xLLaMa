@@ -327,3 +327,11 @@ class CodeVisitor(ast.NodeVisitor):
                 for reference in self.undefined_references
             ]
         }
+
+
+if __name__ == "__main__":
+    v = CodeVisitor()
+    code = "a.b.c.d.e"
+    tree = ast.parse(code)
+    v.visit(tree)
+    print(v.to_json())

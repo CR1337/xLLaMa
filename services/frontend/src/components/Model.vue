@@ -351,6 +351,7 @@ export default {
                                 const frameworkItem = this.getFrameworkItemForSymbol(symbolDefinition);
                                 if (frameworkItem == null) return;
                                 if (frameworkItem.framework != this.frameworkItem.framework) return;
+                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
                                 if (frameworkItem.id == this.frameworkItem.id) return;
                                 if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
                                 this.codeFrameworkItems.push(frameworkItem);
@@ -366,6 +367,7 @@ export default {
                                 const frameworkItem = this.getFrameworkItemForSymbol(undefinedSymbolReference);
                                 if (frameworkItem == null) return;
                                 if (frameworkItem.framework != this.frameworkItem.framework) return;
+                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
                                 if (frameworkItem.id == this.frameworkItem.id) return;
                                 if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
                                 this.codeFrameworkItems.push(frameworkItem);
