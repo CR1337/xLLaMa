@@ -1,4 +1,7 @@
 <style>
+.Header_Logo {
+    margin-right: 3px;
+}
 </style>
 
 <template>
