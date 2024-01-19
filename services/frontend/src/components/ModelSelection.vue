@@ -3,7 +3,7 @@
 
 <template>
 <div>
-    <h4> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? hourglassEmojis[currentHourglassEmojiIndex] : frameworkItem.name }} </h4>
+    <h4> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? "Noting generated yet!" : frameworkItem.name }} </h4>
     <button title="close this example" class="closeButton" @click="close" style="float: right;">✖</button>
     <div class="top-row">
         <template v-for="model in models" :key="model">
@@ -47,10 +47,7 @@ export default {
             models: ["codellama:7b-instruct", "wizardcoder:13b-python"],
             disabled_models: ["GPT-3.5", "GPT-4"],
             selectedModel: "codellama:7b-instruct",
-            frameworkItem: null,
-
-            hourglassEmojis: ['⏳', '⌛'],
-            currentHourglassEmojiIndex: 0
+            frameworkItem: null
         }
     },
     methods: {
@@ -66,13 +63,7 @@ export default {
         },
         close() {
             this.$emit('close', this.id);
-        },
-        flipHourglassEmoji() {
-            this.currentHourglassEmojiIndex = (this.currentHourglassEmojiIndex + 1) % this.hourglassEmojis.length;
         }
-    },
-    mounted() {
-        window.setInterval(this.flipHourglassEmoji, 500);
-    },
+    }
 }
 </script>
