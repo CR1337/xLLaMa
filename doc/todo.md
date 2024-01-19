@@ -25,6 +25,7 @@
 - [ ] Tab Logo
 - [x] Fix Radio Button Grouping
 - [ ] Add Logo to Header
+- [ ] Add more functions to database
 
 -------------------------------------------------------------------------------
 
