@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod, abstractclassmethod
 from typing import Any, Dict, List, Tuple, Generator
-from openai import OpenAI, ChatCompletion, AuthenticationError
+from openai import (
+    OpenAI, ChatCompletion, AuthenticationError, APIConnectionError
+)
 import requests
 import json
 import os
@@ -491,7 +493,7 @@ class OpenAiRequest(LlmRequest):
     def model_names(cls) -> List[str]:
         try:
             return [str(m) for m in cls.client.models.list()]
-        except AuthenticationError:
+        except (AuthenticationError, APIConnectionError):
             return []
 
     def _request_generation(self, stream: bool) -> ChatCompletion:
