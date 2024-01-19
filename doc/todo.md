@@ -15,7 +15,7 @@
 - [x] Generate Example ausgrauen bis valid input
 - [x] Dropdown schön machen (Background weiß statt durchsichtig?)
 - [x] Tokenlimit anpassen
-- [x] Nur example Code im linken Feld anzeigen, keine Erklärungen
+- [ ] Nur example Code im linken Feld anzeigen, keine Erklärungen
 - [x] Close Button anpassen
 - [x] Fix Text Wrap
 - [x] Überschrift für Beispiele mit Funktionsname
