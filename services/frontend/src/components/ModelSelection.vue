@@ -3,7 +3,7 @@
 
 <template>
 <div>
-    <h4> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? "Noting generated yet!" : frameworkItem.name }} </h4>
+    <h4 class="Function_Title"> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? "Noting generated yet!" : frameworkItem.name }} </h4>
     <button title="close this example" class="closeButton" @click="close" style="float: right;">✖</button>
     <div class="top-row">
         <template v-for="model in models" :key="model">

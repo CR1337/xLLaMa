@@ -1,17 +1,4 @@
 <style>
-.image-link {
-    margin-right: 10px;
-    margin-top: 10px;
-    float: right;
-}
-
-.copyright-info{
-    bottom: 0;
-    position: fixed;
-    z-index: -1000;
-    font-size: x-small;
-    color: #b5b5b5;
-}
 </style>
 
 <template>
@@ -33,7 +20,12 @@
     />
 </a>
 </div>
-<h1>xLLaMa</h1>
+<div class="header">
+    <img class="Header_Logo" src="@/assets/xLLaMa_logo.png"  alt="xLLaMa" height="48px"/>
+    <h1>LLaMa</h1>
+</div>
+
+<!-- <img class="Header_Logo" src="@/assets/xLLaMa_logo_name.png"  alt="xLLaMa" height="65px"/> -->
 <ApiSelector @frameworkChanged="frameworkChanged"></ApiSelector>
 <FunctionSelector ref="functionSelector" @frameworkItemSelected="frameworkItemSelected"></FunctionSelector>
 <div>

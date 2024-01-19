@@ -10,17 +10,29 @@ body {
 h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 55px;
-    margin: 0 0px;
-    padding-left: 10px;
-    background-color: #015c63;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-left: 0px;
     color: #fff;
     text-shadow: -1px 0 #034c52, 0 1px #034c52, 1px 0 #034c52, 0 -1px #034c52;
+    display: inline-block;
+}
 
+.header {
+    background-color: #015c63;
 }
 
 div {
     margin: 5px 0px;
 }
+
+.Function_Title {
+    margin-bottom: 0px;
+    margin-left: 5px;
+}
+
+/* ------ BUTTONS ------ */
 
 button {
   background-color: #333;
@@ -61,16 +73,20 @@ button:disabled {
     font-size: larger;
 }
 
-.documentation {
-    padding-top: 4px;
+/* ------ BUTTONS ------ */
+
+/* ------ IMAGE ------ */
+
+.copy {
+    padding-top: 3px;
     padding-bottom: 0px;
     padding-left: 3px;
     padding-right: 3px;
     margin-bottom: 0px;
 }
 
-.copy {
-    padding-top: 4px;
+.documentation {
+    padding-top: 3px;
     padding-bottom: 0px;
     padding-left: 3px;
     padding-right: 3px;
@@ -81,18 +97,39 @@ button:disabled {
     -webkit-filter: invert(1);
     filter:invert(1);
     height: 20px;
+    width: 20px;
 }
 
 .clipboardimg {
     -webkit-filter: invert(1);
     filter:invert(1);
+    height: 20px;
+    width: 20px;
 }
 
-img {
-    width : 20px;
-    height: auto;
+.image-link {
+    margin-right: 10px;
+    margin-top: 10px;
+    float: right;
 }
 
+.copyright-info{
+    bottom: 0;
+    position: fixed;
+    z-index: -1000;
+    font-size: x-small;
+    color: #b5b5b5;
+}
+
+.Header_Logo {
+    margin-left: 5px;
+    margin-right: -4px;
+    margin-top: 0px;
+    margin-bottom: -5px;
+    display: inline-block;
+}
+
+/* ------ IMAGE ------ */
 
 
 label {
@@ -106,6 +143,8 @@ input {
 span {
     white-space: pre;
 }
+
+/* ------ AUTOCOMPLETE ------ */
 
 .p-autocomplete-panel {
     background-color: white;
@@ -126,6 +165,10 @@ span {
     border: 1px solid #015c63;
     height: 31px;
 }
+
+/* ------ AUTOCOMPLETE ------ */
+
+/* ------ TEXT FIELDS ------ */
 
 .wrapper {
     display: flex;
@@ -162,3 +205,5 @@ span {
     margin: 0px 0px 0px;
     padding-left: 5px;
 }
+
+/* ------ TEXT FIELDS ------ */
