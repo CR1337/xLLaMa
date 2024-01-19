@@ -21,11 +21,11 @@
 - [x] Fix Text Wrap
 - [x] Überschrift für Beispiele mit Funktionsname
 - [x] Add Github link
-- [ ] Action Buttons schöner machen
+- [x] Action Buttons schöner machen
 - [ ] (Radio Button styling)
-- [ ] Tab Logo
+- [x] Tab Logo
 - [x] Fix Radio Button Grouping
-- [ ] Add Logo to Header
+- [x] Add Logo to Header
 - [ ] Add more functions to database
 
 -------------------------------------------------------------------------------
