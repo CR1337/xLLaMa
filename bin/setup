@@ -7,6 +7,9 @@ RESET_COLOR='\033[0m'
 printf "${CYAN}Installing python dependencies...${RESET_COLOR}\n"
 pip3 install -r requirements.txt
 
+printf "${CYAN}Copying .env.template to .env...${RESET_COLOR}\n"
+cp .env.template .env
+
 printf "${CYAN}Building docker services...${RESET_COLOR}\n"
 bin/build
 
