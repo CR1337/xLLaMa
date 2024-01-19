@@ -34,7 +34,6 @@
     <div class="codebuttons">
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
-        <!-- TODO: imporove disabled -->
         <AutoComplete
             v-model="selectedCodeFrameworkItem"
             :suggestions="suggestedCodeFrameworkItem"
@@ -42,10 +41,9 @@
             optionLabel="name"
             force-selection
             dropdown
-            :disabled="isDummy"
+            :disabled="!generated || isDummy || codeFrameworkItems.length == 0"
         />
-        <!-- TODO: check generated for disabled -->
-        <button v-on:click="generateNextExample()" :disabled="selectedCodeFrameworkItem == null || isDummy">Generate next</button>
+        <button v-on:click="generateNextExample()" :disabled="!generated || selectedCodeFrameworkItem == null || isDummy">Generate next</button>
     </div>
 
 </div>
@@ -353,6 +351,8 @@ export default {
                                 const frameworkItem = this.getFrameworkItemForSymbol(symbolDefinition);
                                 if (frameworkItem == null) return;
                                 if (frameworkItem.framework != this.frameworkItem.framework) return;
+                                if (frameworkItem.id == this.frameworkItem.id) return;
+                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
                                 this.codeFrameworkItems.push(frameworkItem);
                             })
                             .catch((error) => {
@@ -366,6 +366,8 @@ export default {
                                 const frameworkItem = this.getFrameworkItemForSymbol(undefinedSymbolReference);
                                 if (frameworkItem == null) return;
                                 if (frameworkItem.framework != this.frameworkItem.framework) return;
+                                if (frameworkItem.id == this.frameworkItem.id) return;
+                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
                                 this.codeFrameworkItems.push(frameworkItem);
                             })
                             .catch((error) => {
@@ -387,8 +389,8 @@ export default {
         getFrameworkItemForSymbol(symbol) {
             const symbolName = symbol.symbol.toLowerCase();
             for (const frameworkItem of this.allFrameworkItems) {
-                const frameworkItemName = frameworkItem.name.toLowerCase();
-                if (frameworkItemName.includes(symbolName)) {
+                const frameworkItemName = frameworkItem.name.split('.').reverse()[0].toLowerCase();
+                if (frameworkItemName == symbolName) {
                     return frameworkItem;
                 }
             }
@@ -464,15 +466,10 @@ export default {
         },
 
         updateSuggestedCodeFrameworkItems(event) {
-            // TODO: implement
-            // This should return a list of all framework items that were found in generated code
-
-            // TODO: backend needs to find symbols after dots
-
-            console.log(this.allFrameworkItems);
-            this.suggestedCodeFrameworkItem = this.allFrameworkItems.map((item) => {
-                return item;
-            })
+            const query = event.query.toLowerCase();
+            this.suggestedCodeFrameworkItem = this.codeFrameworkItems.filter((item) => {
+                return item.name.toLowerCase().includes(query);
+            });
         },
 
         openDocumentation() {
