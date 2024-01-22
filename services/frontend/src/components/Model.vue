@@ -39,7 +39,7 @@
         <div class="explainer">
             <div>
                 <button @click="explain" :disabled="!generated || isDummy || explainClicked">Explain!</button>
-                <button @click="debug_fillExplain()">FILL THIS TOO!</button>
+                <button @click="debug_fillExplain()" disabled>FILL THIS TOO!</button>
             </div>
             <div class="container_explain">
                 <div>{{ explanationText }}</div>
@@ -48,8 +48,8 @@
     </div>
 
     <div class="codebuttons">
-        <button v-on:click="debug_fillWithCode(false)">FILL ME!</button>
-        <button v-on:click="debug_fillWithCode(true)">FILL ME 2!</button>
+        <button v-on:click="debug_fillWithCode(false)" disabled>FILL ME!</button>
+        <button v-on:click="debug_fillWithCode(true)" disabled>FILL ME 2!</button>
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
         <button class="generateNextExample" v-on:click="generateNextExample()" :disabled="!generated || isDummy" v-if="selectedCodeFrameworkItem != null">Generate example for {{ selectedCodeFrameworkItem.name }}</button>
