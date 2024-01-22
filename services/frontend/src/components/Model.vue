@@ -1,8 +1,4 @@
 <style>
-.container pre {
-    background-color: white;
-    margin: 0px 0px 0px
-}
 </style>
 
 <template>
@@ -10,15 +6,28 @@
     <div class="wrapper">
         <div class="coder">
             <div class="helper_buttons" style="float: right;">
-                <div><button class="copy" title="Copy to clipboard" v-on:click="copyToClipboard()" :disabled="!generated || isDummy">
-                    <img class="copyimg" v-bind:src="'src/assets/copy-icon.png'">
-                </button></div>
                 <div><button class="documentation" title="Open documentation" v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">
                     <img class="clipboardimg" v-bind:src="'src/assets/read-book-icon.png'">
                 </button></div>
             </div>
             <div class="container">
-                <pre><code class="language-python">{{ generatedText }}</code></pre>
+                <template v-if="highlighted">
+                    <template v-for="resultChunk in resultChunks" :key="resultChunk.content">
+                        <template v-if="resultChunk.type == 'code'">
+                            <CodeSnippet
+                                :codeSnippet="resultChunk.codeSnippet"
+                                :clickableNames="resultChunk.clickableNames"
+                                @click="codeSnippetClicked"
+                            />
+                        </template>
+                        <template v-else>
+                            <pre>{{ resultChunk.content }}</pre>
+                        </template>
+                    </template>
+                </template>
+                <template v-else>
+                    <pre>{{ generatedText }}</pre>
+                </template>
             </div>
         </div>
         <div class="explainer">
@@ -34,31 +43,19 @@
     <div class="codebuttons">
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
-        <AutoComplete
-            v-model="selectedCodeFrameworkItem"
-            :suggestions="suggestedCodeFrameworkItem"
-            @complete="updateSuggestedCodeFrameworkItems"
-            optionLabel="name"
-            force-selection
-            dropdown
-            :disabled="!generated || isDummy || codeFrameworkItems.length == 0"
-        />
-        <button v-on:click="generateNextExample()" :disabled="!generated || selectedCodeFrameworkItem == null || isDummy">Generate next</button>
+        <button v-on:click="generateNextExample()" :disabled="!generated || isDummy" v-if="selectedCodeFrameworkItem != null">Generate example for {{ selectedCodeFrameworkItem.name }}</button>
     </div>
 
 </div>
 </template>
 
 <script>
-import Prism from 'prismjs';
-import 'prismjs/themes/prism.css';
-import 'prismjs/components/prism-python';
-import AutoComplete from 'primevue/autocomplete';
+import CodeSnippet from '@/components/CodeSnippet.vue';
 
 export default {
     name: "Model",
     components: {
-        AutoComplete
+        CodeSnippet
     },
     props: {
         model: String,
@@ -72,10 +69,11 @@ export default {
             generatedText: "Generated code by " + this.model + " will apear here.",
             generatedPrediction: null,
             generated: false,
+            highlighted: false,
+            resultChunks: [],
 
             codeFrameworkItems: [],
             selectedCodeFrameworkItem: null,
-            suggestedCodeFrameworkItem: [],
 
             explanationText: "",
             explanationModel: "codellama:7b-instruct",
@@ -83,8 +81,17 @@ export default {
 
             stream: true,  // This is a constant to dis/enable streaming
             max_tokens: 1024,
-            temperature: 0.0
+            temperature: 0.0,
+
+            stopSequences: []
         }
+    },
+    mounted() {
+        fetch("http://" + this.host + ":5003/stop_sequences")
+        .then((response) => response.json())
+        .then((responseJson) => {
+            this.stopSequences = responseJson.map((stopSequence) => stopSequence.id);
+        })
     },
     methods: {
         tooLong() {
@@ -283,6 +290,7 @@ export default {
                 + "&system_prompt=" + systemPromptId
                 + "&framework_item=" + this.frameworkItem.id
                 + "&max_tokens=" + this.max_tokens
+                // + "&stop_sequences=" + this.stopSequences.toString()
                 + "&temperature=" + this.temperature;
             if (followUpId != null) {
                 url += "&parent_follow_up=" + followUpId;
@@ -323,11 +331,7 @@ export default {
                 this.generatedPrediction = responseJson;
                 this.generatedText = this.generatedPrediction.text;
 
-                this.$nextTick(() => {
-                    Prism.highlightAll();
-                });
-
-                this.getCodeSymbols();
+                this.highlightCode();
                 this.generated = true;
             })
             .catch((error) => {
@@ -335,70 +339,56 @@ export default {
             })
         },
 
-        getCodeSymbols() {
+        highlightCode() {
             fetch("http://" + this.host + ":5002/analyze-prediction?prediction=" + this.generatedPrediction.id)
             .then((response) => response.json())
             .then((responseJson) => {
                 const codeSnippetIds = responseJson.code_snippets;
+                let promises = [];
                 for (const codeSnippetId of codeSnippetIds) {
-                    fetch("http://" + this.host + ":5003/code_snippets/" + codeSnippetId)
-                    .then((response) => response.json())
-                    .then((codeSnippet) => {
-                        const symbolDefinitionIds = codeSnippet.symbol_definitions;
-                        const undefinedSymbolReferenceIds = codeSnippet.undefined_symbol_references;
-                        for (const symbolDefinitionId of symbolDefinitionIds) {
-                            fetch("http://" + this.host + ":5003/symbol_definitions/" + symbolDefinitionId)
-                            .then((response) => response.json())
-                            .then((symbolDefinition) => {
-                                const frameworkItem = this.getFrameworkItemForSymbol(symbolDefinition);
-                                if (frameworkItem == null) return;
-                                if (frameworkItem.framework != this.frameworkItem.framework) return;
-                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
-                                if (frameworkItem.id == this.frameworkItem.id) return;
-                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
-                                this.codeFrameworkItems.push(frameworkItem);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            })
+                    promises.push(fetch("http://" + this.host + ":5003/code_snippets/" + codeSnippetId));
+                }
+                Promise.all(promises)
+                    .then((responses) => Promise.all(responses.map(response => response.json())))
+                    .then((codeSnippets) => {
+                        const sortedCodeSnippets = codeSnippets.sort((a, b) => a.start_line - b.start_line);
+                        const codeSnippetCount = sortedCodeSnippets.length;
+                        const lines = this.generatedPrediction.text.split("\n");
+                        const lineCount = lines.length;
+
+                        let resultChunks = [];
+                        let currentCodeSnippetIndex = 0;
+
+                        for (let line = 0; line < lineCount; ++line) {
+                            if (currentCodeSnippetIndex < codeSnippetCount)  {
+                                if (line == sortedCodeSnippets[currentCodeSnippetIndex].start_line) {
+                                    resultChunks.push({
+                                        type: "code",
+                                        codeSnippet: sortedCodeSnippets[currentCodeSnippetIndex],
+                                        clickableNames: this.clickableNames
+                                    });
+                                    line = sortedCodeSnippets[currentCodeSnippetIndex].end_line;
+                                    ++currentCodeSnippetIndex;
+                                    continue;
+                                }
+                            }
+                            if (lines[line].startsWith("```")) continue;
+                            resultChunks.push({
+                                type: "text",
+                                content: lines[line]
+                            });
                         }
-                        for (const undefinedSymbolReferenceId of undefinedSymbolReferenceIds) {
-                            fetch("http://" + this.host + ":5003/undefined_symbol_references/" + undefinedSymbolReferenceId)
-                            .then((response) => response.json())
-                            .then((undefinedSymbolReference) => {
-                                const frameworkItem = this.getFrameworkItemForSymbol(undefinedSymbolReference);
-                                if (frameworkItem == null) return;
-                                if (frameworkItem.framework != this.frameworkItem.framework) return;
-                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
-                                if (frameworkItem.id == this.frameworkItem.id) return;
-                                if (this.codeFrameworkItems.some((item) => item.id == frameworkItem.id)) return;
-                                this.codeFrameworkItems.push(frameworkItem);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            })
-                        }
+
+                        this.resultChunks = resultChunks;
+                        this.highlighted = true;
                     })
                     .catch((error) => {
                         console.log(error);
-                    })
-                }
+                    });
             })
             .catch((error) => {
                 console.log(error);
-            })
-
-        },
-
-        getFrameworkItemForSymbol(symbol) {
-            const symbolName = symbol.symbol.toLowerCase();
-            for (const frameworkItem of this.allFrameworkItems) {
-                const frameworkItemName = frameworkItem.name.split('.').reverse()[0].toLowerCase();
-                if (frameworkItemName == symbolName) {
-                    return frameworkItem;
-                }
-            }
-            return null;
+            });
         },
 
         explain() {
@@ -458,6 +448,7 @@ export default {
                 console.log(error);
             });
         },
+
         displayExplanation(predictionId) {
             fetch("http://" + this.host + ":5003/predictions/" + predictionId)
             .then((response) => response.json())
@@ -469,11 +460,14 @@ export default {
             })
         },
 
-        updateSuggestedCodeFrameworkItems(event) {
-            const query = event.query.toLowerCase();
-            this.suggestedCodeFrameworkItem = this.codeFrameworkItems.filter((item) => {
-                return item.name.toLowerCase().includes(query);
-            });
+        codeSnippetClicked(name) {
+            console.log(name);
+            const frameworkItems = this.allFrameworkItems.filter(
+                (item) => item.name.split('.').reverse()[0] == name
+            );
+            if (frameworkItems.length == 0) return;
+            this.selectedCodeFrameworkItem = frameworkItems[0];
+            console.log(this.selectedCodeFrameworkItem);
         },
 
         openDocumentation() {
@@ -489,7 +483,16 @@ export default {
         }
     },
     computed: {
-        host() { return window.location.origin.split("/")[2].split(":")[0]; }
+        host() { return window.location.origin.split("/")[2].split(":")[0]; },
+
+        clickableNames()  {
+            let frameworkItems = this.allFrameworkItems.filter(
+                (item) => item.framework.id == this.frameworkItem.framework.id
+            );
+            return frameworkItems.map(
+                (item) => item.name.split('.').reverse()[0]
+            );
+        }
     }
 }
 </script>
