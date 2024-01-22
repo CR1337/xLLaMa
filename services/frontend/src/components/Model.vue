@@ -39,6 +39,7 @@
         <div class="explainer">
             <div>
                 <button @click="explain" :disabled="!generated || isDummy || explainClicked">Explain!</button>
+                <button @click="debug_fillExplain()">FILL THIS TOO!</button>
             </div>
             <div class="container_explain">
                 <div>{{ explanationText }}</div>
@@ -349,6 +350,70 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
+        },
+
+        debug_fillExplain() {
+            this.explanationText = `Eine Aufzählung:\n
+1. Erstens\n
+2. Zweitens\n
+3. Drittens\n
+\n
+Und ein Lorem Ipsum:\n
+\n
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n
+incididunt ut labore et dolore magna aliqua. Magna fermentum iaculis eu non diam\n
+phasellus vestibulum lorem. Varius vel pharetra vel turpis nunc eget.\n
+Condimentum vitae sapien pellentesque habitant morbi tristique senectus et.\n
+Lobortis elementum nibh tellus molestie nunc non. Lacus vestibulum sed arcu\n
+non odio euismod lacinia at. Lacus luctus accumsan tortor posuere. A pellentesque\n
+sit amet porttitor eget dolor morbi. Enim lobortis scelerisque fermentum dui\n
+faucibus. Iaculis nunc sed augue lacus viverra vitae congue eu consequat. Sed\n
+egestas egestas fringilla phasellus faucibus scelerisque. Aliquet sagittis id\n
+consectetur purus ut faucibus pulvinar elementum integer. Nec tincidunt praesent\n
+semper feugiat nibh sed pulvinar. Porttitor leo a diam sollicitudin. Velit\n
+euismod in pellentesque massa placerat. Ut venenatis tellus in metus vulputate\n
+eu. Dui id ornare arcu odio ut. Massa sapien faucibus et molestie ac feugiat.\n
+\n
+Cursus mattis molestie a iaculis. Volutpat sed cras ornare arcu dui vivamus\n
+arcu. In massa tempor nec feugiat nisl pretium fusce id velit. Turpis massa\n
+tincidunt dui ut ornare lectus. Consectetur purus ut faucibus pulvinar elementum\n
+integer enim. Vitae congue eu consequat ac felis donec et odio pellentesque.\n
+Sit amet cursus sit amet dictum sit amet justo donec. Magna fermentum iaculis\n
+eu non. Elit eget gravida cum sociis natoque penatibus. Lectus urna duis\n
+convallis convallis. Lorem dolor sed viverra ipsum nunc aliquet. Sed blandit\n
+libero volutpat sed cras.\n
+\n
+Habitasse platea dictumst quisque sagittis. Aliquam vestibulum morbi blandit\n
+cursus. Venenatis a condimentum vitae sapien pellentesque. Pharetra diam sit\n
+amet nisl suscipit. Auctor neque vitae tempus quam pellentesque. Sed risus\n
+pretium quam vulputate dignissim suspendisse in est. Lectus nulla at volutpat\n
+diam ut. Sed augue lacus viverra vitae congue. Adipiscing elit pellentesque\n
+habitant morbi tristique senectus et. Id nibh tortor id aliquet lectus proin\n
+nibh nisl condimentum. Aenean et tortor at risus viverra adipiscing at in\n
+tellus. Ut ornare lectus sit amet est placerat in egestas erat. Massa tincidunt\n
+nunc pulvinar sapien et ligula ullamcorper malesuada proin. Cras semper auctor\n
+neque vitae tempus quam pellentesque. Ac feugiat sed lectus vestibulum mattis\n
+ullamcorper velit sed. Commodo odio aenean sed adipiscing diam donec adipiscing\n
+tristique risus.\n
+\n
+Enim nulla aliquet porttitor lacus. Rhoncus est pellentesque elit ullamcorper\n
+dignissim cras tincidunt lobortis. Lacus vestibulum sed arcu non odio euismod\n
+lacinia. Eget nulla facilisi etiam dignissim. A cras semper auctor neque vitae\n
+tempus quam pellentesque nec. Vitae tortor condimentum lacinia quis vel eros\n
+donec ac odio. Diam vulputate ut pharetra sit amet aliquam id. Praesent\n
+elementum facilisis leo vel. Aliquam nulla facilisi cras fermentum odio eu\n
+feugiat pretium. Posuere urna nec tincidunt praesent semper feugiat. Condimentum\n
+lacinia quis vel eros donec ac odio tempor orci. Semper viverra nam libero\n
+justo laoreet sit amet. Pellentesque habitant morbi tristique senectus et.\n
+\n
+Dictum at tempor commodo ullamcorper a lacus vestibulum sed arcu. Sed lectus\n
+vestibulum mattis ullamcorper. Id consectetur purus ut faucibus pulvinar\n
+elementum integer. At augue eget arcu dictum varius. Tristique risus nec\n
+feugiat in fermentum posuere urna nec tincidunt. Quis hendrerit dolor magna\n
+eget est. Amet tellus cras adipiscing enim. In nisl nisi scelerisque eu.\n
+Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Cras fermentum odio\n
+eu feugiat pretium.\n
+`;
         },
 
         debug_fillWithCode(long) {
