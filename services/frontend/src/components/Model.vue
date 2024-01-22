@@ -47,7 +47,8 @@
     </div>
 
     <div class="codebuttons">
-        <button v-on:click="debug_fillWithCode()">FILL ME!</button>
+        <button v-on:click="debug_fillWithCode(false)">FILL ME!</button>
+        <button v-on:click="debug_fillWithCode(true)">FILL ME 2!</button>
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
         <button v-on:click="generateNextExample()" :disabled="!generated || isDummy" v-if="selectedCodeFrameworkItem != null">Generate example for {{ selectedCodeFrameworkItem.name }}</button>
@@ -350,7 +351,7 @@ export default {
             })
         },
 
-        debug_fillWithCode() {
+        debug_fillWithCode(long) {
             const rawHtml = `<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">BertTokenizerFast</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
@@ -368,15 +369,30 @@ export default {
 </pre></div>
             `
 
+            this.resultChunks = []
+            if (long) {
+                this.resultChunks.push({
+                    type: "text",
+                    content: "This is some text."
+                });
+            }
+            this.resultChunks.push({
+                type: "debug",
+                content: "",
+                rawHtml: rawHtml
+            });
+            if (long) {
+                this.resultChunks.push({
+                    type: "text",
+                    content:
+                        "This is some more text that is a bit longer and has more lines.\n"
+                        + "Once upon a time there was a very long text with multiple lines that was so long that it was too long.\n"
+                        + "This is some more text that is a bit longer and has more lines.\n"
 
-            this.resultChunks = [
-                {
-                    type: "debug",
-                    rawHtml: rawHtml
-                }
-            ];
+                });
+            }
+
             this.highlighted = true;
-
         },
 
         highlightCode() {
