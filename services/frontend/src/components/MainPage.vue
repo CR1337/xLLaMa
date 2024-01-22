@@ -34,7 +34,8 @@
 <div>
     <button v-on:click="generateExample()" class="generate-example-button" :disabled="selectedFrameworkItem == null">Generate Examples!</button>
 </div>
-<ModelSelection
+<div class="outsidewrapper">
+    <ModelSelection
     v-for="modelSelectionId in modelSelectionIds"
     :key="modelSelectionId"
     :all-framework-items="allFrameworkItems"
@@ -44,6 +45,8 @@
     @generateFollowUpExample="generateFollowUpExample"
     @close="close"
 />
+</div>
+
 <div class="copyright-info">
     Copyright (c) 2024 Lara Kursawe, Christian Raue
 </div>
