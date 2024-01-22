@@ -20,8 +20,14 @@
                                 @click="codeSnippetClicked"
                             />
                         </template>
-                        <template v-else>
+                        <template v-else-if="resultChunk.type == 'text'">
                             <pre>{{ resultChunk.content }}</pre>
+                        </template>
+                        <template v-else-if="resultChunk.type == 'debug'">
+                            <CodeSnippet
+                                :rawHtml="resultChunk.rawHtml"
+                                @click="codeSnippetClicked"
+                            />
                         </template>
                     </template>
                 </template>
@@ -41,6 +47,7 @@
     </div>
 
     <div class="codebuttons">
+        <button v-on:click="debug_fillWithCode()">FILL ME!</button>
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
         <button v-on:click="generateNextExample()" :disabled="!generated || isDummy" v-if="selectedCodeFrameworkItem != null">Generate example for {{ selectedCodeFrameworkItem.name }}</button>
@@ -341,6 +348,35 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
+        },
+
+        debug_fillWithCode() {
+            const rawHtml = `<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">BertTokenizerFast</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">"bert-base-uncased"</span><span class="p">)</span>
+<span class="n">sequences</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"This is a test"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"Another sentence"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">batch_decoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'batch_decode')">batch_decode</a></u></b></span><span class="p">(</span><span class="n">sequences</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">batch_decoded</span><span class="p">)</span> <span class="c1"># Output: ['this is a test', 'another sentence']</span>
+
+<span class="c1"># Convert the sequences to tensors and pass them through the model</span>
+<span class="n">input_ids</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"This is a test"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"Another sentence"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">)])</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span>
+<span class="c1"># Use the 'batch_decode' method to decode the output ids</span>
+<span class="n">decoded_sequences</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'batch_decode')">batch_decode</a></u></b></span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean_up_tokenization_spaces</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">decoded_sequences</span><span class="p">)</span> <span class="c1"># Output: ['this is a test', 'another sentence']</span>
+</pre></div>
+            `
+
+
+            this.resultChunks = [
+                {
+                    type: "debug",
+                    rawHtml: rawHtml
+                }
+            ];
+            this.highlighted = true;
+
         },
 
         highlightCode() {

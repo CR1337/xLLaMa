@@ -16,7 +16,8 @@ export default {
   name: 'CodeSnippet',
   props: {
     codeSnippet: Object,
-    clickableNames: Array
+    clickableNames: Array,
+    rawHtml: String
   },
   data() {
     return {
@@ -24,6 +25,10 @@ export default {
     };
   },
   mounted() {
+    if (this.rawHtml !== undefined) {
+      this.code = this.rawHtml;
+      return;
+    }
     codeSnippetObjects[this.codeSnippet.id] = this;
     fetch(
         `http://${this.host}:5002/highlight`
@@ -45,7 +50,29 @@ export default {
         },
 
         copyToClipboard() {
-            navigator.clipboard.writeText(this.codeSnippet.code);
+          // source: https://stackoverflow.com/questions/51805395/navigator-clipboard-is-undefined
+          if (navigator.clipboard && window.isSecureContext) {
+              navigator.clipboard.writeText(this.codeSnippet.code);
+          } else {
+              // Use the 'out of viewport hidden text area' trick
+              const textArea = document.createElement("textarea");
+              textArea.value = this.codeSnippet.code;
+
+              // Move textarea out of the viewport so it's not visible
+              textArea.style.position = "absolute";
+              textArea.style.left = "-999999px";
+
+              document.body.prepend(textArea);
+              textArea.select();
+
+              try {
+                  document.execCommand('copy');
+              } catch (error) {
+                  console.error(error);
+              } finally {
+                  textArea.remove();
+              }
+          }
         }
     },
   computed: {
