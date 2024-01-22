@@ -23,6 +23,7 @@
             :ref="`ref_${model}`"
             :all-framework-items="allFrameworkItems"
             :is-dummy="isDummy"
+            :debug="debug"
             @generateFollowUpExample="generateFollowUpExample"
         />
     </template>
@@ -40,7 +41,8 @@ export default {
     props: {
         allFrameworkItems: Array,
         id: String,
-        isDummy: Boolean
+        isDummy: Boolean,
+        debug: Boolean
     },
     data() {
         return {

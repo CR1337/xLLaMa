@@ -39,7 +39,7 @@
         <div class="explainer">
             <div>
                 <button @click="explain" :disabled="!generated || isDummy || explainClicked">Explain!</button>
-                <button @click="debug_fillExplain()" hidden>FILL THIS TOO!</button>
+                <button @click="debug_fillExplain()" :hidden="!debug">FILL THIS TOO!</button>
             </div>
             <div class="container_explain">
                 <div>{{ explanationText }}</div>
@@ -48,8 +48,8 @@
     </div>
 
     <div class="codebuttons">
-        <button v-on:click="debug_fillWithCode(false)" hidden>FILL ME!</button>
-        <button v-on:click="debug_fillWithCode(true)" hidden>FILL ME 2!</button>
+        <button v-on:click="debug_fillWithCode(false)" :hidden="!debug">FILL ME!</button>
+        <button v-on:click="debug_fillWithCode(true)" :hidden="!debug">FILL ME 2!</button>
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
         <button class="generateNextExample" v-on:click="generateNextExample()" :disabled="!generated || isDummy" v-if="selectedCodeFrameworkItem != null">Generate example for {{ selectedCodeFrameworkItem.name }}</button>
@@ -71,7 +71,8 @@ export default {
         frameworkItem: Object,
         visible: Boolean,
         allFrameworkItems: Array,
-        isDummy: Boolean
+        isDummy: Boolean,
+        debug: Boolean
     },
     data() {
         return {

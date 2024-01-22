@@ -36,18 +36,28 @@
 </div>
 <div class="outsidewrapper">
     <ModelSelection
-    v-for="modelSelectionId in modelSelectionIds"
-    :key="modelSelectionId"
-    :all-framework-items="allFrameworkItems"
-    :ref="`modelSelection_${modelSelectionId}`"
-    :id="modelSelectionId"
-    :is-dummy="modelSelectionId == dummyModelSelectionId"
-    @generateFollowUpExample="generateFollowUpExample"
-    @close="close"
-/>
+        v-for="modelSelectionId in modelSelectionIds"
+        :key="modelSelectionId"
+        :all-framework-items="allFrameworkItems"
+        :ref="`modelSelection_${modelSelectionId}`"
+        :id="modelSelectionId"
+        :is-dummy="modelSelectionId == dummyModelSelectionId"
+        :debug="debug"
+        @generateFollowUpExample="generateFollowUpExample"
+        @close="close"
+    />
+    <ModelSelection
+        v-if="debug"
+        :all-framework-items="allFrameworkItems"
+        :ref="`modelSelection_<<<DEBUG_DUMMY>>>`"
+        :is-dummy="true"
+        :debug="true"
+        @generateFollowUpExample="generateFollowUpExample"
+        @close="close"
+    />
 </div>
 
-<div class="copyright-info">
+<div class="copyright-info" @click="debugToggleClick()">
     Copyright (c) 2024 Lara Kursawe, Christian Raue
 </div>
 </template>
@@ -72,7 +82,10 @@ export default {
 
             dummyModelSelectionId: '<<<DUMMY>>>',
             modelSelectionIds: [],
-            unused: true
+            unused: true,
+
+            debug: false,
+            debugToggleClickAmount: 0
         }
     },
     methods: {
@@ -113,6 +126,13 @@ export default {
             this.unused = false;
             const index = this.modelSelectionIds.indexOf(id);
             this.modelSelectionIds.splice(index, 1);
+        },
+        debugToggleClick() {
+            this.debugToggleClickAmount++;
+            if (this.debugToggleClickAmount == 7) {
+                this.debug = !this.debug;
+                this.debugToggleClickAmount = 0;
+            }
         }
     },
     mounted: function() {
