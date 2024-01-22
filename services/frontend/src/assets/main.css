@@ -88,6 +88,11 @@ button:disabled {
     font-size: larger;
 }
 
+.copy {
+    background-color: transparent;
+    border: none;
+}
+
 /* ------ BUTTONS ------ */
 
 /* ------ IMAGE ------ */
@@ -174,6 +179,15 @@ button:disabled {
 /* ------ TEXT FIELDS ------ */
 
 .outsidewrapper {
+    padding-left: 5px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    padding-right: 2px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.outsidewrapper:hover {
     background-color: #f0f0f0;
     padding-left: 5px;
     padding-top: 0px;
@@ -208,23 +222,24 @@ button:disabled {
 
 .container {
     overflow-y: auto;
-    height: 300px;
+    height: 350px;
     border: 1px solid #015c63;
     border-radius: 5px;
-    background-color: black;
+    background-color: rgba(13,17,23,255);
     margin: 0px 0px 0px;
     padding-left: 5px;
-    color: white;
+    color: #bababa;
 }
 
 .container_explain {
     overflow-y: auto;
-    height: 255px;
+    height: 305px;
     border: 1px solid #015c63;
     border-radius: 5px;
     background-color: white;
     margin: 0px 0px 0px;
     padding-left: 5px;
+    white-space: pre-line;
 }
 
 /* ------ TEXT FIELDS ------ */
