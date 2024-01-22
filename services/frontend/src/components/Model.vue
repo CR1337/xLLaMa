@@ -404,7 +404,7 @@ export default {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    "text": "Please explain this code:\n\n```python\n" + this.generatedText + "\n```"
+                    "text": "Please explain this code step by step:\n\n```python\n" + this.generatedText + "\n```"
                 })
             })
             .then((response) => response.json())
