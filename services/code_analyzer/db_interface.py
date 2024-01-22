@@ -25,6 +25,13 @@ class DbInterface:
         return response.json()
 
     @classmethod
+    def get_code_snippet(cls, code_snippet_id: str):
+        response = requests.get(
+            f"{cls.DB_INTERFACE_URL}/code_snippets/{code_snippet_id}"
+        )
+        return response.json()
+
+    @classmethod
     def post_code_snippet(
         cls,
         code: str,
