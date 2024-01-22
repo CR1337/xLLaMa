@@ -628,7 +628,7 @@ bin/stop-local
 
         clickableNames()  {
             let frameworkItems = this.allFrameworkItems.filter(
-                (item) => item.framework.id == this.frameworkItem.framework.id
+                (item) => item.framework.id == this.frameworkItem.framework.id && item.name != this.frameworkItem.name
             );
             return frameworkItems.map(
                 (item) => item.name.split('.').reverse()[0]
