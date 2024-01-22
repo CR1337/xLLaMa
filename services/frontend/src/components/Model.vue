@@ -107,12 +107,16 @@ export default {
             this.generated = false;
             this.highlighted = false;
             this.resultChunks = [];
+            this.explanationText = "";
+            this.explainClicked = false;
             this.generateExample("too_long");
         },
         tooShort() {
             this.generated = false;
             this.highlighted = false;
             this.resultChunks = [];
+            this.explanationText = "";
+            this.explainClicked = false;
             this.generateExample("too_short");
         },
         generateExample(generationReason="example_generation") {
