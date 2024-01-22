@@ -39,7 +39,7 @@ export default {
     },
     props: {
         allFrameworkItems: Array,
-        id: Number,
+        id: String,
         isDummy: Boolean
     },
     data() {

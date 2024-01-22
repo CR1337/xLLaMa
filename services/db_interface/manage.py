@@ -1,6 +1,7 @@
 from model import (
     db, BaseModel, UserRatingType, Framework, FrameworkItem,
-    SymbolDefinitionType, FollowUpType, Prediction, SystemPrompt
+    SymbolDefinitionType, FollowUpType, Prediction, SystemPrompt,
+    StopSequence
 )
 from models import models
 from functools import wraps
@@ -78,6 +79,11 @@ def populate_db():
         for framework_item in framework_items:
             framework_item["framework_id"] = framework.id
             FrameworkItem.from_dict(framework_item)
+
+    with open("init_data/stop_sequences.json", 'r') as file:
+        stop_sequences_data = json.load(file)
+    for stop_sequence in stop_sequences_data:
+        stop_sequence = StopSequence.from_dict(stop_sequence)
 
 
 COMMANDS: Dict[str, Callable[[None], None]] = {

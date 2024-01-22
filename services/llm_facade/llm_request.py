@@ -397,7 +397,9 @@ class OllamaRequest(LlmRequest):
         if self._system_prompt:
             request_body['system'] = self._system_prompt['text']
         if self._stop_sequences:
-            request_body['options']['stop'] = self._stop_sequences
+            request_body['options']['stop'] = [
+                s['text'] for s in self._stop_sequences
+            ]
         return request_body
 
     def generate(self) -> Tuple[Dict[str, Any], int]:
@@ -453,6 +455,7 @@ class OllamaRequest(LlmRequest):
                                 # until a complete JSON is formed
                                 pass
                             else:
+                                print(json_response, flush=True)
                                 if json_response['done']:
                                     self._persist_generation()
                                 else:

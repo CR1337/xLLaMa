@@ -27,10 +27,18 @@ div {
     margin: 5px 0px;
 }
 
-.Function_Title {
-    margin-bottom: 0px;
-    margin-left: 5px;
+label {
+    margin-right: 10px;
 }
+
+input {
+    margin-right: 3px;
+}
+
+span {
+    white-space: pre;
+}
+
 
 /* ------ BUTTONS ------ */
 
@@ -62,15 +70,27 @@ button:disabled {
     font-weight: bold;
 }
 
+.generateNextExample {
+    background-color: salmon;
+    border-color: rgb(203, 104, 93);
+    color: black;
+    font-weight: bold;
+}
+
 .generate-example-button:enabled:hover {
     background-color: rgb(210, 107, 95);
 }
 
 .closeButton, .closeButton:hover {
-    background-color: #f4f4f4;
+    background-color: transparent;
     color: #b5b5b5;
     border:none;
     font-size: larger;
+}
+
+.copy {
+    background-color: transparent;
+    border: none;
 }
 
 /* ------ BUTTONS ------ */
@@ -91,6 +111,7 @@ button:disabled {
     padding-left: 3px;
     padding-right: 3px;
     margin-bottom: 0px;
+    margin-top: -10px;
 }
 
 .copyimg {
@@ -131,19 +152,6 @@ button:disabled {
 
 /* ------ IMAGE ------ */
 
-
-label {
-    margin-right: 10px;
-}
-
-input {
-    margin-right: 3px;
-}
-
-span {
-    white-space: pre;
-}
-
 /* ------ AUTOCOMPLETE ------ */
 
 .p-autocomplete-panel {
@@ -170,6 +178,32 @@ span {
 
 /* ------ TEXT FIELDS ------ */
 
+.outsidewrapper {
+    padding-left: 5px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    padding-right: 2px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.outsidewrapper:hover {
+    background-color: #f0f0f0;
+    padding-left: 5px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    padding-right: 2px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+}
+
+.Function_Title {
+    margin-bottom: 0px;
+    margin-left: 2px;
+    margin-top: 0px;
+    padding-top: 5px;
+}
+
 .wrapper {
     display: flex;
 }
@@ -188,22 +222,24 @@ span {
 
 .container {
     overflow-y: auto;
-    height: 300px;
+    height: 350px;
     border: 1px solid #015c63;
     border-radius: 5px;
-    background-color: white;
+    background-color: rgba(13,17,23,255);
     margin: 0px 0px 0px;
     padding-left: 5px;
+    color: #bababa;
 }
 
 .container_explain {
     overflow-y: auto;
-    height: 255px;
+    height: 305px;
     border: 1px solid #015c63;
     border-radius: 5px;
     background-color: white;
     margin: 0px 0px 0px;
     padding-left: 5px;
+    white-space: pre-line;
 }
 
 /* ------ TEXT FIELDS ------ */
