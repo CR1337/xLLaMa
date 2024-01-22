@@ -8,9 +8,9 @@ class CodeHighlighter:
 
     STYLE: str = 'github-dark'
     CLICKABLE_HTML: str = (
-        '<b><u><a class="{clickable_class}" {on_click_attribute}='
+        '><b><u><a class="{clickable_class}" {on_click_attribute}='
         '"{click_handler_name}(\'{code_snippet_id}\', \'{name}\')">{name}'
-        '</a></u></b>'
+        '</a></u></b><'
     )
 
     @classmethod
