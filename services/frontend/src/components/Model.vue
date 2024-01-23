@@ -117,6 +117,7 @@ export default {
             this.resultChunks = [];
             this.explanationText = "";
             this.explainClicked = false;
+            this.generatedText = "";
             this.generateExample("too_long");
         },
         tooShort() {
@@ -125,6 +126,7 @@ export default {
             this.resultChunks = [];
             this.explanationText = "";
             this.explainClicked = false;
+            this.generatedText = "";
             this.generateExample("too_short");
         },
         generateExample(generationReason="example_generation") {
