@@ -594,7 +594,9 @@ bin/stop-local
             fetch("http://" + this.host + ":5003/predictions/" + predictionId)
             .then((response) => response.json())
             .then((responseJson) => {
-                this.explanationText = responseJson.text;
+                const explanationText = responseJson.text;
+                explanationText.replace("\n\n", "\n");
+                this.explanationText = explanationText;
             })
             .catch((error) => {
                 console.log(error);
