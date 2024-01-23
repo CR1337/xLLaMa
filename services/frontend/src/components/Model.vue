@@ -81,7 +81,7 @@ export default {
     },
     data() {
         return {
-            generatedText: "Generated code by " + this.model + " will apear here.",
+            generatedText: "",
             generatedPrediction: null,
             generated: false,
             highlighted: false,
