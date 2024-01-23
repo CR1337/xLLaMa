@@ -1,4 +1,5 @@
 <style>
+
 </style>
 
 <template>
@@ -11,6 +12,7 @@
                 </button></div>
             </div>
             <div class="container">
+                <div v-if="showLoading" class="lds-facebook"><div></div><div></div><div></div></div>
                 <template v-if="highlighted">
                     <template v-for="resultChunk in resultChunks" :key="resultChunk.content">
                         <template v-if="resultChunk.type == 'code'">
@@ -75,7 +77,7 @@ export default {
         visible: Boolean,
         allFrameworkItems: Array,
         isDummy: Boolean,
-        debug: Boolean
+        debug: Boolean,
     },
     data() {
         return {
@@ -96,7 +98,9 @@ export default {
             max_tokens: 1024,
             temperature: 0.0,
 
-            stopSequences: []
+            stopSequences: [],
+
+            showLoading: false
         }
     },
     mounted() {
@@ -124,6 +128,7 @@ export default {
             this.generateExample("too_short");
         },
         generateExample(generationReason="example_generation") {
+            this.showLoading = true;
             fetch("http://" + this.host + ":5003/system_prompts/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -326,6 +331,7 @@ export default {
                 .then((response) => response.json())
                 .then((responseJson) => {
                     this.displayPrediction(responseJson.prediction);
+                    this.showLoading = false;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -341,6 +347,7 @@ export default {
                     eventSource.close();
                     const predictionId = JSON.parse(event.data).prediction;
                     this.displayPrediction(predictionId);
+                    this.showLoading = false;
                 });
             }
         },
