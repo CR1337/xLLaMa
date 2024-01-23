@@ -12,7 +12,7 @@
                 </button></div>
             </div>
             <div class="container">
-                <div v-if="showLoading" class="lds-facebook"><div></div><div></div><div></div></div>
+                <div v-if="showLoading || debug" class="lds-facebook"><div></div><div></div><div></div></div>
                 <template v-if="highlighted">
                     <template v-for="resultChunk in resultChunks" :key="resultChunk.content">
                         <template v-if="resultChunk.type == 'code'">
