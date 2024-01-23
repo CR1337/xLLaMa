@@ -1,0 +1,2 @@
+- Live Demo statt Video?
+- Vortrag auf Deutsch/Englisch?
