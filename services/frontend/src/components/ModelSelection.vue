@@ -2,7 +2,7 @@
 </style>
 
 <template>
-<div>
+<div class="outsidewrapper">
     <h4 class="Function_Title"> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? "Noting generated yet!" : frameworkItem.name }} </h4>
     <button title="close this example" class="closeButton" @click="close" style="float: right;">✖</button>
     <div class="top-row">

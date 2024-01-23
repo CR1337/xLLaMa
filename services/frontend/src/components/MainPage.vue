@@ -34,7 +34,7 @@
 <div>
     <button v-on:click="generateExample()" class="generate-example-button" :disabled="selectedFrameworkItem == null">Generate Examples!</button>
 </div>
-<div class="outsidewrapper">
+<div>
     <ModelSelection
         v-for="modelSelectionId in modelSelectionIds"
         :key="modelSelectionId"

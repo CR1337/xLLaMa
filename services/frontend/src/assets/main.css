@@ -81,6 +81,10 @@ button:disabled {
     background-color: rgb(210, 107, 95);
 }
 
+.generateNextExample:enabled:hover {
+    background-color: rgb(210, 107, 95);
+}
+
 .closeButton, .closeButton:hover {
     background-color: transparent;
     color: #b5b5b5;
@@ -185,6 +189,7 @@ button:disabled {
     padding-right: 2px;
     border: 1px solid transparent;
     border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 .outsidewrapper:hover {
