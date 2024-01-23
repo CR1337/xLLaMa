@@ -340,6 +340,7 @@ export default {
                 this.generatedText = "";
                 const eventSource = new EventSource(url);
                 eventSource.addEventListener("generation_progress", (event) => {
+                    this.showLoading = false;
                     const token = JSON.parse(event.data).token;
                     this.generatedText += token;
                 });
@@ -347,7 +348,6 @@ export default {
                     eventSource.close();
                     const predictionId = JSON.parse(event.data).prediction;
                     this.displayPrediction(predictionId);
-                    this.showLoading = false;
                 });
             }
         },

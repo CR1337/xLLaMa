@@ -49,7 +49,16 @@
     <ModelSelection
         v-if="debug"
         :all-framework-items="allFrameworkItems"
-        :ref="`modelSelection_<<<DEBUG_DUMMY>>>`"
+        :ref="`modelSelection_<<<DEBUG_DUMMY_1>>>`"
+        :is-dummy="true"
+        :debug="true"
+        @generateFollowUpExample="generateFollowUpExample"
+        @close="close"
+    />
+    <ModelSelection
+        v-if="debug"
+        :all-framework-items="allFrameworkItems"
+        :ref="`modelSelection_<<<DEBUG_DUMMY_2>>>`"
         :is-dummy="true"
         :debug="true"
         @generateFollowUpExample="generateFollowUpExample"
@@ -146,7 +155,7 @@ export default {
             console.log(error);
         });
 
-        this.modelSelectionIds.push(this.dummyModelSelectionId);
+        // this.modelSelectionIds.push(this.dummyModelSelectionId);
     },
     computed: {
         host() { return window.location.origin.split("/")[2].split(":")[0]; }
