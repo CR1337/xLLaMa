@@ -5,6 +5,7 @@ from typing import List, Generator, Tuple
 
 DEFAULT_THEME = 'default'
 DEFAULT_FORMAT = 'svg'
+DEFAULT_WIDTH = 2000
 
 
 def read_file() -> List[str]:
@@ -41,18 +42,21 @@ def parse(lines: List[str]) -> Generator[Tuple[str, str], None, None]:
 def main():
     out_format = DEFAULT_FORMAT
     theme = DEFAULT_THEME
+    width = DEFAULT_WIDTH
 
     for i, arg in enumerate(sys.argv):
         if arg == '-f':
             out_format = sys.argv[i + 1]
         elif arg == '-t':
             theme = sys.argv[i + 1]
+        elif arg == '-w':
+            width = sys.argv[i + 1]
 
     lines = read_file()
     for headline, code in parse(lines):
         print(f"Rendering {headline}")
         command = (
-            f"echo '{code}' | mmdc -t {theme} -i - -e {out_format}"
+            f"echo '{code}' | mmdc -t {theme} -i - -e {out_format} -w {width}"
             f" -o diagrams/{headline}.{out_format}"
         )
         if os.system(command) != 0:
