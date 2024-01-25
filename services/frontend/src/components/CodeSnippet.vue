@@ -73,6 +73,11 @@ export default {
                   textArea.remove();
               }
           }
+          this.$toast.open({
+              "message": "Copied to clipboard",
+              "position": "top-right",
+              "type": "default"
+          });
         }
     },
   computed: {

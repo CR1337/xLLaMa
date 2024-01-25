@@ -628,10 +628,6 @@ bin/stop-local
 
         generateNextExample() {
             this.$emit("generateFollowUpExample", this.selectedCodeFrameworkItem);
-        },
-
-        copyToClipboard() {
-            navigator.clipboard.writeText(this.generatedText);
         }
     },
     computed: {

@@ -141,6 +141,19 @@ export default {
             if (this.debugToggleClickAmount == 7) {
                 this.debug = !this.debug;
                 this.debugToggleClickAmount = 0;
+                if (this.debug) {
+                    this.$toast.open({
+                        "message": "Debug mode activated",
+                        "position": "top-right",
+                        "type": "default"
+                    });
+                } else {
+                    this.$toast.open({
+                        "message": "Debug mode deactivated",
+                        "position": "top-right",
+                        "type": "default"
+                    });
+                }
             }
         }
     },
