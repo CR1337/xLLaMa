@@ -6,3 +6,5 @@
 __pycache__
 volumes/**
 !volumes/.gitkeep
+doc/final-presentation/diagrams/*.png
+doc/final-presentation/diagrams/*.svg
