@@ -136,6 +136,49 @@ sequenceDiagram
 
 ## Parallel Generation
 
-```mermaid
-
+```python
+ollama_usage = {
+    "0": 0
+    "1": 0
+}
 ```
+
+```mermaid
+flowchart LR
+    start(["Start"])
+    _end(["End"])
+
+    locked{"ollama_usage locked?"}
+    lock["Lock ollama_usage"]
+    min["index = min(ollama_usage)"]
+    inc["ollama_usage[index]++"]
+    unlock["Unlock ollama_usage"]
+
+    start --> locked
+    locked --> |Yes| locked
+    locked --> |No| lock
+    lock --> min
+    min --> inc
+    inc --> unlock
+    unlock --> _end
+```
+
+```mermaid
+flowchart LR
+    start(["Start"])
+    _end(["End"])
+
+    locked{"ollama_usage locked?"}
+    lock["Lock ollama_usage"]
+    dec["ollama_usage[index]--"]
+    unlock["Unlock ollama_usage"]
+
+    start --> locked
+    locked --> |Yes| locked
+    locked --> |No| lock
+    lock --> dec
+    dec --> unlock
+    unlock --> _end
+```
+
+
