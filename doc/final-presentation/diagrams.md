@@ -1,48 +1,5 @@
 # Diagrams
 
-## Frontend
-
-```mermaid
-flowchart TB
-    app[App]
-    main-page[Main Page]
-    api-selector[API Selector]
-    function-selector[Function Selector]
-    model-selection-1[Model Selection]
-    model-selection-2[Model Selection]
-    model-selection-3[Model Selection]
-    model-1[Model]
-    model-2[model]
-    model-3[Model]
-    code-snippet-1-1[Code Snippet]
-    code-snippet-1-2[Code Snippet]
-    code-snippet-1-3[Code Snippet]
-    code-snippet-2-1[Code Snippet]
-    code-snippet-2-2[Code Snippet]
-    code-snippet-2-3[Code Snippet]
-    code-snippet-3-1[Code Snippet]
-    code-snippet-3-2[Code Snippet]
-    code-snippet-3-3[Code Snippet]
-
-    app --- main-page
-    main-page --- api-selector
-    main-page --- function-selector
-    main-page --- model-selection-1
-    main-page --- model-selection-2
-    main-page --- model-selection-3
-    model-selection-1 --- model-1
-    model-selection-2 --- model-2
-    model-selection-3 --- model-3
-    model-1 --- code-snippet-1-1
-    model-1 --- code-snippet-1-2
-    model-1 --- code-snippet-1-3
-    model-2 --- code-snippet-2-1
-    model-2 --- code-snippet-2-2
-    model-2 --- code-snippet-2-3
-    model-3 --- code-snippet-3-1
-    model-3 --- code-snippet-3-2
-    model-3 --- code-snippet-3-3
-```
 
 ## Architecture
 
@@ -75,7 +32,7 @@ flowchart LR
     subgraph Cache
         redis[Redis<image src="https://res.cloudinary.com/practicaldev/image/fetch/s--gWwIv4vV--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/787xlgwc2hhq3ctzxcvs.png">]
     end
-    openai{{OpenAI<image src="https://static.vecteezy.com/system/resources/previews/022/227/370/original/openai-chatgpt-logo-icon-free-png.png">}}
+    openai{{OpenAI<image src="https://www.pngitem.com/pimgs/m/66-668806_openai-logo-openai-logo-elon-musk-hd-png.png">}}
 
     flask-ca --- pygments
     flask-ca --- ast
@@ -98,7 +55,7 @@ flowchart LR
 
 ```
 
-## Simple generation
+## Simple generation full
 
 ```mermaid
 sequenceDiagram
@@ -113,7 +70,7 @@ sequenceDiagram
     FE ->>+ LF: GET /generate
         LF ->>+ OL: GET /api/generate
         OL -->>- LF: generated text
-        LF ->>+ DI: POST /prediction
+        LF ->>+ DI: POST /predictions
         DI -->>- LF: prediction_id
     LF -->>- FE: prediction_id
 
@@ -121,6 +78,12 @@ sequenceDiagram
     DI -->>- FE: prediction
 
     FE ->>+ CA: GET /analyze-prediction?prediction=prediction_id
+        CA ->>+ DI: GET /predictions/prediction_id
+        DI -->>- CA: prediction
+        par
+            CA ->>+ DI: POST /code_snippets
+            DI -->>- CA: code_snippet_id
+        end
     CA -->>- FE: code_snippet_ids
 
     par
@@ -130,55 +93,33 @@ sequenceDiagram
 
     par
         FE ->>+ CA: GET /highlight?code_snippet=code_snippet_id
+            CA ->>+ DI: GET /code_snippets/code_snippet_id
+            DI -->>- CA: code_snippet
         CA -->>- FE: highlighted_code
     end
 ```
 
-## Parallel Generation
-
-```python
-ollama_usage = {
-    "0": 0
-    "1": 0
-}
-```
+## Simple generation simplified
 
 ```mermaid
-flowchart LR
-    start(["Start"])
-    _end(["End"])
+sequenceDiagram
+    autonumber
 
-    locked{"ollama_usage locked?"}
-    lock["Lock ollama_usage"]
-    min["index = min(ollama_usage)"]
-    inc["ollama_usage[index]++"]
-    unlock["Unlock ollama_usage"]
+    participant FE as Frontend
+    participant LF as LLM Facade
+    participant OL as Ollama
+    participant CA as Code Analyzer
 
-    start --> locked
-    locked --> |Yes| locked
-    locked --> |No| lock
-    lock --> min
-    min --> inc
-    inc --> unlock
-    unlock --> _end
+    FE ->>+ LF: GET /generate
+        LF ->>+ OL: GET /api/generate
+        OL -->>- LF: generated text
+    LF -->>- FE: prediction
+
+    FE ->>+ CA: GET /analyze-prediction?prediction=prediction
+    CA -->>- FE: code_snippets
+
+    par
+        FE ->>+ CA: GET /highlight?code_snippet=code_snippet
+        CA -->>- FE: highlighted_code
+    end
 ```
-
-```mermaid
-flowchart LR
-    start(["Start"])
-    _end(["End"])
-
-    locked{"ollama_usage locked?"}
-    lock["Lock ollama_usage"]
-    dec["ollama_usage[index]--"]
-    unlock["Unlock ollama_usage"]
-
-    start --> locked
-    locked --> |Yes| locked
-    locked --> |No| lock
-    lock --> dec
-    dec --> unlock
-    unlock --> _end
-```
-
-
