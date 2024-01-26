@@ -14,6 +14,7 @@
         dropdown
         :disabled="!enabled"
     />
+    <a class="suggested">   Suggested Functions: </a>
     <button
         v-for="frameworkItem in displayedFrameworkItems"
         :key="frameworkItem.id"

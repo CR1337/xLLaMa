@@ -1,7 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+
+* {
+    font-family: "Signika", sans-serif;
+    /* font-family: "Roboto", sans-serif;  */
+}
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Signika", sans-serif;
+    /* font-family: "Roboto", sans-serif; */
     line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
@@ -37,6 +44,14 @@ input {
 
 span {
     white-space: pre;
+}
+
+a {
+    font-weight: bold;
+}
+
+.suggested {
+    font-weight: normal;
 }
 
 
@@ -165,6 +180,7 @@ button:disabled {
 .p-autocomplete {
     min-width: 300px;
     margin: 2px 2px;
+    background-color: white;
 }
 
 .p-component {
