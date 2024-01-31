@@ -31,3 +31,12 @@
     - (eg: Generate an axample where a lambda function is passed as an argument)
 
 - There should be a history of generated examples which reminds of what was generated so far and allows to restore already closed examples
+
+
+
+## Feedback 3
+- Copy button should give feedback (fixed)
+- Add copy documentation button before generating next example
+- unsure of what suggested function buttons do (fixed)
+- Would be cool to have for programming languages, e.g. Java
+- Font looks a bit oldschool (fixed)
