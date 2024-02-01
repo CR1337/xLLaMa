@@ -31,12 +31,25 @@
 -------------------------------------------------------------------------------
 
 ## Endpres
-- [ ] KW4 Präsentation anfangen
+- [x] KW4 Präsentation anfangen
 - [x] 1.2. Präsi Termin Lukas gesagt
-- [ ] User Feedback, wie arbeiten Entwickler mit dem Tool?
-- [ ] User Story ausarbeiten, diese durch Nutzung des Tools untermalen. Example explorative generieren
-- [ ] Erklären warum Website, falls Website, wie integriert man existierende Projektinfos
+- [x] User Feedback, wie arbeiten Entwickler mit dem Tool?
+- [x] User Story ausarbeiten, diese durch Nutzung des Tools untermalen. Example explorative generieren
+- [x] Erklären warum Website, falls Website, wie integriert man existierende Projektinfos
 
 ## Abgabe
-- [ ] ab KW6 Abgabe fertig machen
-- [ ] Repo vermutlich okay, mit Commit Hash
+- [ ] Refactoring
+  - [ ] frontend
+  - [ ] llm_facade
+  - [ ] db_interface
+  - [ ] code_analyzer
+- [ ] Fix
+  - [ ] tests
+- [ ] Documentation
+  - [ ] Setup/Benutzung erklären
+  - [ ] Vortrag verschriftlichen
+  - [ ] technische Doku schreiben/überarbeiten
+    - [ ] frontend
+    - [ ] llm_facade
+    - [ ] db_interface
+    - [ ] code_analyzer
