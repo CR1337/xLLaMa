@@ -4,8 +4,8 @@
 - [x] Mehr Funktionen in Datenbank einfügen
 - [x] Code Explaination by LLM
 - [x] Find more functions in generated Code
-- [ ] (GPT)
-- [ ] Fix tests
+- [ ] ~~(GPT)~~
+
 
 ## Frontend
 - [x] Neue Funktionen aus DB suchbar machen
@@ -16,17 +16,17 @@
 - [x] Generate Example ausgrauen bis valid input
 - [x] Dropdown schön machen (Background weiß statt durchsichtig?)
 - [x] Tokenlimit anpassen
-- [ ] Nur example Code im linken Feld anzeigen, keine Erklärungen
+- [ ] ~~Nur example Code im linken Feld anzeigen, keine Erklärungen~~
 - [x] Close Button anpassen
 - [x] Fix Text Wrap
 - [x] Überschrift für Beispiele mit Funktionsname
 - [x] Add Github link
 - [x] Action Buttons schöner machen
-- [ ] (Radio Button styling)
+- [ ] ~~(Radio Button styling)~~
 - [x] Tab Logo
 - [x] Fix Radio Button Grouping
 - [x] Add Logo to Header
-- [ ] Add more functions to database
+- [ ] ~~Add more functions to database~~
 
 -------------------------------------------------------------------------------
 
