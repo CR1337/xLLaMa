@@ -1,12 +1,6 @@
-<style>
-.Header_Logo {
-    margin-right: 3px;
-}
-</style>
-
 <template>
 <div>
-<a class="image-link" href="https://hpi.de/studium/im-studium/lehrveranstaltungen/it-systems-engineering-ma/lehrveranstaltung/wise-23-24-3872-future-of-programming.html" target="_blank">
+<a class="header-small-image" href="https://hpi.de/studium/im-studium/lehrveranstaltungen/it-systems-engineering-ma/lehrveranstaltung/wise-23-24-3872-future-of-programming.html" target="_blank">
 <img
     src="https://hpi.de/favicon.ico"
     alt="Future of Programming"
@@ -14,7 +8,7 @@
     height="16"
 />
 </a>
-<a class="image-link" href="https://github.com/CR1337/xLLaMa" target="_blank">
+<a class="header-small-image" href="https://github.com/CR1337/xLLaMa" target="_blank">
     <img
         src="https://github.githubassets.com/favicon.ico"
         alt="GitHub"
@@ -24,11 +18,10 @@
 </a>
 </div>
 <div class="header">
-    <img class="Header_Logo" src="@/assets/xLLaMa_logo.png"  alt="xLLaMa" height="48px"/>
+    <img class="header-logo" src="@/assets/xLLaMa_logo.png"  alt="xLLaMa" height="48px"/>
     <h1>LLaMa</h1>
 </div>
 
-<!-- <img class="Header_Logo" src="@/assets/xLLaMa_logo_name.png"  alt="xLLaMa" height="65px"/> -->
 <ApiSelector @frameworkChanged="frameworkChanged"></ApiSelector>
 <FunctionSelector ref="functionSelector" @frameworkItemSelected="frameworkItemSelected"></FunctionSelector>
 <div>

@@ -1,6 +1,3 @@
-<style>
-</style>
-
 <template>
 <div>
     <a>Function: </a>
@@ -14,7 +11,7 @@
         dropdown
         :disabled="!enabled"
     />
-    <a class="suggested">   Suggested Functions: </a>
+    <a class="suggested-functions">   Suggested Functions: </a>
     <button
         v-for="frameworkItem in displayedFrameworkItems"
         :key="frameworkItem.id"

@@ -2,10 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
 
 
-
+/* General Styles */
 body {
     font-family: "Signika", sans-serif;
-    /* font-family: "Roboto", sans-serif; */
     line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
@@ -14,10 +13,8 @@ body {
 h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 55px;
-    margin-left: 0px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-left: 0px;
+    margin: 0;
+    padding: 0;
     color: #fff;
     text-shadow: -1px 0 #034c52, 0 1px #034c52, 1px 0 #034c52, 0 -1px #034c52;
     display: inline-block;
@@ -47,20 +44,19 @@ a {
     font-weight: bold;
 }
 
-.suggested {
+.suggested-functions {
     font-weight: normal;
 }
 
 
-/* ------ BUTTONS ------ */
-
+/* Buttons */
 button {
   background-color: #333;
   color: #fff;
   padding: 7px 14px;
   border: 1px solid #333;
   border-radius: 5px;
-  margin: 2px 2px;
+  margin: 2px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
 }
@@ -75,46 +71,38 @@ button:disabled {
     border: 1px solid #929292;
 }
 
-.generate-example-button {
+.generate-example-button, .generate-next-example {
     background-color: salmon;
     border-color: rgb(203, 104, 93);
     color: black;
+    font-weight: bold;
     margin-bottom: 20px;
-    font-weight: bold;
 }
 
-.generateNextExample {
+/* 
+.generate-next-example {
     background-color: salmon;
     border-color: rgb(203, 104, 93);
     color: black;
     font-weight: bold;
-}
+} */
 
-.generate-example-button:enabled:hover {
+.generate-example-button:enabled:hover, .generate-next-example:enabled:hover {
     background-color: rgb(210, 107, 95);
 }
 
-.generateNextExample:enabled:hover {
-    background-color: rgb(210, 107, 95);
-}
-
-.closeButton, .closeButton:hover {
+.close-button, .close-button:hover {
     background-color: transparent;
     color: #b5b5b5;
     border:none;
     font-size: larger;
 }
 
-.copy {
+
+/* Images */
+.copy-button {
     background-color: transparent;
     border: none;
-}
-
-/* ------ BUTTONS ------ */
-
-/* ------ IMAGE ------ */
-
-.copy {
     padding-top: 3px;
     padding-bottom: 0px;
     padding-left: 3px;
@@ -122,7 +110,7 @@ button:disabled {
     margin-bottom: 0px;
 }
 
-.documentation {
+.documentation-button {
     padding-top: 3px;
     padding-bottom: 0px;
     padding-left: 3px;
@@ -131,21 +119,14 @@ button:disabled {
     margin-top: -10px;
 }
 
-.copyimg {
+.copy-button-image, .documentation-button-image {
     -webkit-filter: invert(1);
     filter:invert(1);
     height: 20px;
     width: 20px;
 }
 
-.clipboardimg {
-    -webkit-filter: invert(1);
-    filter:invert(1);
-    height: 20px;
-    width: 20px;
-}
-
-.image-link {
+.header-small-image {
     margin-right: 10px;
     margin-top: 10px;
     float: right;
@@ -159,18 +140,16 @@ button:disabled {
     color: #b5b5b5;
 }
 
-.Header_Logo {
+.header-logo {
     margin-left: 5px;
-    margin-right: -4px;
+    margin-right: 3px;
     margin-top: 0px;
     margin-bottom: -5px;
     display: inline-block;
 }
 
-/* ------ IMAGE ------ */
 
-/* ------ AUTOCOMPLETE ------ */
-
+/* Autocomplete */
 .p-autocomplete-panel {
     background-color: white;
 }
@@ -192,15 +171,9 @@ button:disabled {
     height: 31px;
 }
 
-/* ------ AUTOCOMPLETE ------ */
-
-/* ------ TEXT FIELDS ------ */
-
+/* Text Fields */
 .outsidewrapper {
-    padding-left: 5px;
-    padding-top: 0px;
-    padding-bottom: 5px;
-    padding-right: 2px;
+    padding: 5px 2px;
     border: 1px solid transparent;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -208,38 +181,33 @@ button:disabled {
 
 .outsidewrapper:hover {
     background-color: #f0f0f0;
-    padding-left: 5px;
-    padding-top: 0px;
-    padding-bottom: 5px;
-    padding-right: 2px;
     border: 1px solid #e0e0e0;
-    border-radius: 5px;
 }
 
-.Function_Title {
+.function-title {
     margin-bottom: 0px;
     margin-left: 2px;
     margin-top: 0px;
     padding-top: 5px;
 }
 
-.wrapper {
+.code-explanation-wrapper {
     display: flex;
 }
 
-.coder {
+.code-container-wrapper {
     margin-right: 50px;
     flex: 1;
     overflow: hidden;
 }
 
-.explainer {
+.explanation-container-wrapper {
     margin-right: 5px;
     flex: 1;
     overflow: hidden;
 }
 
-.container {
+.code-container {
     overflow-y: auto;
     height: 350px;
     border: 1px solid #015c63;
@@ -251,7 +219,7 @@ button:disabled {
     position: relative;
 }
 
-.container_explain {
+.explanation-container {
     overflow-y: auto;
     height: 305px;
     border: 1px solid #015c63;
@@ -262,10 +230,8 @@ button:disabled {
     white-space: pre-line;
 }
 
-/* ------ TEXT FIELDS ------ */
 
-/* ------ LOADING ANIMATION ------ */
-
+/* Loading Animation */
 .lds-facebook {
     position: absolute;
     top: 34%;
@@ -309,5 +275,3 @@ button:disabled {
       height: 32px;
     }
 }
-
-/* ------ LOADING ANIMATION ------ */

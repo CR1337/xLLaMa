@@ -1,17 +1,13 @@
-<style>
-
-</style>
-
 <template>
 <div :hidden="!visible">
-    <div class="wrapper">
-        <div class="coder">
+    <div class="code-explanation-wrapper">
+        <div class="code-container-wrapper">
             <div class="helper_buttons" style="float: right;">
-                <div><button class="documentation" title="Open documentation" v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">
-                    <img class="clipboardimg" v-bind:src="'src/assets/read-book-icon.png'">
+                <div><button class="documentation-button" title="Open documentation" v-on:click="openDocumentation()" :disabled="frameworkItem == null || isDummy">
+                    <img class="documentation-button-image" v-bind:src="'src/assets/read-book-icon.png'">
                 </button></div>
             </div>
-            <div class="container">
+            <div class="code-container">
                 <div v-if="showLoading || debug" class="lds-facebook"><div></div><div></div><div></div></div>
                 <template v-if="highlighted">
                     <template v-for="resultChunk in resultChunks" :key="resultChunk.content">
@@ -38,24 +34,23 @@
                 </template>
             </div>
         </div>
-        <div class="explainer">
+        <div class="explanation-container-wrapper">
             <div>
                 <button @click="explain" :disabled="!generated || isDummy || explainClicked">Explain!</button>
                 <button @click="debug_fillExplain()" :hidden="!debug">FILL THIS TOO!</button>
             </div>
-            <div class="container_explain">
-                <!-- <div>{{ explanationText }}</div> -->
+            <div class="explanation-container">
                 <vue-markdown :source="explanationText" />
             </div>
         </div>
     </div>
 
-    <div class="codebuttons">
+    <div class="code-buttons">
         <button v-on:click="debug_fillWithCode(false)" :hidden="!debug">FILL ME!</button>
         <button v-on:click="debug_fillWithCode(true)" :hidden="!debug">FILL ME 2!</button>
         <button v-on:click="tooLong()" :disabled="!generated || isDummy">Too long</button>
         <button v-on:click="tooShort()" :disabled="!generated || isDummy">Too short</button>
-        <button class="generateNextExample" v-on:click="generateNextExample()" :disabled="!generated || isDummy" v-if="selectedCodeFrameworkItem != null">Generate example for {{ selectedCodeFrameworkItem.name }}</button>
+        <button class="generate-next-example" v-on:click="generateNextExample()" :disabled="!generated || isDummy" v-if="selectedCodeFrameworkItem != null">Generate example for {{ selectedCodeFrameworkItem.name }}</button>
     </div>
 
 </div>

@@ -3,8 +3,8 @@
 </style>
 
 <template>
-<div><button class="copy" title="Copy to clipboard" v-on:click="copyToClipboard()">
-    <img class="copyimg" v-bind:src="'src/assets/copy-icon.png'">
+<div><button class="copy-button" title="Copy to clipboard" v-on:click="copyToClipboard()">
+    <img class="copy-button-image" v-bind:src="'src/assets/copy-icon.png'">
 </button></div>
 <span class="code-snipet-span" v-html="code"></span>
 </template>

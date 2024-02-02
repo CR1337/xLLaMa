@@ -1,10 +1,7 @@
-<style>
-</style>
-
 <template>
 <div class="outsidewrapper">
-    <h4 class="Function_Title"> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? "Noting generated yet!" : frameworkItem.name }} </h4>
-    <button title="close this example" class="closeButton" @click="close" style="float: right;">✖</button>
+    <h4 class="function-title"> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? "Noting generated yet!" : frameworkItem.name }} </h4>
+    <button title="close this example" class="close-button" @click="close" style="float: right;">✖</button>
     <div class="top-row">
         <template v-for="model in models" :key="model">
         <input type="radio" :id="model + '_' + id" :value="model" :name="'model_selection_' + id" v-model="selectedModel">

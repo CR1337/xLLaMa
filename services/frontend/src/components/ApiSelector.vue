@@ -1,6 +1,3 @@
-<style>
-</style>
-
 <template>
 <div>
     <a>API / Framework: </a>
