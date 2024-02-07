@@ -38,17 +38,23 @@
 - [x] Erklären warum Website, falls Website, wie integriert man existierende Projektinfos
 
 ## Abgabe
-- [ ] Refactoring
-  - [ ] frontend
-  - [ ] llm_facade
+- [ ] Refactoring (C)
+  - [ ] frontend (insb. js code)
+  - [ ] llm_facade (insb. llm_request.py)
   - [ ] db_interface
   - [ ] code_analyzer
-- [ ] Fix
-  - [ ] tests
+  - [ ] Naming conventions
+  - [ ] docs -> old docs
+  - [ ] Remove debug code
+  - [ ] Remove metrics
+  - [ ] (Check tests - optional)
 - [ ] Documentation
-  - [ ] Setup/Benutzung erklären
-  - [ ] Vortrag verschriftlichen
-  - [ ] technische Doku schreiben/überarbeiten
+  - [ ] Setup/Benutzung Skript schreiben + in readme (L)
+  - [ ] Video aufnehmen (L)
+  - [ ] Abstract fertig (L)
+  - [ ] Vortrag Infoboxen Backend wo nötig (C)
+  - [ ] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C + L)
+  - [ ] technische Doku schreiben/überarbeiten (C)
     - [ ] frontend
     - [ ] llm_facade
     - [ ] db_interface
