@@ -38,7 +38,7 @@ def create_db():
 
 @db_session
 def drop_db():
-    db.drop_tables(TABLES)
+    db.drop_tables(TABLES, safe=True)
 
 
 def reset_db():
