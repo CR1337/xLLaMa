@@ -1,4 +1,3 @@
-# from code_visitor import CodeVisitor
 from simple_code_visitor import SimpleCodeVisitor
 from metric_calculator import MetricCalculator
 from typing import Any, Dict
