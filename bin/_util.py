@@ -2,6 +2,7 @@ import subprocess
 from shutil import copyfile
 from typing import List
 import sys
+import requests
 
 
 CYAN: str = "\033[1;96m"
@@ -128,3 +129,24 @@ def set_environment(gpu_ids: List[int]):
         set_environment_key(".env", "GPU0", "0")
         set_environment_key(".env", "GPU1", "0")
     print_color("Successfully set environment\n", GREEN)
+
+
+def post_request(
+    port: int,
+    endpoint: str,
+    info_message: str,
+    success_message: str,
+    failure_message: str
+):
+    print_color(info_message, CYAN)
+    try:
+        response = requests.post(f"http://localhost:{port}/{endpoint}")
+    except requests.exceptions.ConnectionError:
+        print_color(failure_message)
+        sys.exit(1)
+    else:
+        if response.status_code != 200:
+            print_color(failure_message, RED)
+            sys.exit(1)
+        else:
+            print_color(f"{success_message}\n", GREEN)

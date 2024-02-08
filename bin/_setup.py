@@ -2,7 +2,7 @@ from _util import (
     GREEN, MODELS, dash_local_suffix, dot_local_suffix, print_color,
     run_program, ask_for_integer, set_environment, copy_file
 )
-from _requests import post_request, install_model_request
+from bin._model_installation import post_request, install_model_request
 
 
 def main():
