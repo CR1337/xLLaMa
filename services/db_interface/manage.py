@@ -38,7 +38,9 @@ def create_db():
 
 @db_session
 def drop_db():
+    db.execute_sql("PRAGMA foreign_keys = OFF;")
     db.drop_tables(TABLES, safe=True)
+    db.execute_sql("PRAGMA foreign_keys = ON;")
 
 
 def reset_db():
