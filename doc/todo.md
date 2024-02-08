@@ -48,6 +48,7 @@
   - [ ] Remove debug code
   - [x] Remove metrics
   - [ ] Add Comments and Docstrings where needed
+  - [ ] Make Setup Script work without dependencies
   - [ ] (Check tests - optional)
 - [ ] Documentation
   - [ ] Setup/Benutzung Skript schreiben + in readme (L)
