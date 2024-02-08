@@ -44,7 +44,7 @@
   - [ ] db_interface
   - [ ] code_analyzer
   - [ ] Naming conventions
-  - [ ] docs -> old docs
+  - [x] docs -> old docs
   - [ ] Remove debug code
   - [ ] Remove metrics
   - [ ] (Check tests - optional)
