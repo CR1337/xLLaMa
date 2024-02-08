@@ -184,39 +184,6 @@ class DbInterface:
             code=code_snippet.code,
             start_line=code_snippet.start_line,
             end_line=code_snippet.end_line,
-            raw_loc=analyzer.metric_calculator.raw_report.loc,
-            raw_lloc=analyzer.metric_calculator.raw_report.lloc,
-            raw_sloc=analyzer.metric_calculator.raw_report.sloc,
-            raw_comments=analyzer.metric_calculator.raw_report.comments,
-            raw_multi=analyzer.metric_calculator.raw_report.multi,
-            raw_single_comments=(
-                analyzer.metric_calculator.raw_report.single_comments
-            ),
-            raw_blank=analyzer.metric_calculator.raw_report.blank,
-            halstead_h1=analyzer.metric_calculator.halstead_report.h1,
-            halstead_h2=analyzer.metric_calculator.halstead_report.h2,
-            halstead_N1=analyzer.metric_calculator.halstead_report.N1,
-            halstead_N2=analyzer.metric_calculator.halstead_report.N2,
-            halstead_length=analyzer.metric_calculator.halstead_report.length,
-            halstead_volume=analyzer.metric_calculator.halstead_report.volume,
-            halstead_difficulty=(
-                analyzer.metric_calculator.halstead_report.difficulty
-            ),
-            halstead_effort=analyzer.metric_calculator.halstead_report.effort,
-            halstead_time=analyzer.metric_calculator.halstead_report.time,
-            halstead_bugs=analyzer.metric_calculator.halstead_report.bugs,
-            cyclomatic_complexity_score=(
-                analyzer.metric_calculator.cyclometric_complexity
-            ),
-            cyclomatic_complexity_rank=(
-                analyzer.metric_calculator.cyclometric_complexity_rank
-            ),
-            maintainability_index_score=(
-                analyzer.metric_calculator.maintainability_index
-            ),
-            maintainability_index_rank=(
-                analyzer.metric_calculator.maintainability_index_rank
-            ),
             prediction=prediction
         )
 
