@@ -11,27 +11,6 @@ erDiagram
         text code
         integer start_line
         integer end_line
-        integer raw_loc
-        integer raw_lloc
-        integer raw_sloc
-        integer raw_comments
-        integer raw_multi
-        integer raw_single_comments
-        integer raw_blank
-        integer halstead_h1
-        integer halstead_h2
-        integer halstead_N1
-        integer halstead_N2
-        float halstead_length
-        float halstead_volume
-        float halstead_difficulty
-        float halstead_effort
-        float halstead_time
-        float halstead_bugs
-        float cyclomatic_complexity_score
-        char cyclometric_complexity_rank
-        float maintainablility_index_score
-        char maintainability_index_rank
         text prediction FK
     }
     Prediction ||--o{ CodeSnippet: "generated"
