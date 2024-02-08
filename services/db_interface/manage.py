@@ -38,9 +38,7 @@ def create_db():
 
 @db_session
 def drop_db():
-    db.execute_sql('SET session_replication_role = REPLICA;')
-    db.drop_tables(TABLES, safe=True)
-    db.execute_sql('SET session_replication_role = DEFAULT;')
+    db.drop_tables(TABLES, cascade=True)
 
 
 def reset_db():
