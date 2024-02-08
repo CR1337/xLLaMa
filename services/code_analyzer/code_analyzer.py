@@ -1,5 +1,5 @@
 from code_snippet import CodeSnippet
-from code_analyzer.code_visitor import CodeVisitor
+from code_visitor import CodeVisitor
 
 
 class CodeAnalyzer:
