@@ -1,6 +1,6 @@
 from model import (
     db, BaseModel, UserRatingType, Framework, FrameworkItem,
-    SymbolDefinitionType, FollowUpType, Prediction, SystemPrompt,
+    FollowUpType, Prediction, SystemPrompt,
     StopSequence
 )
 from models import models
@@ -57,11 +57,6 @@ def populate_db():
         follow_up_types_data = json.load(file)
     for follow_up_type in follow_up_types_data:
         FollowUpType.from_dict(follow_up_type)
-
-    with open("init_data/symbol_definition_types.json", 'r') as file:
-        symbol_definition_types_data = json.load(file)
-    for symbol_definition_type in symbol_definition_types_data:
-        SymbolDefinitionType.from_dict(symbol_definition_type)
 
     with open("init_data/user_rating_types.json", 'r') as file:
         user_rating_types_data = json.load(file)
