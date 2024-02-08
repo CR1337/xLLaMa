@@ -1,7 +1,6 @@
 from model import Prediction, FollowUp, FrameworkItem, Llm, PromptPart, \
     StopSequence, CodeSnippet, UserRating, Framework, FollowUpType, \
-    PromptPartUsage, StopSequenceUsage, SymbolDefinition, \
-    SymbolReference, \
+    PromptPartUsage, StopSequenceUsage, SymbolReference, \
     UserRatingType, BaseModel, SystemPrompt
 from typing import Dict, Type
 
@@ -17,10 +16,8 @@ models: Dict[str, Type[BaseModel]] = {
     "prompt_parts": PromptPart,
     "stop_sequence_usages": StopSequenceUsage,
     "stop_sequences": StopSequence,
-    "symbol_definitions": SymbolDefinition,
     "symbol_references": SymbolReference,
     "system_prompts": SystemPrompt,
-    "symbol_references": SymbolReference,
     "user_rating_types": UserRatingType,
     "user_ratings": UserRating
 }

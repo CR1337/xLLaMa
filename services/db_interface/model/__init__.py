@@ -15,5 +15,4 @@ from .code_snippet import CodeSnippet  # noqa: F401
 from .prompt_part_usage import PromptPartUsage  # noqa: F401
 from .stop_sequence_usage import StopSequenceUsage  # noqa: F401
 from .symbol_reference import SymbolReference  # noqa: F401
-from .symbol_reference import SymbolReference  # noqa: 401
 from .system_prompt import SystemPrompt  # noqa: 401
