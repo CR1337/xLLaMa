@@ -206,22 +206,20 @@ This endpoint only exists for debugging purposes. It doesn't take any further pa
 ### `GET /<table_name>/by-name/<name>`
 This endpoint returns a database object from `<table_name>` with name `<name>`. Note that the object has to have a column called `name`. Possible tables names are:
 1. [`follow_up_types`](#followuptype)
-2. [`symbol_definition_types`](#symboldefinitiontype)
-3. [`user_rating_types`](#userratingtype)
-4. [`llms`](#llm)
-5. [`frameworks`](#framework)
-6. [`framework_items`](#frameworkitem)
-7. [`system_prompts`](#systemprompt)
+2. [`user_rating_types`](#userratingtype)
+3. [`llms`](#llm)
+4. [`frameworks`](#framework)
+5. [`framework_items`](#frameworkitem)
+6. [`system_prompts`](#systemprompt)
 
 ### `DELETE /<table_name>/by-name/<name>`
 This endpoint deletes an existing database object from `<table_name>` with name `<name>`. Note that the object has to have a column called `name`. Possible tables names are:
 1. [`follow_up_types`](#followuptype)
-2. [`symbol_definition_types`](#symboldefinitiontype)
-3. [`user_rating_types`](#userratingtype)
-4. [`llms`](#llm)
-5. [`frameworks`](#framework)
-6. [`framework_items`](#frameworkitem)
-7. [`system_prompts`](#systemprompt)
+2. [`user_rating_types`](#userratingtype)
+3. [`llms`](#llm)
+4. [`frameworks`](#framework)
+5. [`framework_items`](#frameworkitem)
+6. [`system_prompts`](#systemprompt)
 
 ### `GET /<table_name>`
 This endpoint returns a list of all database objects from `<table_name>`. Possible tables names are:
@@ -236,14 +234,11 @@ This endpoint returns a list of all database objects from `<table_name>`. Possib
 9. [`prompt_parts`](#promptpart)
 10. [`stop_sequence_usages`](#stopsequenceusage)
 11. [`stop_sequences`](#stopsequence)
-12. [`symbol_definition_references`](#symboldefinitionreference)
-13. [`symbol_definition_types`](#symboldefinitiontype)
-14. [`symbol_definitions`](#symboldefinition)
-15. [`symbol_references`](#symbolreference)
-16. [`system_prompts`](#systemprompt)
-17. [`undefined_symbol_references`](#undefinedsymbolreference)
-18. [`user_rating_types`](#userratingtype)
-19. [`user_ratings`](#userrating)
+12. [`symbol_references`](#symbolreference)
+13. [`system_prompts`](#systemprompt)
+14. [`symbol_references`](#symbolreference)
+15. [`user_rating_types`](#userratingtype)
+16. [`user_ratings`](#userrating)
 
 ### `POST /<table_name>`
 This endpoint will create a new database object. You have to provide a json body with the necessary column values. Necessary columns are all columns that don't have a `NOT NULL` constraint and are not one of (`id`, `created_at`, `updated_at`). When you provide references to other database objects you have to give them as database ids.
