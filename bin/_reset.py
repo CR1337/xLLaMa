@@ -1,6 +1,6 @@
 from _util import (
     GREEN, MODELS, dash_local_suffix, print_color, run_program, post_request,
-    install_model_request
+    install_model_request, get_request
 )
 
 
@@ -44,6 +44,13 @@ def main():
             f"Successfully installed model {model}",
             f"Failed to install model {model}"
         )
+    get_request(
+        5001,
+        "/models",
+        "Checking models...",
+        "Successfully checked models",
+        "Failed to check models"
+    )
     run_program(
         ["sh", f"./bin/stop{dash_local_suffix}"],
         "Stopping docker services...",
