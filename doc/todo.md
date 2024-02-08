@@ -46,7 +46,7 @@
   - [ ] Naming conventions
   - [x] docs -> old docs
   - [ ] Remove debug code
-  - [ ] Remove metrics
+  - [x] Remove metrics
   - [ ] (Check tests - optional)
 - [ ] Documentation
   - [ ] Setup/Benutzung Skript schreiben + in readme (L)
