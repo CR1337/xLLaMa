@@ -42,11 +42,13 @@
   - [ ] frontend (insb. js code)
   - [ ] llm_facade (insb. llm_request.py)
   - [ ] db_interface
-  - [ ] code_analyzer
+  - [x] code_analyzer
   - [ ] Naming conventions
   - [x] docs -> old docs
   - [ ] Remove debug code
   - [x] Remove metrics
+  - [ ] Add Comments and Docstrings where needed
+  - [ ] Make Setup Script work without dependencies
   - [ ] (Check tests - optional)
 - [ ] Documentation
   - [ ] Setup/Benutzung Skript schreiben + in readme (L)

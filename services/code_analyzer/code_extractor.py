@@ -39,7 +39,7 @@ class CodeExtractor:
                 try:
                     tree = ast.parse(snippet)
                 except (SyntaxError, ValueError):
-                    continue
+                    continue  # no valid code snippet, just continue
                 else:
                     self._code_snippets.append(
                         CodeSnippet(

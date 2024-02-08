@@ -55,11 +55,7 @@ class TestDatabaseInterfaceGet:
         "frameworks",
         "prompt_part_usages",
         "stop_sequence_usages",
-        "symbol_definitions",
-        "symbol_definition_types",
         "symbol_references",
-        "symbol_definition_references",
-        "undefined_symbol_references",
         "user_rating_types"
     ])
     def test_get_instances(self, model_name: str):
@@ -89,11 +85,7 @@ class TestDatabaseInterfaceGet:
         "frameworks",
         "prompt_part_usages",
         "stop_sequence_usages",
-        "symbol_definitions",
-        "symbol_definition_types",
         "symbol_references",
-        "symbol_definition_references",
-        "undefined_symbol_references",
         "user_rating_types"
     ])
     def test_get_instance(self, model_name: str, instance_ids: Dict[str, Any]):

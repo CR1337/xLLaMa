@@ -32,10 +32,7 @@ class TestDatabaseInterfacePost:
         ("user_ratings", "value", 42.0),
         ("frameworks", "name", "test"),
         ("prompt_part_usages", "position", 42),
-        ("symbol_definitions", "symbol", "test"),
-        ("symbol_definition_types", "name", "test"),
-        ("symbol_references", "start_line", 42),
-        ("undefined_symbol_references", "symbol", "test"),
+        ("symbol_references", "symbol", "test"),
         ("user_rating_types", "name", "test")
     ])
     def test_patch_instance(

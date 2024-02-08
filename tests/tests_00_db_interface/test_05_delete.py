@@ -21,11 +21,7 @@ class TestDatabaseInterfaceGet:
         populate_database()
 
     @pytest.mark.parametrize("model_name", [
-        "undefined_symbol_references",
-        "symbol_definition_references",
         "symbol_references",
-        "symbol_definitions",
-        "symbol_definition_types",
         "code_snippets",
         "stop_sequence_usages",
         "stop_sequences",

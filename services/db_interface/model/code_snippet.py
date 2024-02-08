@@ -16,19 +16,10 @@ class CodeSnippet(BaseModel):
     prediction = ForeignKeyField(Prediction, backref='_code_snippets')
 
     @property
-    def undefined_symbol_references(self) -> List[BaseModel]:
-        from model.undefined_symbol_reference import UndefinedSymbolReference
+    def symbol_references(self) -> List[BaseModel]:
+        from model.symbol_reference import SymbolReference
         return self.get_backref_list_1_n(
-            UndefinedSymbolReference,
-            UndefinedSymbolReference.code_snippet,
-            self
-        )
-
-    @property
-    def symbol_definitions(self) -> List[BaseModel]:
-        from model.symbol_definition import SymbolDefinition
-        return self.get_backref_list_1_n(
-            SymbolDefinition,
-            SymbolDefinition.code_snippet,
+            SymbolReference,
+            SymbolReference.code_snippet,
             self
         )
