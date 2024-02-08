@@ -1,0 +1,3 @@
+#!/bin/sh
+
+python3 bin/_reset.py --local
