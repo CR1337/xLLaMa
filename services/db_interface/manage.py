@@ -38,9 +38,9 @@ def create_db():
 
 @db_session
 def drop_db():
-    db.execute_sql("PRAGMA foreign_keys = OFF;")
+    db.execute_sql('SET session_replication_role = REPLICA;')
     db.drop_tables(TABLES, safe=True)
-    db.execute_sql("PRAGMA foreign_keys = ON;")
+    db.execute_sql('SET session_replication_role = DEFAULT;')
 
 
 def reset_db():
