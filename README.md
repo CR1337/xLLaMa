@@ -24,6 +24,8 @@ Links to installation
 ## Architecture
 ### Component Diagrams
 #### Frontend
+![Frontend Component Diagram](https://github.com/CR1337/xLLaMa/blob/main/doc/diagrams/frontend_component_diagram_image.png)
+
 #### Backend
 ### Sequence Diagrams
 
