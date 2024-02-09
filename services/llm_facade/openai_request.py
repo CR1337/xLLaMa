@@ -78,7 +78,7 @@ class OpenAiRequest(LlmRequest):
                 i + 1
             )
 
-        return server_sent_event_generator
+        return server_sent_event_generator()
 
     def _request_generation(self, stream: bool) -> ChatCompletion:
         messages = []

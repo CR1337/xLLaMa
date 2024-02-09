@@ -115,7 +115,7 @@ class OllamaRequest(LlmRequest):
             for thread in threads:
                 thread.join()
 
-        return server_sent_event_generator
+        return server_sent_event_generator()
 
     @classmethod
     def _ollama_stream(
@@ -239,7 +239,7 @@ class OllamaRequest(LlmRequest):
                 ):
                     yield event
 
-        return server_sent_event_generator
+        return server_sent_event_generator()
 
     def _build_generation_request_body(self, stream: bool) -> Dict[str, Any]:
         request_body = {
