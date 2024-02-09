@@ -23,9 +23,9 @@ class RequestError(Exception):
 
 
 def get_model_names() -> List[str]:
-    model_names = OllamaRequest.model_names()
+    model_names = OllamaRequest.model_names
     if OpenAiRequest.available:
-        model_names += OpenAiRequest.model_names()
+        model_names += OpenAiRequest.model_names
     return model_names
 
 
