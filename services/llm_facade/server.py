@@ -3,7 +3,7 @@ from flask_cors import CORS
 from db_interface import DbInterface
 import os
 from typing import List, Type
-from llm_request import LlmRequest, REQUEST_CLASSES
+from llm_request import LlmRequest
 from openai_request import OpenAiRequest
 from ollama_request import OllamaRequest
 

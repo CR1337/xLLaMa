@@ -1,4 +1,4 @@
-from llm_request import LlmRequest, REQUEST_CLASSES
+from llm_request import LlmRequest
 from openai import (
     OpenAI, AuthenticationError, APIConnectionError, ChatCompletion
 )
@@ -100,6 +100,3 @@ class OpenAiRequest(LlmRequest):
             top_p=self._top_p,
             stop=[s['text'] for s in self._stop_sequences or []]
         )
-
-
-REQUEST_CLASSES.append(OpenAiRequest)
