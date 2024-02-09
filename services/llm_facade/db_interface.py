@@ -15,8 +15,7 @@ class DbInterface:
             json={"name": name}
         )
         if response.status_code == 400:
-            json_response = response.json()
-            if 'IntegrityError' in json_response['message']:
+            if 'IntegrityError' in response.json()['message']:
                 return cls.get_llm_by_name(name)
         return response.json()
 

@@ -68,7 +68,7 @@ def route_model(model_name: str):
             else:
                 return {"message": "Invalid json body."}, 400
         except IntegrityError as ex:
-            return {"message": str(ex)}, 400
+            return {"message": "IntegrityError: " + str(ex)}, 400
 
 
 @app.route("/<model_name>/<id>", methods=['GET', 'PATCH', 'DELETE'])
