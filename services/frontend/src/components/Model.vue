@@ -59,7 +59,10 @@
 <script>
 import CodeSnippet from '@/components/CodeSnippet.vue';
 import VueMarkdown from 'vue-markdown-render';
-import { host } from "@/util/util.js";
+import { db } from "@/util/dbInterface.js";
+import { debug } from "@/util/debug.js";
+import { llm } from "@/util/llm.js";
+import { codeAnalyzer } from "@/util/codeAnalyzer.js";
 
 export default {
     name: "Model",
@@ -100,8 +103,7 @@ export default {
         }
     },
     mounted() {
-        fetch("http://" + host() + ":5003/stop_sequences")
-        .then((response) => response.json())
+        db.getAll("stop_sequences")
         .then((responseJson) => {
             this.stopSequences = responseJson.map((stopSequence) => stopSequence.id);
         })
@@ -127,343 +129,149 @@ export default {
         },
         generateExample(generationReason="example_generation") {
             this.showLoading = true;
-            fetch("http://" + host() + ":5003/system_prompts/by-name/" + generationReason)
-            .then((response) => response.json())
+            db.getByName("system_prompts", generationReason)
             .then((responseJson) => {
                 this.setPromptParts(responseJson.id, generationReason);
-            })
-            .catch((error) => {
-                console.log(error);
             });
         },
         setPromptParts(systemPromptId, generationReason) {
             let promises = [
-                fetch("http://" + host() + ":5003/prompt_parts", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "text": "\n# Documentation:\n" + this.frameworkItem.description
-                    })
+                db.create("prompt_parts", {
+                    text: "\n# Documentation:\n" + this.frameworkItem.description
                 }),
-                fetch("http://" + host() + ":5003/prompt_parts", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "text": "\n# Implementation:\n" + this.frameworkItem.source
-                    })
+                db.create("prompt_parts", {
+                    text: "\n# Implementation:\n" + this.frameworkItem.source
                 })
             ]
             if (generationReason == "too_short") {
-                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "text": "\n# Your last generation:\n" + this.generatedText
-                    })
+                promises.push(db.create("prompt_parts", {
+                    text: "\n# Your last generation:\n" + this.generatedText
                 }));
-                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "text": "\n# Task:\nWrite a longer code example for this function. Please provide only code."
-                    })
+                promises.push(db.create("prompt_parts", {
+                    text: "\n# Task:\nWrite a longer code example for this function. Please provide only code."
                 }));
             } else if (generationReason == "too_long") {
-                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "text": "\n# Your last generation:\n" + this.generatedText
-                    })
+                promises.push(db.create("prompt_parts", {
+                    text: "\n# Your last generation:\n" + this.generatedText
                 }));
-                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "text": "\n# Task:\nWrite a shorter code example for this function. Please provide only code."
-                    })
+                promises.push(db.create("prompt_parts", {
+                    text: "\n# Task:\nWrite a shorter code example for this function. Please provide only code."
                 }));
             } else {
-                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "text": "\n# Task:\nWrite a helpful code example for this function. Please provide only code."
-                    })
+                promises.push(db.create("prompt_parts", {
+                    text: "\n# Task:\nWrite a helpful code example for this function. Please provide only code."
                 }));
             }
             Promise.all(promises)
-            .then((responses) => Promise.all(responses.map(response => response.json())))
             .then((responseJson) => {
                 const promptPartIds = responseJson.map(data => data.id);
                 this.getLlmId(systemPromptId, promptPartIds, generationReason)
-            })
-            .catch((error) => {
-                console.log(error);
             });
         },
 
         getLlmId(systemPromptId, promptPartIds, generationReason) {
-            fetch("http://" + host() + ":5003/llms/by-name/" + this.model)
-            .then((response) => response.json())
+            db.getByName("llms", this.model)
             .then((responseJson) => {
                 if (generationReason == "example_generation") {
                     this.generatePrediction(systemPromptId, promptPartIds, responseJson.id, null);
                 } else {
                     this.getUserRatingType(systemPromptId, promptPartIds, responseJson.id, generationReason);
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            });
         },
 
         getUserRatingType(systemPromptId, promptPartIds, llmId, generationReason) {
-            fetch("http://" + host() + ":5003/user_rating_types/by-name/" + generationReason)
-            .then((response) => response.json())
+            db.getByName("user_rating_types", generationReason)
             .then((responseJson) => {
-                this.getFollowUpType(systemPromptId, promptPartIds, llmId, responseJson.id, generationReason);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+                this.generateUserRating(systemPromptId, promptPartIds, llmId, responseJson.id, generationReason);
+            });
         },
 
         generateUserRating(systemPromptId, promptPartIds, llmId, userRatingTypeId, generationReason) {
-            fetch("http://" + host() + ":5003/user_ratings", {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    value: 0.0,
-                    prediction: this.generatedPrediction.id,
-                    user_rating_type: userRatingTypeId
-                })
+            db.create("user_ratings", {
+                value: 0.0,
+                prediction: this.generatedPrediction.id,
+                user_rating_type: userRatingTypeId
             })
-            .then((response) => response.json())
             .then((responseJson) => {
                 this.getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            });
         },
 
         getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason) {
-            fetch("http://" + host() + ":5003/follow_up_types/by-name/" + generationReason)
-            .then((response) => response.json())
+            db.getByName("follow_up_types", generationReason)
             .then((responseJson) => {
                 this.generateFollowUp(systemPromptId, promptPartIds, llmId, responseJson.id);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            });
         },
 
         generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId) {
-            fetch("http://" + host() + ":5003/follow_ups", {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
+            db.create(
+                "follow_ups",
+                {
                     parent_prediction: this.generatedPrediction.id,
                     follow_up_type: followUpTypeId
-                })
-            })
-            .then((response) => response.json())
+                }
+            )
             .then((responseJson) => {
-                this.generatePrediction(systemPromptId, promptPartIds, llmId, responseJson.id);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+                    this.generatePrediction(systemPromptId, promptPartIds, llmId, responseJson.id);
+            });
         },
 
         generatePrediction(systemPromptId, promptPartIds, llmId, followUpId) {
-            let url = "http://" + host() + ":5001/generate"
-                + "?model=" + llmId
-                + "&prompt_parts=" + promptPartIds.toString()
-                + "&system_prompt=" + systemPromptId
-                + "&framework_item=" + this.frameworkItem.id
-                + "&max_tokens=" + this.max_tokens
-                // + "&stop_sequences=" + this.stopSequences.toString()
-                + "&temperature=" + this.temperature;
-            if (followUpId != null) {
-                url += "&parent_follow_up=" + followUpId;
-            }
-
             this.codeFrameworkItems = [];
             this.selectedCodeFrameworkItem = null;
 
-            if (!this.stream) {
-                url += "&stream=false";
-                fetch(url)
-                .then((response) => response.json())
-                .then((responseJson) => {
+            llm.generate(
+                llmId,
+                promptPartIds,
+                systemPromptId,
+                {
+                    frameworkItem: this.frameworkItem.id,
+                    maxTokens: this.max_tokens,
+                    temperature: this.temperature,
+                    parentFollowUpId: followUpId
+                },
+                this.stream,
+                (responseJson) => {
                     this.displayPrediction(responseJson.prediction);
                     this.showLoading = false;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-            } else {
-                this.generatedText = "";
-                const eventSource = new EventSource(url);
-                eventSource.addEventListener("generation_progress", (event) => {
+                },
+                (event) => {
                     this.showLoading = false;
                     const token = JSON.parse(event.data).token;
                     this.generatedText += token;
-                });
-                eventSource.addEventListener("generation_success", (event) => {
-                    eventSource.close();
+                },
+                (event) => {
                     const predictionId = JSON.parse(event.data).prediction;
                     this.displayPrediction(predictionId);
-                });
-            }
+                }
+            );
         },
 
         displayPrediction(predictionId) {
-            fetch("http://" + host() + ":5003/predictions/" + predictionId)
-            .then((response) => response.json())
+            db.getById("predictions", predictionId)
             .then((responseJson) => {
                 this.generatedPrediction = responseJson;
                 this.generatedText = this.generatedPrediction.text;
 
                 this.highlightCode();
                 this.generated = true;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            });
         },
 
         debug_fillExplain() {
-            this.explanationText = `# xLLaMa
-
-## Setup
-
-### 1. Install Docker
-See [Docker Installation](https://docs.docker.com/engine/install/) (if not already installed)
-
-### 2. Install Python 3
-Install at least Python 3.10 with Pip (if not already installed). Earlier versions might work but are not tested.
-
-### 3. Clone this Repository
-\`\`\`bash
-git clone https://github.com/CR1337/xLLaMa.git
-\`\`\`
-
-### 4. Change into the Repository
-\`\`\`bash
-cd xLLaMa
-\`\`\`
-
-### 5. Create a virtual environment (optional)
-\`\`\`bash
-python3 -m venv .venv
-\`\`\`
-
-### 6. Activate the virtual environment (optional)
-\`\`\`bash
-source .venv/bin/activate
-\`\`\`
-
-### 7. Run setup script
-If you are on the production server with GPUs 2 and 3, run
-\`\`\`bash
-bin/setup
-\`\`\`
-else run
-\`\`\`bash
-bin/setup-local
-\`\`\`
-
-## Usage
-### 1. Run the application
-For running in the background (recommended for production):
-\`\`\`bash
-bin/run
-\`\`\`
-For seeing terminal output (recommended for development):
-\`\`\`bash
-bin/run-blocking
-\`\`\`
-
-If you are not on the production server with GPUs 2 and 3 use
-\`\`\`bash
-bin/run-local
-\`\`\`
-or
-\`\`\`bash
-bin/run-blocking-local
-\`\`\`
-respectively.
-
-### 2. Open the application
-Open the application in a browser at http://localhost:8080. You can replace localhost with the IP of the server.
-
-### 3. Stop the application
-\`\`\`bash
-bin/stop
-\`\`\`
-or if you are not on the production server with GPUs 2 and 3
-\`\`\`bash
-bin/stop-local
-\`\`\`
-`;
+            this.explanationText = debug.explanationText;
         },
 
         debug_fillWithCode(long) {
-            const rawHtml = `<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">BertTokenizerFast</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">"bert-base-uncased"</span><span class="p">)</span>
-<span class="n">sequences</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"This is a test"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"Another sentence"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
-<span class="n">batch_decoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'batch_decode')">batch_decode</a></u></b></span><span class="p">(</span><span class="n">sequences</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">batch_decoded</span><span class="p">)</span> <span class="c1"># Output: ['this is a test', 'another sentence']</span>
-
-<span class="c1"># Convert the sequences to tensors and pass them through the model</span>
-<span class="n">input_ids</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"This is a test"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'encode')">encode</a></u></b></span><span class="p">(</span><span class="s2">"Another sentence"</span><span class="p">,</span> <span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'add_special_tokens')">add_special_tokens</a></u></b></span><span class="o">=</span><span class="kc">False</span><span class="p">)])</span>
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span>
-<span class="c1"># Use the 'batch_decode' method to decode the output ids</span>
-<span class="n">decoded_sequences</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n"><b><u><a class="clickable" onclick="handleCodeSnippetObjectClick('3330b658-b5b1-4723-aa5c-0a0f48c51121', 'batch_decode')">batch_decode</a></u></b></span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean_up_tokenization_spaces</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">decoded_sequences</span><span class="p">)</span> <span class="c1"># Output: ['this is a test', 'another sentence']</span>
-</pre></div>
-            `
+            const rawHtml = debug.codeSnippetHtml;
 
             this.resultChunks = []
             if (long) {
                 this.resultChunks.push({
                     type: "text",
-                    content: "This is some text."
+                    content: debug.prefixWrapperText
                 });
             }
             this.resultChunks.push({
@@ -474,11 +282,7 @@ bin/stop-local
             if (long) {
                 this.resultChunks.push({
                     type: "text",
-                    content:
-                        "This is some more text that is a bit longer and has more lines.\n"
-                        + "Once upon a time there was a very long text with multiple lines that was so long that it was too long.\n"
-                        + "This is some more text that is a bit longer and has more lines.\n"
-
+                    content: debug.suffixWrapperText
                 });
             }
 
@@ -486,16 +290,14 @@ bin/stop-local
         },
 
         highlightCode() {
-            fetch("http://" + host() + ":5002/analyze-prediction?prediction=" + this.generatedPrediction.id)
-            .then((response) => response.json())
+            codeAnalyzer.analyze(this.generatedPrediction.id)
             .then((responseJson) => {
                 const codeSnippetIds = responseJson.code_snippets;
                 let promises = [];
                 for (const codeSnippetId of codeSnippetIds) {
-                    promises.push(fetch("http://" + host() + ":5003/code_snippets/" + codeSnippetId));
+                    promises.push(db.getById("code_snippets", codeSnippetId));
                 }
                 Promise.all(promises)
-                    .then((responses) => Promise.all(responses.map(response => response.json())))
                     .then((codeSnippets) => {
                         const sortedCodeSnippets = codeSnippets.sort((a, b) => a.start_line - b.start_line);
                         const codeSnippetCount = sortedCodeSnippets.length;
@@ -527,9 +329,6 @@ bin/stop-local
 
                         this.resultChunks = resultChunks;
                         this.highlighted = true;
-                    })
-                    .catch((error) => {
-                        console.log(error);
                     });
             })
             .catch((error) => {
@@ -539,73 +338,46 @@ bin/stop-local
 
         explain() {
             this.explainClicked = true;
-            fetch("http://" + host() + ":5003/prompt_parts", {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "text": "Please explain this code step by step formatted as markdown:\n\n```python\n" + this.generatedText + "\n```"
-                })
+            db.create("prompt_parts", {
+                text: "Please explain this code step by step formatted as markdown:\n\n```python\n" + this.generatedText + "\n```"
             })
-            .then((response) => response.json())
             .then((responseJson) => {
                 const promptPartIds = [responseJson.id];
-                fetch("http://" + host() + ":5003/llms/by-name/" + this.explanationModel)
-                .then((response) => response.json())
+                db.getByName("llms", this.explanationModel)
                 .then((responseJson) => {
                     const llmId = responseJson.id;
-                    let url = "http://" + host() + ":5001/generate"
-                        + "?model=" + llmId
-                        + "&prompt_parts=" + [promptPartIds].toString()
-                        + "&framework_item=" + this.frameworkItem.id
-                        + "&max_tokens=" + this.max_tokens
-                        + "&temperature=" + this.temperature;
-                        if (!this.stream) {
-                            url += "&stream=false";
-                            fetch(url)
-                            .then((response) => response.json())
-                            .then((responseJson) => {
-                                this.displayExplanation(responseJson.prediction);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                        } else {
-                            this.explanationText = "";
-                            const eventSource = new EventSource(url);
-                            eventSource.addEventListener("generation_progress", (event) => {
-                                const token = JSON.parse(event.data).token;
-                                this.explanationText += token;
-                            });
-                            eventSource.addEventListener("generation_success", (event) => {
-                                eventSource.close();
-                                const predictionId = JSON.parse(event.data).prediction;
-                                this.displayExplanation(predictionId);
-                            });
+                    llm.generate(
+                        llmId,
+                        promptPartIds,
+                        this.frameworkItem.id,
+                        {
+                            maxTokens: this.max_tokens,
+                            temperature: this.temperature
+                        },
+                        this.stream,
+                        (responseJson) => {
+                            this.displayExplanation(responseJson.prediction);
+                        },
+                        (event) => {
+                            const token = JSON.parse(event.data).token;
+                            this.explanationText += token;
+                        },
+                        (event) => {
+                            const predictionId = JSON.parse(event.data).prediction;
+                            this.displayExplanation(predictionId);
                         }
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+                    );
+                });
             })
-            .catch((error) => {
-                console.log(error);
-            });
         },
 
         displayExplanation(predictionId) {
-            fetch("http://" + host() + ":5003/predictions/" + predictionId)
-            .then((response) => response.json())
+            db.getById("predictions", predictionId)
             .then((responseJson) => {
                 const explanationText = responseJson.text;
                 explanationText.replace("\n\n", "\n");
                 this.explanationText = explanationText;
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+            });
         },
 
         codeSnippetClicked(name) {
