@@ -10,21 +10,19 @@ import json
 
 class OpenAiRequest(LlmRequest):
 
-    _available: bool = True
+    _availability: bool = True
     try:
         _client: OpenAI = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     except Exception:
-        _available = False
+        _availability = False
 
     @classmethod
-    @property
     def available(cls) -> bool:
-        return cls._available
+        return cls._availability
 
     @classmethod
-    @property
     def model_names(cls) -> List[str]:
-        if not cls._available:
+        if not cls._availability:
             return []
         try:
             return [str(m) for m in cls._client.models.list()]

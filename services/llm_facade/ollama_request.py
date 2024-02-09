@@ -22,12 +22,10 @@ class OllamaRequest(LlmRequest):
     STREAM_CHUNK_SIZE: int = 32
 
     @classmethod
-    @property
     def available(cls) -> bool:
         return True
 
     @classmethod
-    @property
     def model_names(cls) -> List[str]:
         responses = cls._parallel_ollama_request(
             requests.get,

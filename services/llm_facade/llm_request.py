@@ -98,12 +98,10 @@ class LlmRequest(ABC):
         self._prediction = None
 
     @abstractclassmethod
-    @abstractproperty
     def available(self) -> bool:
         raise NotImplementedError("abstract class property")
 
     @abstractclassmethod
-    @abstractproperty
     def model_names(cls) -> List[str]:
         raise NotImplementedError("abstract class method")
 
@@ -126,7 +124,7 @@ class LlmRequest(ABC):
 
     @classmethod
     def has_model(cls, model: str) -> bool:
-        return model in cls.model_names
+        return model in cls.model_names()
 
     @abstractclassmethod
     def _install_model(cls, model_name: str):
