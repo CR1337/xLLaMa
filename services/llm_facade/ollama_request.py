@@ -261,4 +261,6 @@ class OllamaRequest(LlmRequest):
                 s['text'] for s in self._stop_sequences
             ]
 
+        print(f"REQUEST BODY:\n{request_body}", flush=True)
+
         return request_body
