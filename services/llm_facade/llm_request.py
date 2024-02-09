@@ -57,6 +57,12 @@ class LlmRequest(ABC):
         self._temperature = temperature or self.DEFAULT_TEMPERATURE
         self._top_p = top_p or self.DEFAULT_TOP_P
 
+        self._repeat_penalty = float(self._repeat_penalty)
+        self._max_tokens = int(self._max_tokens)
+        self._seed = int(self._seed)
+        self._temperature = float(self._temperature)
+        self._top_p = float(self._top_p)
+
         self._llm_id = llm_id
         self._framework_item_id = framework_item_id
         self._system_prompt_id = system_prompt_id
