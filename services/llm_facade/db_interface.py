@@ -14,6 +14,10 @@ class DbInterface:
             f"{cls.DB_INTERFACE_URL}/llms",
             json={"name": name}
         )
+        if response.status_code == 400:
+            json_response = response.json()
+            if 'IntegrityError' in json_response['message']:
+                return cls.get_llm_by_name(name)
         return response.json()
 
     @classmethod
@@ -31,6 +35,11 @@ class DbInterface:
     @classmethod
     def get_llm(cls, id: str) -> Dict[str, Any]:
         response = requests.get(f"{cls.DB_INTERFACE_URL}/llms/{id}")
+        return response.json()
+
+    @classmethod
+    def get_llm_by_name(cls, name: str) -> Dict[str, Any]:
+        response = requests.get(f"{cls.DB_INTERFACE_URL}/llms/by-name/{name}")
         return response.json()
 
     @classmethod
