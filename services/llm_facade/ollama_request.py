@@ -1,6 +1,6 @@
 from typing import Any, Callable, Dict, List, Iterator, Generator, Tuple
 import os
-from llm_request import LlmRequest, REQUEST_CLASSES
+from llm_request import LlmRequest
 from threading import Thread
 from queue import Queue, Empty
 import requests
@@ -255,13 +255,10 @@ class OllamaRequest(LlmRequest):
         if self._seed:
             request_body['options']['seed'] = self._seed
         if self._system_prompt:
-            request_body['system_prompt'] = self._system_prompt['text']
+            request_body['system'] = self._system_prompt['text']
         if self._stop_sequences:
             request_body['options']['stop'] = [
                 s['text'] for s in self._stop_sequences
             ]
 
         return request_body
-
-
-REQUEST_CLASSES.append(OllamaRequest)
