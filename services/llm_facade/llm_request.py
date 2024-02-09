@@ -124,8 +124,9 @@ class LlmRequest(ABC):
         else:
             return self._generate()
 
-    def has_model(self, model: str) -> bool:
-        return model in self.model_names
+    @classmethod
+    def has_model(cls, model: str) -> bool:
+        return model in cls.model_names
 
     @abstractclassmethod
     def _install_model(cls, model_name: str):
