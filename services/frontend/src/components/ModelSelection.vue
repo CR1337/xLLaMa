@@ -1,5 +1,5 @@
 <template>
-<div class="outsidewrapper">
+<div class="outside-wrapper">
     <h4 class="function-title"> {{ (isDummy) ? 'Noting generated yet!' : (frameworkItem == null) ? "Noting generated yet!" : frameworkItem.name }} </h4>
     <button title="close this example" class="close-button" @click="close" style="float: right;">✖</button>
     <div class="top-row">

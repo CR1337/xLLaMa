@@ -13,8 +13,10 @@ body {
 h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 55px;
-    margin: 0;
-    padding: 0;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-left: 0px;
     color: #fff;
     text-shadow: -1px 0 #034c52, 0 1px #034c52, 1px 0 #034c52, 0 -1px #034c52;
     display: inline-block;
@@ -175,16 +177,24 @@ button:disabled {
 }
 
 /* Text Fields */
-.outsidewrapper {
-    padding: 5px 2px;
+.outside-wrapper {
+    padding-left: 5px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    padding-right: 2px;
     border: 1px solid transparent;
     border-radius: 5px;
     margin-bottom: 10px;
 }
 
-.outsidewrapper:hover {
+.outside-wrapper:hover {
     background-color: #f0f0f0;
+    padding-left: 5px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    padding-right: 2px;
     border: 1px solid #e0e0e0;
+    border-radius: 5px;
 }
 
 .function-title {
