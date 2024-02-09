@@ -41,7 +41,7 @@
 - [ ] Refactoring (C)
   - [ ] frontend (insb. js code)
     - [ ] follow up is currently GET requested by name but id is passed
-  - [ ] llm_facade (insb. llm_request.py)
+  - [x] llm_facade (insb. llm_request.py)
   - [ ] db_interface
   - [x] code_analyzer
   - [ ] Naming conventions
