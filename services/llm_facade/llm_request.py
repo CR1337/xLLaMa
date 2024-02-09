@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod, abstractclassmethod, abstractclassproperty
+from abc import ABC, abstractmethod, abstractclassmethod, abstractproperty
 from typing import Any, Dict, List
 from db_interface import DbInterface
 
@@ -97,11 +97,13 @@ class LlmRequest(ABC):
         self._token_amount = 0
         self._prediction = None
 
-    @abstractclassproperty
+    @abstractclassmethod
+    @abstractproperty
     def available(self) -> bool:
         raise NotImplementedError("abstract class property")
 
-    @abstractclassproperty
+    @abstractclassmethod
+    @abstractproperty
     def model_names(cls) -> List[str]:
         raise NotImplementedError("abstract class method")
 
