@@ -54,7 +54,7 @@
 - [ ] Documentation
   - [ ] Setup/Benutzung Skript schreiben + in readme (L)
   - [ ] Video aufnehmen (L)
-  - [ ] Abstract fertig (L)
+  - [x] Abstract fertig (L)
   - [ ] Vortrag Infoboxen Backend wo nötig (C)
   - [ ] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C + L)
   - [ ] technische Doku schreiben/überarbeiten (C)
