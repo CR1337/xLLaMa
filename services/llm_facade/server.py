@@ -94,11 +94,11 @@ def route_install_model():
         DbInterface.post_llm(model)
     if stream:
         return Response(
-            OllamaRequest.install_model_stream(model),
+            OllamaRequest.install_model(model, stream),
             mimetype='text/event-stream'
         )
     else:
-        return OllamaRequest.install_model(model)
+        return OllamaRequest.install_model(model, stream)
 
 
 @app.route('/models/uninstall', methods=['GET'])
@@ -126,14 +126,14 @@ def route_generate():
         )
         if stream:
             response = Response(
-                llm_request.generate_stream(),
+                llm_request.generate(stream),
                 mimetype='text/event-stream'
             )
             response.headers['Cache-Control'] = 'no-cache'
             response.headers['Connection'] = 'keep-alive'
             return response
         else:
-            return llm_request.generate()
+            return llm_request.generate(stream)
 
 
 @app.route('/ollama/instances', methods=['GET'])
