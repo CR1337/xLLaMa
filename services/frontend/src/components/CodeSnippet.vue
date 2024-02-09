@@ -11,6 +11,7 @@
 
 <script>
 import { codeSnippetObjects, handleCodeSnippetObjectClick } from "/src/main.js";
+import { host } from "@/util/util.js";
 
 export default {
   name: 'CodeSnippet',
@@ -31,7 +32,7 @@ export default {
     }
     codeSnippetObjects[this.codeSnippet.id] = this;
     fetch(
-        `http://${this.host}:5002/highlight`
+        `http://${host()}:5002/highlight`
         + `?code_snippet=${this.codeSnippet.id}`
         + `&clickable_class=clickable`
         + `&clickable_names=${this.clickableNamesForUrl}`
@@ -81,8 +82,6 @@ export default {
         }
     },
   computed: {
-    host() { return window.location.origin.split("/")[2].split(":")[0]; },
-
     clickableNamesForUrl() {
         return this.clickableNames.join(",");
     }

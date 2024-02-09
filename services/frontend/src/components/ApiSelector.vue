@@ -9,7 +9,7 @@
 </template>
 
 <script>
-
+import { host } from "@/util/util.js";
 
 export default {
     name: "ApiSelector",
@@ -26,7 +26,7 @@ export default {
         }
     },
     mounted() {
-        fetch("http://" + this.host + ":5003/frameworks", )
+        fetch("http://" + host() + ":5003/frameworks", )
         .then((response) => response.json())
         .then((responseJson) => {
             this.frameworks = responseJson;
@@ -34,9 +34,6 @@ export default {
         .catch((error) => {
             console.log(error);
         });
-    },
-    computed: {
-        host() { return window.location.origin.split("/")[2].split(":")[0]; }
     }
 }
 </script>

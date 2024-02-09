@@ -68,6 +68,7 @@
 import ApiSelector from '@/components/ApiSelector.vue';
 import FunctionSelector from '@/components/FunctionSelector.vue'
 import ModelSelection from '@/components/ModelSelection.vue'
+import { host, uuidv4 } from "@/util/util.js";
 
 export default {
     name: "MainPage",
@@ -111,18 +112,13 @@ export default {
                 this.modelSelectionIds = [];
             }
             this.$nextTick(() => {
-                const id = this.uuidv4();
+                const id = uuidv4();
                 this.modelSelectionIds.splice(index, 0, id);
                 this.$nextTick(() => {
                     const modelSelection = this.$refs[`modelSelection_${id}`][0];
                     modelSelection.generateExample(frameworkItem);
                 });
             });
-        },
-        uuidv4() {
-          return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-          );
         },
         close(id) {
             this.unused = false;
@@ -151,7 +147,7 @@ export default {
         }
     },
     mounted: function() {
-        fetch("http://" + this.host + ":5003/framework_items")
+        fetch("http://" + host() + ":5003/framework_items")
         .then((response) => response.json())
         .then((responseJson) => {
             this.allFrameworkItems = responseJson;
@@ -160,11 +156,6 @@ export default {
         .catch((error) => {
             console.log(error);
         });
-
-        // this.modelSelectionIds.push(this.dummyModelSelectionId);
-    },
-    computed: {
-        host() { return window.location.origin.split("/")[2].split(":")[0]; }
     }
 }
 </script>

@@ -59,6 +59,7 @@
 <script>
 import CodeSnippet from '@/components/CodeSnippet.vue';
 import VueMarkdown from 'vue-markdown-render';
+import { host } from "@/util/util.js";
 
 export default {
     name: "Model",
@@ -99,7 +100,7 @@ export default {
         }
     },
     mounted() {
-        fetch("http://" + this.host + ":5003/stop_sequences")
+        fetch("http://" + host() + ":5003/stop_sequences")
         .then((response) => response.json())
         .then((responseJson) => {
             this.stopSequences = responseJson.map((stopSequence) => stopSequence.id);
@@ -126,7 +127,7 @@ export default {
         },
         generateExample(generationReason="example_generation") {
             this.showLoading = true;
-            fetch("http://" + this.host + ":5003/system_prompts/by-name/" + generationReason)
+            fetch("http://" + host() + ":5003/system_prompts/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setPromptParts(responseJson.id, generationReason);
@@ -137,7 +138,7 @@ export default {
         },
         setPromptParts(systemPromptId, generationReason) {
             let promises = [
-                fetch("http://" + this.host + ":5003/prompt_parts", {
+                fetch("http://" + host() + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -147,7 +148,7 @@ export default {
                         "text": "\n# Documentation:\n" + this.frameworkItem.description
                     })
                 }),
-                fetch("http://" + this.host + ":5003/prompt_parts", {
+                fetch("http://" + host() + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -159,7 +160,7 @@ export default {
                 })
             ]
             if (generationReason == "too_short") {
-                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
+                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -169,7 +170,7 @@ export default {
                         "text": "\n# Your last generation:\n" + this.generatedText
                     })
                 }));
-                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
+                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -180,7 +181,7 @@ export default {
                     })
                 }));
             } else if (generationReason == "too_long") {
-                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
+                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -190,7 +191,7 @@ export default {
                         "text": "\n# Your last generation:\n" + this.generatedText
                     })
                 }));
-                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
+                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -201,7 +202,7 @@ export default {
                     })
                 }));
             } else {
-                promises.push(fetch("http://" + this.host + ":5003/prompt_parts", {
+                promises.push(fetch("http://" + host() + ":5003/prompt_parts", {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -224,7 +225,7 @@ export default {
         },
 
         getLlmId(systemPromptId, promptPartIds, generationReason) {
-            fetch("http://" + this.host + ":5003/llms/by-name/" + this.model)
+            fetch("http://" + host() + ":5003/llms/by-name/" + this.model)
             .then((response) => response.json())
             .then((responseJson) => {
                 if (generationReason == "example_generation") {
@@ -239,7 +240,7 @@ export default {
         },
 
         getUserRatingType(systemPromptId, promptPartIds, llmId, generationReason) {
-            fetch("http://" + this.host + ":5003/user_rating_types/by-name/" + generationReason)
+            fetch("http://" + host() + ":5003/user_rating_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.getFollowUpType(systemPromptId, promptPartIds, llmId, responseJson.id, generationReason);
@@ -250,7 +251,7 @@ export default {
         },
 
         generateUserRating(systemPromptId, promptPartIds, llmId, userRatingTypeId, generationReason) {
-            fetch("http://" + this.host + ":5003/user_ratings", {
+            fetch("http://" + host() + ":5003/user_ratings", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -272,7 +273,7 @@ export default {
         },
 
         getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason) {
-            fetch("http://" + this.host + ":5003/follow_up_types/by-name/" + generationReason)
+            fetch("http://" + host() + ":5003/follow_up_types/by-name/" + generationReason)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.generateFollowUp(systemPromptId, promptPartIds, llmId, responseJson.id);
@@ -286,7 +287,7 @@ export default {
         },
 
         generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId) {
-            fetch("http://" + this.host + ":5003/follow_ups", {
+            fetch("http://" + host() + ":5003/follow_ups", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -307,7 +308,7 @@ export default {
         },
 
         generatePrediction(systemPromptId, promptPartIds, llmId, followUpId) {
-            let url = "http://" + this.host + ":5001/generate"
+            let url = "http://" + host() + ":5001/generate"
                 + "?model=" + llmId
                 + "&prompt_parts=" + promptPartIds.toString()
                 + "&system_prompt=" + systemPromptId
@@ -350,7 +351,7 @@ export default {
         },
 
         displayPrediction(predictionId) {
-            fetch("http://" + this.host + ":5003/predictions/" + predictionId)
+            fetch("http://" + host() + ":5003/predictions/" + predictionId)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.generatedPrediction = responseJson;
@@ -485,13 +486,13 @@ bin/stop-local
         },
 
         highlightCode() {
-            fetch("http://" + this.host + ":5002/analyze-prediction?prediction=" + this.generatedPrediction.id)
+            fetch("http://" + host() + ":5002/analyze-prediction?prediction=" + this.generatedPrediction.id)
             .then((response) => response.json())
             .then((responseJson) => {
                 const codeSnippetIds = responseJson.code_snippets;
                 let promises = [];
                 for (const codeSnippetId of codeSnippetIds) {
-                    promises.push(fetch("http://" + this.host + ":5003/code_snippets/" + codeSnippetId));
+                    promises.push(fetch("http://" + host() + ":5003/code_snippets/" + codeSnippetId));
                 }
                 Promise.all(promises)
                     .then((responses) => Promise.all(responses.map(response => response.json())))
@@ -538,7 +539,7 @@ bin/stop-local
 
         explain() {
             this.explainClicked = true;
-            fetch("http://" + this.host + ":5003/prompt_parts", {
+            fetch("http://" + host() + ":5003/prompt_parts", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -551,11 +552,11 @@ bin/stop-local
             .then((response) => response.json())
             .then((responseJson) => {
                 const promptPartIds = [responseJson.id];
-                fetch("http://" + this.host + ":5003/llms/by-name/" + this.explanationModel)
+                fetch("http://" + host() + ":5003/llms/by-name/" + this.explanationModel)
                 .then((response) => response.json())
                 .then((responseJson) => {
                     const llmId = responseJson.id;
-                    let url = "http://" + this.host + ":5001/generate"
+                    let url = "http://" + host() + ":5001/generate"
                         + "?model=" + llmId
                         + "&prompt_parts=" + [promptPartIds].toString()
                         + "&framework_item=" + this.frameworkItem.id
@@ -595,7 +596,7 @@ bin/stop-local
         },
 
         displayExplanation(predictionId) {
-            fetch("http://" + this.host + ":5003/predictions/" + predictionId)
+            fetch("http://" + host() + ":5003/predictions/" + predictionId)
             .then((response) => response.json())
             .then((responseJson) => {
                 const explanationText = responseJson.text;
@@ -626,8 +627,6 @@ bin/stop-local
         }
     },
     computed: {
-        host() { return window.location.origin.split("/")[2].split(":")[0]; },
-
         clickableNames()  {
             let frameworkItems = this.allFrameworkItems.filter(
                 (item) => item.framework.id == this.frameworkItem.framework.id && item.name != this.frameworkItem.name
