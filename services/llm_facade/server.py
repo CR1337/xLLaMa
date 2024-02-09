@@ -64,12 +64,12 @@ def build_llm_request(request: Request) -> LlmRequest:
         seed=request.args.get('seed'),
         temperature=request.args.get('temperature'),
         top_p=request.args.get('top_p'),
-        llm=llm_id,
-        framework_item=request.args.get('framework_item'),
-        system_prompt=request.args.get('system_prompt'),
-        parent_follow_up=request.args.get('parent_follow_up'),
-        prompt_parts=prompt_parts,
-        stop_sequences=stop_sequences,
+        llm_id=llm_id,
+        framework_item_id=request.args.get('framework_item'),
+        system_prompt_id=request.args.get('system_prompt'),
+        parent_follow_up_id=request.args.get('parent_follow_up'),
+        prompt_part_ids=prompt_parts,
+        stop_sequence_ids=stop_sequences,
     )
 
 
