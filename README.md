@@ -27,7 +27,7 @@ Users can request a longer or shorter version of the code example by pressing on
 The generated code can also be copied to the clipboard by pressing the button located in the top left-hand corner. 
 Once users have finished with a particular code snippet, they can close this example and proceed with their work.
 
-A demonstration video can be found ![here](https://github.com/CR1337/xLLaMa/blob/main/doc/xLLaMa_demonstration_video.mp4).
+A demonstration video can be found [here](https://github.com/CR1337/xLLaMa/blob/main/doc/xLLaMa_demonstration_video.mp4).
 
 
 ## Repository Structure
