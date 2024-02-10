@@ -26,9 +26,8 @@ Within the example code, various other functions are highlighted and can be sele
 Users can request a longer or shorter version of the code example by pressing one of the buttons below. 
 The generated code can also be copied to the clipboard by pressing the button located in the top left-hand corner. 
 Once users have finished with a particular code snippet, they can close this example and proceed with their work.
-(Link to video)
 
-
+A demonstration video can be found [here]().
 
 
 ## Repository Structure
