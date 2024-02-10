@@ -13,8 +13,9 @@ Users have responded positively to the tool, noting its potential to enhance the
 Further information can be found [here](https://github.com/CR1337/xLLaMa/blob/main/doc/xLLaMa_endpresentation.pdf).
 
 ## How to use
+Setup instructions can be found [here](https://github.com/CR1337/xLLaMa?tab=readme-ov-file#setup).
 (Link to video)
-Links to installation
+
 
 
 
