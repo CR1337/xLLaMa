@@ -52,11 +52,11 @@
   - [x] Add reset script for database
   - [ ] (Check tests - optional)
 - [ ] Documentation
-  - [ ] Setup/Benutzung Skript schreiben + in readme (L)
-  - [ ] Video aufnehmen (L)
+  - [x] Setup/Benutzung Skript schreiben + in readme (L)
+  - [x] Video aufnehmen (L)
   - [x] Abstract fertig (L)
   - [ ] Vortrag Infoboxen Backend wo nötig (C)
-  - [ ] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C + L)
+  - [ ] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C)
   - [ ] technische Doku schreiben/überarbeiten (C)
     - [ ] frontend
     - [ ] llm_facade
