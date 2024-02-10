@@ -16,7 +16,7 @@ Further information can be found [here](https://github.com/CR1337/xLLaMa/blob/ma
 Setup instructions can be found [here](https://github.com/CR1337/xLLaMa?tab=readme-ov-file#setup).
 
 The web interface of xLLaMa is intuitively structured to match a user's workflow by going from the top to the bottom.
-In order to generate an exmaple, users first select their preferred API or framework. 
+In order to generate an example, users first select their preferred API or framework. 
 From there they can choose a function, either by selecting one of the suggested functions or by picking it from the dropdown menu. 
 Once a function has been selected, users can generate their example right away. The generation process takes place simultaneously with multiple LLMs, offering a broader range of choices.
 
@@ -27,7 +27,7 @@ Users can request a longer or shorter version of the code example by pressing on
 The generated code can also be copied to the clipboard by pressing the button located in the top left-hand corner. 
 Once users have finished with a particular code snippet, they can close this example and proceed with their work.
 
-A demonstration video can be found [here]().
+A demonstration video can be found ![here](https://github.com/CR1337/xLLaMa/blob/main/doc/xLLaMa_demonstration_video.mp4).
 
 
 ## Repository Structure
