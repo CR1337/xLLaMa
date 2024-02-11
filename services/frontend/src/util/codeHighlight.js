@@ -45,4 +45,5 @@ export const highlighter = {
         .catch((error) => {
             console.log(error);
         });
+    }
 }
