@@ -200,7 +200,7 @@ export default {
                         text: prompts.exampleGenerationTask
                     }));
                 }
-                Promise.all(promises)
+                return Promise.all(promises)
                 .then((resolvedPromises) => {
                     const promptPartIds = resolvedPromises.map(x => x.id);
                     return {
