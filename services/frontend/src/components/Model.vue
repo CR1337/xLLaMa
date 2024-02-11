@@ -63,7 +63,7 @@ import { db } from "@/util/dbInterface.js";
 import { debug } from "@/util/debug.js";
 import { llm } from "@/util/llm.js";
 import { prompts } from "@/util/prompts.js";
-import { highlightCode } from "@/util/codeHighlight.js";
+import { highlighter } from "@/util/codeHighlight.js";
 
 export default {
     name: "Model",
@@ -268,7 +268,7 @@ export default {
             .then((responseJson) => {
                 this.generatedPrediction = responseJson;
                 this.generatedText = this.generatedPrediction.text;
-                highlightCode(this);
+                highlighter.highlightCode(this);
                 this.generated = true;
             });
         },
