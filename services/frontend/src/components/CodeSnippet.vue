@@ -11,7 +11,7 @@
 
 <script>
 import { codeSnippetObjects, handleCodeSnippetObjectClick } from "/src/main.js";
-import { host } from "@/util/util.js";
+import { codeAnalyzer } from "../util/codeAnalyzer";
 
 export default {
   name: 'CodeSnippet',
@@ -31,19 +31,17 @@ export default {
       return;
     }
     codeSnippetObjects[this.codeSnippet.id] = this;
-    fetch(
-        `http://${host()}:5002/highlight`
-        + `?code_snippet=${this.codeSnippet.id}`
-        + `&clickable_class=clickable`
-        + `&clickable_names=${this.clickableNamesForUrl}`
-        + `&on_click_attribute=onclick`
-        + `&click_handler=handleCodeSnippetObjectClick`
+    codeAnalyzer.highlight(
+      this.codeSnippet.id,
+      'clickable',
+      this.clickableNamesForUrl,
+      'onclick',
+      'handleCodeSnippetObjectClick'
     )
-        .then(response => response.json())
-        .then(data => {
-          this.code = data.html;
-        })
-        .catch(error => console.error(error));
+    .then(data => {
+      this.code = data.html;
+    })
+    .catch(error => console.error(error));
   },
     methods: {
         handleClick(name) {

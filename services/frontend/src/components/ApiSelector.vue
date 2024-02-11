@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { host } from "@/util/util.js";
+import { db } from "@/util/dbInterface.js";
 
 export default {
     name: "ApiSelector",
@@ -26,13 +26,9 @@ export default {
         }
     },
     mounted() {
-        fetch("http://" + host() + ":5003/frameworks", )
-        .then((response) => response.json())
-        .then((responseJson) => {
+        db.getAll("frameworks")
+        .then(responseJson => {
             this.frameworks = responseJson;
-        })
-        .catch((error) => {
-            console.log(error);
         });
     }
 }
