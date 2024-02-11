@@ -1,4 +1,4 @@
-import { host } from "src/util/util.js";
+import { host } from "../util/util.js";
 
 const llmPort = 5001;
 
