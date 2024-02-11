@@ -62,7 +62,8 @@ import VueMarkdown from 'vue-markdown-render';
 import { db } from "@/util/dbInterface.js";
 import { debug } from "@/util/debug.js";
 import { llm } from "@/util/llm.js";
-import { codeAnalyzer } from "@/util/codeAnalyzer.js";
+import { prompts } from "@/util/prompts.js";
+import { highlightCode } from "@/util/codeHighlight.js";
 
 export default {
     name: "Model",
@@ -110,118 +111,131 @@ export default {
     },
     methods: {
         tooLong() {
-            this.generated = false;
-            this.highlighted = false;
-            this.resultChunks = [];
-            this.explanationText = "";
-            this.explainClicked = false;
-            this.generatedText = "";
-            this.generateExample("too_long");
+            this.generateAfterUserFeedback(true, false, "too_long");
         },
+
         tooShort() {
+            this.generateAfterUserFeedback(false, true, "too_short");
+        },
+
+        generateAfterUserFeedback(tooLong, tooShort, generationReason) {
+            const promises = [
+                this.prepareGeneration(tooLong, tooShort),
+                this.createFollowUp(generationReason)
+            ]
+            Promise.all(promises)
+            .then((resolvedPromises) => {
+                const generationPreparationData = resolvedPromises[0];
+                const followUpId = resolvedPromises[1];
+                this.generate(
+                    generationPreparationData.systemPromptId,
+                    generationPreparationData.promptPartIds,
+                    generationPreparationData.llm.id,
+                    followUpId
+                )
+            })
+        },
+
+        generateExample() {
+            this.prepareGeneration(false, false)
+            .then((data) => {
+                this.generate(
+                    data.systemPromptId,
+                    data.promptPartIds,
+                    data.llm.id,
+                    null
+                );
+            });
+        },
+
+        reset() {
+            this.generatedText = "";
+            this.generatedPrediction = null;
             this.generated = false;
             this.highlighted = false;
             this.resultChunks = [];
-            this.explanationText = "";
-            this.explainClicked = false;
-            this.generatedText = "";
-            this.generateExample("too_short");
-        },
-        generateExample(generationReason="example_generation") {
-            this.showLoading = true;
-            db.getByName("system_prompts", generationReason)
-            .then((responseJson) => {
-                this.setPromptParts(responseJson.id, generationReason);
-            });
-        },
-        setPromptParts(systemPromptId, generationReason) {
-            let promises = [
-                db.create("prompt_parts", {
-                    text: "\n# Documentation:\n" + this.frameworkItem.description
-                }),
-                db.create("prompt_parts", {
-                    text: "\n# Implementation:\n" + this.frameworkItem.source
-                })
-            ]
-            if (generationReason == "too_short") {
-                promises.push(db.create("prompt_parts", {
-                    text: "\n# Your last generation:\n" + this.generatedText
-                }));
-                promises.push(db.create("prompt_parts", {
-                    text: "\n# Task:\nWrite a longer code example for this function. Please provide only code."
-                }));
-            } else if (generationReason == "too_long") {
-                promises.push(db.create("prompt_parts", {
-                    text: "\n# Your last generation:\n" + this.generatedText
-                }));
-                promises.push(db.create("prompt_parts", {
-                    text: "\n# Task:\nWrite a shorter code example for this function. Please provide only code."
-                }));
-            } else {
-                promises.push(db.create("prompt_parts", {
-                    text: "\n# Task:\nWrite a helpful code example for this function. Please provide only code."
-                }));
-            }
-            Promise.all(promises)
-            .then((responseJson) => {
-                const promptPartIds = responseJson.map(data => data.id);
-                this.getLlmId(systemPromptId, promptPartIds, generationReason)
-            });
-        },
-
-        getLlmId(systemPromptId, promptPartIds, generationReason) {
-            db.getByName("llms", this.model)
-            .then((responseJson) => {
-                if (generationReason == "example_generation") {
-                    this.generatePrediction(systemPromptId, promptPartIds, responseJson.id, null);
-                } else {
-                    this.getUserRatingType(systemPromptId, promptPartIds, responseJson.id, generationReason);
-                }
-            });
-        },
-
-        getUserRatingType(systemPromptId, promptPartIds, llmId, generationReason) {
-            db.getByName("user_rating_types", generationReason)
-            .then((responseJson) => {
-                this.generateUserRating(systemPromptId, promptPartIds, llmId, responseJson.id, generationReason);
-            });
-        },
-
-        generateUserRating(systemPromptId, promptPartIds, llmId, userRatingTypeId, generationReason) {
-            db.create("user_ratings", {
-                value: 0.0,
-                prediction: this.generatedPrediction.id,
-                user_rating_type: userRatingTypeId
-            })
-            .then((responseJson) => {
-                this.getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason);
-            });
-        },
-
-        getFollowUpType(systemPromptId, promptPartIds, llmId, generationReason) {
-            db.getByName("follow_up_types", generationReason)
-            .then((responseJson) => {
-                this.generateFollowUp(systemPromptId, promptPartIds, llmId, responseJson.id);
-            });
-        },
-
-        generateFollowUp(systemPromptId, promptPartIds, llmId, followUpTypeId) {
-            db.create(
-                "follow_ups",
-                {
-                    parent_prediction: this.generatedPrediction.id,
-                    follow_up_type: followUpTypeId
-                }
-            )
-            .then((responseJson) => {
-                    this.generatePrediction(systemPromptId, promptPartIds, llmId, responseJson.id);
-            });
-        },
-
-        generatePrediction(systemPromptId, promptPartIds, llmId, followUpId) {
             this.codeFrameworkItems = [];
             this.selectedCodeFrameworkItem = null;
+            this.explanationText = "";
+            this.explainClicked = false;
+        },
 
+        prepareGeneration(tooLong, tooShort) {
+            this.reset()
+            this.showLoading = true;
+
+            const generationReason = (tooLong)
+                ? "too_long"
+                : (tooShort)
+                    ? "too_short"
+                    : "example_generation";
+
+            return db.getByName("system_prompts", generationReason)
+            .then((responseJson) => { return responseJson.id; })
+            .then((systemPromptId) => {
+                let promises = [
+                    db.create("prompt_parts", {
+                        text: "\n# Documentation:\n" + this.frameworkItem.description
+                    }),
+                    db.create("prompt_parts", {
+                        text: "\n# Implementation:\n" + this.frameworkItem.source
+                    })
+                ];
+                if (generationReason == "too_short") {
+                    promises.push(db.create("prompt_parts", {
+                        text: prompts.tooShortOrLongPrefix + this.generatedText
+                    }));
+                    promises.push(db.create("prompt_parts", {
+                        text: prompts.tooShortTask
+                    }));
+                } else if (generationReason == "too_long") {
+                    promises.push(db.create("prompt_parts", {
+                        text: prompts.tooShortOrLongPrefix + this.generatedText
+                    }));
+                    promises.push(db.create("prompt_parts", {
+                        text: prompts.tooLongTask
+                    }));
+                } else {
+                    promises.push(db.create("prompt_parts", {
+                        text: prompts.exampleGenerationTask
+                    }));
+                }
+                return {
+                    systemPromptId: systemPromptId,
+                    resolvedPromises: Promise.all(promises)
+                };
+            })
+            .then((data) => {
+                const promptPartIds = data.resolvedPromises.map(x => x.id);
+                return {
+                    systemPromptId: data.systemPromptId,
+                    promptPartIds: promptPartIds,
+                    llm: db.getByName("llms", this.model)
+                };
+            })
+        },
+
+        createFollowUp(generationReason) {
+            db.getByName("user_rating_type", generationReason)
+            .then((responseJson) => {
+                return db.create("user_ratings", {
+                    value: 0.0,
+                    prediction: this.generatedPrediction.id,
+                    user_rating_type: responseJson.id
+                });
+            })
+            .then((responseJson) => {
+                return db.getByName("follow_up_types", generationReason);
+            })
+            .then((responseJson) => {
+                return db.create("follow_ups", {
+                    parent_prediction: this.generatedPrediction.id,
+                    follow_up_type: responseJson.id
+                });
+            })
+        },
+
+        generate(systemPromptId, promptPartIds, llmId, followUpId) {
             llm.generate(
                 llmId,
                 promptPartIds,
@@ -254,8 +268,7 @@ export default {
             .then((responseJson) => {
                 this.generatedPrediction = responseJson;
                 this.generatedText = this.generatedPrediction.text;
-
-                this.highlightCode();
+                highlightCode(this);
                 this.generated = true;
             });
         },
@@ -289,57 +302,10 @@ export default {
             this.highlighted = true;
         },
 
-        highlightCode() {
-            codeAnalyzer.analyze(this.generatedPrediction.id)
-            .then((responseJson) => {
-                const codeSnippetIds = responseJson.code_snippets;
-                let promises = [];
-                for (const codeSnippetId of codeSnippetIds) {
-                    promises.push(db.getById("code_snippets", codeSnippetId));
-                }
-                Promise.all(promises)
-                    .then((codeSnippets) => {
-                        const sortedCodeSnippets = codeSnippets.sort((a, b) => a.start_line - b.start_line);
-                        const codeSnippetCount = sortedCodeSnippets.length;
-                        const lines = this.generatedPrediction.text.split("\n");
-                        const lineCount = lines.length;
-
-                        let resultChunks = [];
-                        let currentCodeSnippetIndex = 0;
-
-                        for (let line = 0; line < lineCount; ++line) {
-                            if (currentCodeSnippetIndex < codeSnippetCount)  {
-                                if (line == sortedCodeSnippets[currentCodeSnippetIndex].start_line) {
-                                    resultChunks.push({
-                                        type: "code",
-                                        codeSnippet: sortedCodeSnippets[currentCodeSnippetIndex],
-                                        clickableNames: this.clickableNames
-                                    });
-                                    line = sortedCodeSnippets[currentCodeSnippetIndex].end_line;
-                                    ++currentCodeSnippetIndex;
-                                    continue;
-                                }
-                            }
-                            if (lines[line].startsWith("```")) continue;
-                            resultChunks.push({
-                                type: "text",
-                                content: lines[line]
-                            });
-                        }
-
-                        this.resultChunks = resultChunks;
-                        this.highlighted = true;
-                    });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        },
-
         explain() {
             this.explainClicked = true;
             db.create("prompt_parts", {
-                text: "Please explain this code step by step formatted as markdown:\n\n```python\n" + this.generatedText + "\n```"
+                text:prompts.explanationTask + this.generatedText + prompts.explanationTaskSuffix
             })
             .then((responseJson) => {
                 const promptPartIds = [responseJson.id];
