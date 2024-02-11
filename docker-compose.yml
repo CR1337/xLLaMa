@@ -83,18 +83,6 @@ services:
     volumes:
       - ./volumes/db-data:/var/lib/postgresql/data
 
-  test_db:
-    image: postgres:12.1
-    container_name: test_db
-    ports:
-      - ${TEST_DB_EXTERNAL_PORT}:${TEST_DB_INTERNAL_PORT}
-    env_file:
-      - .env
-    environment:
-      - PGPORT=${TEST_DB_INTERNAL_PORT}
-    volumes:
-      - ./volumes/test-db-data:/var/lib/postgresql/data
-
   db_interface:
     build: services/db_interface
     container_name: db_interface
@@ -102,11 +90,8 @@ services:
       - ${DB_INTERFACE_EXTERNAL_PORT}:${DB_INTERFACE_INTERNAL_PORT}
     env_file:
       - .env
-    environment:
-      - TEST=${TEST}
     depends_on:
       - db
-      - test_db
 
   llm_facade_nginx:
     build: services/llm_facade_nginx
