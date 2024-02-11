@@ -154,7 +154,6 @@ export default {
 
         reset() {
             this.generatedText = "";
-            this.generatedPrediction = null;
             this.generated = false;
             this.highlighted = false;
             this.resultChunks = [];
@@ -236,6 +235,7 @@ export default {
         },
 
         generate(systemPromptId, promptPartIds, followUpId) {
+            this.generatedPrediction = null;
             llm.generate(
                 this.llm.id,
                 promptPartIds,
