@@ -38,7 +38,7 @@
 - [x] Erklären warum Website, falls Website, wie integriert man existierende Projektinfos
 
 ## Abgabe
-- [ ] Refactoring (C)
+- [x] Refactoring (C)
   - [x] frontend (insb. js code)
     - [x] follow up is currently GET requested by name but id is passed
   - [x] llm_facade (insb. llm_request.py)
@@ -46,16 +46,16 @@
   - [x] code_analyzer
   - [x] Naming conventions
   - [x] docs -> old docs
-  - [ ] Remove debug code
+  - [x] Remove debug code
   - [x] Remove metrics
-  - [ ] Add Comments and Docstrings where needed
+  - [x] Add Comments and Docstrings where needed
   - [x] Add reset script for database
 - [ ] Documentation
   - [x] Setup/Benutzung Skript schreiben + in readme (L)
   - [x] Video aufnehmen (L)
   - [x] Abstract fertig (L)
   - [ ] Vortrag Infoboxen Backend wo nötig (C)
-  - [ ] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C)
+  - [x] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C)
   - [ ] technische Doku schreiben/überarbeiten (C)
     - [ ] frontend
     - [ ] llm_facade
