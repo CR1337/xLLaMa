@@ -127,6 +127,7 @@ if __name__ == "__main__":
             sleep(1)
         else:
             print("Connected to database.", flush=True)
+            break
 
     app.run(
         host="0.0.0.0",
