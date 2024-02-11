@@ -15,6 +15,7 @@ function assembleUrl(
         if (options.stopSequences) url += `&stop_sequences=${options.stopSequences.toString()}`;
         if (options.temperature) url += `&temperature=${options.temperature}`;
         if (options.parentFollowUpId) url += `&parent_follow_up=${options.parentFollowUpId}`;
+        if (options.systemPromptId) url += `&system_prompt=${options.systemPromptId}`;
     }
     if (stream) url += "&stream=true";
     return url;

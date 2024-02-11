@@ -239,12 +239,12 @@ export default {
             llm.generate(
                 this.llm.id,
                 promptPartIds,
-                systemPromptId,
+                this.frameworkItem.id,
                 {
-                    frameworkItem: this.frameworkItem.id,
                     maxTokens: this.max_tokens,
                     temperature: this.temperature,
-                    parentFollowUpId: followUpId
+                    parentFollowUpId: followUpId,
+                    systemPromptId: systemPromptId
                 },
                 this.stream,
                 (responseJson) => {
