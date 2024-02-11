@@ -26,9 +26,9 @@ export default {
         }
     },
     mounted() {
-        db.getAll("framework_items")
+        db.getAll("frameworks")
         .then(responseJson => {
-            this.frameworkItems = responseJson;
+            this.frameworks = responseJson;
         });
     }
 }
