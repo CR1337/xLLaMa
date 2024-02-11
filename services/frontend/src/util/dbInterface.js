@@ -3,14 +3,20 @@ import { host } from "./util";
 const dbInterfacePort = 5003;
 
 function makeAndHandleRequest(endpoint, method, body) {
-    return fetch(`http://${host()}:${dbInterfacePort}${endpoint}`, {
+    let requestData = {
         method: method,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-    })
+        }
+    };
+    if (method !== "GET") {
+        requestData.body = JSON.stringify(body);
+    }
+    return fetch(
+        `http://${host()}:${dbInterfacePort}${endpoint}`,
+        requestData
+    )
     .then(response => response.json())
     .catch(error => console.log(error));
 }
