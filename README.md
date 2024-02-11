@@ -10,7 +10,7 @@ If the generated example includes other functions from the API, users can easily
 
 Users have responded positively to the tool, noting its potential to improve their workflow when working with a new API. They also appreciate the convenience of having all frameworks and features collected in one easily accessible platform.
 
-Further information can be found [here](https://github.com/CR1337/xLLaMa/blob/main/doc/xLLaMa_endpresentation.pdf).
+Further information can be found [here](doc/xLLaMa_endpresentation.pdf).
 
 ## How to use
 Setup instructions can be found [here](https://github.com/CR1337/xLLaMa?tab=readme-ov-file#setup).
@@ -33,19 +33,19 @@ A demonstration video can be found [here](https://github.com/CR1337/xLLaMa/blob/
 ## Repository Structure
 
 
+
 ## Architecture
 ### Component Diagrams
 #### Frontend
-![Frontend Component Diagram](https://github.com/CR1337/xLLaMa/blob/main/doc/diagrams/frontend_component_diagram_image.png)
+![Frontend Component Diagram](doc/diagrams/frontend_component_diagram_image.png)
 
 #### Backend
 
-![Backend Component Diagram](https://github.com/CR1337/xLLaMa/blob/main/doc/diagrams/backend_component_diagram.png)
+![Backend Component Diagram](doc/diagrams/backend_component_diagram.png)
 
 ### Sequence Diagrams
 
-![Example Generation Sequence Diagram](https://github.com/CR1337/xLLaMa/blob/main/doc/diagrams/simple_generation_full.png)
-
+The following sequnce diagram shows what happens during an example generation.
 
 ![Example Generation Sequence Diagram](doc/diagrams/simple_generation_full.png)
 
