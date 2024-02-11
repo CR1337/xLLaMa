@@ -63,6 +63,7 @@ import { db } from "@/util/dbInterface.js";
 import { debug } from "@/util/debug.js";
 import { llm } from "@/util/llm.js";
 import { prompts } from "@/util/prompts.js";
+import { codeAnalyzer } from "@/util/codeAnalyzer.js";
 
 export default {
     name: "Model",
