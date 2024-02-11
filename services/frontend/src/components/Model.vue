@@ -235,7 +235,6 @@ export default {
         },
 
         generate(systemPromptId, promptPartIds, followUpId) {
-            this.generatedPrediction = null;
             llm.generate(
                 this.llm.id,
                 promptPartIds,
