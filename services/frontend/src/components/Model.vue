@@ -100,13 +100,19 @@ export default {
 
             stopSequences: [],
 
-            showLoading: false
+            showLoading: false,
+
+            llm: null
         }
     },
     mounted() {
         db.getAll("stop_sequences")
         .then((responseJson) => {
             this.stopSequences = responseJson.map((stopSequence) => stopSequence.id);
+        })
+        db.getByName("llms", this.model)
+        .then((responseJson) => {
+            this.llm = responseJson;
         })
     },
     methods: {
@@ -130,7 +136,6 @@ export default {
                 this.generate(
                     generationPreparationData.systemPromptId,
                     generationPreparationData.promptPartIds,
-                    generationPreparationData.llm.id,
                     followUpId
                 )
             })
@@ -142,7 +147,6 @@ export default {
                 this.generate(
                     data.systemPromptId,
                     data.promptPartIds,
-                    data.llm.id,
                     null
                 );
             });
@@ -205,8 +209,7 @@ export default {
                     const promptPartIds = resolvedPromises.map(x => x.id);
                     return {
                         systemPromptId: systemPromptId,
-                        promptPartIds: promptPartIds,
-                        llm: db.getByName("llms", this.model)
+                        promptPartIds: promptPartIds
                     };
                 })
             });
@@ -232,9 +235,9 @@ export default {
             })
         },
 
-        generate(systemPromptId, promptPartIds, llmId, followUpId) {
+        generate(systemPromptId, promptPartIds, followUpId) {
             llm.generate(
-                llmId,
+                this.llm.id,
                 promptPartIds,
                 systemPromptId,
                 {
