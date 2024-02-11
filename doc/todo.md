@@ -50,8 +50,8 @@
   - [x] Remove metrics
   - [x] Add Comments and Docstrings where needed
   - [x] Add reset script for database
-- [ ] Documentation
-  - [ ] Repo Struktur
+- [x] Documentation
+  - [x] Repo Struktur
   - [x] Setup/Benutzung Skript schreiben + in readme (L)
   - [x] Video aufnehmen (L)
   - [x] Abstract fertig (L)
