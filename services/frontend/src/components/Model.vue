@@ -63,7 +63,6 @@ import { db } from "@/util/dbInterface.js";
 import { debug } from "@/util/debug.js";
 import { llm } from "@/util/llm.js";
 import { prompts } from "@/util/prompts.js";
-import { highlighter } from "@/util/codeHighlight.js";
 
 export default {
     name: "Model",
@@ -268,8 +267,53 @@ export default {
             .then((responseJson) => {
                 this.generatedPrediction = responseJson;
                 this.generatedText = this.generatedPrediction.text;
-                highlighter.highlightCode(this);
+                this.highlightCode();
                 this.generated = true;
+            });
+        },
+
+        highlightCode() {
+            codeAnalyzer.analyze(this.generatedPrediction.id)
+            .then((responseJson) => {
+                const codeSnippetIds = responseJson.code_snippets;
+                let promises = [];
+                for (const codeSnippetId of codeSnippetIds) {
+
+                    promises.push(db.getById("code_snippets", codeSnippetId));
+                }
+                Promise.all(promises)
+                .then((codeSnippets) => {
+                    const sortedCodeSnippets = codeSnippets.sort((a, b) => a.start_line - b.start_line);
+                    const codeSnippetCount = sortedCodeSnippets.length;
+                    const lines = this.generatedPrediction.text.split("\n");
+                    const lineCount = lines.length;
+                    let resultChunks = [];
+                    let currentCodeSnippetIndex = 0;
+                    for (let line = 0; line < lineCount; ++line) {
+                        if (currentCodeSnippetIndex < codeSnippetCount)  {
+                            if (line == sortedCodeSnippets[currentCodeSnippetIndex].start_line) {
+                                resultChunks.push({
+                                    type: "code",
+                                    codeSnippet: sortedCodeSnippets[currentCodeSnippetIndex],
+                                    clickableNames: this.clickableNames
+                                });
+                                line = sortedCodeSnippets[currentCodeSnippetIndex].end_line;
+                                ++currentCodeSnippetIndex;
+                                continue;
+                            }
+                        }
+                        if (lines[line].startsWith("```")) continue;
+                        resultChunks.push({
+                            type: "text",
+                            content: lines[line]
+                        });
+                    }
+                    this.resultChunks = resultChunks;
+                    this.highlighted = true;
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
         },
 
