@@ -31,7 +31,7 @@ export default {
       return;
     }
     codeSnippetObjects[this.codeSnippet.id] = this;
-    codeAnalyzer.highlightCode(
+    codeAnalyzer.highlight(
       this.codeSnippet.id,
       'clickable',
       this.clickableNamesForUrl,
