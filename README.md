@@ -32,7 +32,19 @@ A demonstration video can be found [here](https://github.com/CR1337/xLLaMa/blob/
 
 ## Repository Structure
 
-
+Directory|Description
+-|-
+/bin|This directory contains some utility scripts to manage the application.
+/doc|Here are some miscellaneous documents.
+/services|This directory contains alle the docker services.
+/services/code_analyzer|A service that can find, analyze and highlight python code. See [here](services/code_analyzer/Readme.md).
+/services/db|A postgres database.
+/services/db_interface|A REST interface for interacting with the database. See [here](services/db_interface/Readme.md)
+/services/frontend|This services runs a node server that hosts the frontend.
+/services/llm_facade|A Service that acts as a facade between the application and other services that provide predictions by LLMs (Specifically Ollama and OpenAI). See [here](services/llm_facade/Readme.md).
+/services/llm_facade_nginx|An nginx server in front of the llm_facade service.
+/services/ollama|A service that makes installing and running LLMs locally easy.
+/volumes|Here are the persistant volumes of the docker services.
 
 ## Architecture
 ### Component Diagrams
