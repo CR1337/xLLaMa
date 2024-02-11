@@ -1,4 +1,4 @@
-import { host } from "./util";
+import { host } from "src/util/util.js";
 
 const dbInterfacePort = 5003;
 

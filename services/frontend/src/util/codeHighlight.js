@@ -1,5 +1,5 @@
-import { codeAnalyzer } from "./util/codeAnalyzer.js"
-import { db } from ".util/dbInterface.js"
+import { codeAnalyzer } from "src/util/codeAnalyzer.js"
+import { db } from "src/util/dbInterface.js"
 
 function highlightCode(modelComponent) {
     codeAnalyzer.analyze(modelComponent.generatedPrediction.id)
