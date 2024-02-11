@@ -20,3 +20,20 @@ It then extracts the code snippets from the prediction and analyzes them. The re
 {"code_snippets": [...]}
 ```
 The list contains the ids of the code snippets now stored in the database. How to retrieve the results and a description of them can be found in the [db_interface Readme](../db_interface/Readme.md).
+
+### `GET /highlight`
+This endpoint highlights code snippets and takes the following parameters:
+
+parameter|description
+-|-
+code_snippet|The id of the code snippet to highlight
+clickable_class|The css class a clickable identifier gets
+clickable_names|A comma seperated list of clickable identifiers
+on_click_attribute|The attribute that holds the name of the click handler
+click_handler|The click handler
+
+It returns
+```json
+{"html": "..."}
+```
+where `...` contains the highlighted code as html.

@@ -13,6 +13,10 @@ from ollama_scheduler import OllamaScheduler
 
 
 class OllamaRequest(LlmRequest):
+    """
+    This represents a request to Ollama.
+    It does (un)installing models and prediction.
+    """
 
     OLLAMA_INSTANCES: int = int(os.getenv("OLLAMA_INSTANCES", 1))
     URLS: List[str] = [

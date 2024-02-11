@@ -5,6 +5,11 @@ from typing import List
 
 
 class CodeHighlighter:
+    """
+    This class turns python code into html that represents
+    highlighted code. It also injects click events on specified
+    identifiers.
+    """
 
     STYLE: str = 'github-dark'
     CLICKABLE_HTML: str = (

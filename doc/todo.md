@@ -38,27 +38,27 @@
 - [x] Erklären warum Website, falls Website, wie integriert man existierende Projektinfos
 
 ## Abgabe
-- [ ] Refactoring (C)
-  - [ ] frontend (insb. js code)
-    - [ ] follow up is currently GET requested by name but id is passed
+- [x] Refactoring (C)
+  - [x] frontend (insb. js code)
+    - [x] follow up is currently GET requested by name but id is passed
   - [x] llm_facade (insb. llm_request.py)
   - [x] db_interface
   - [x] code_analyzer
-  - [ ] Naming conventions
+  - [x] Naming conventions
   - [x] docs -> old docs
-  - [ ] Remove debug code
+  - [x] Remove debug code
   - [x] Remove metrics
-  - [ ] Add Comments and Docstrings where needed
+  - [x] Add Comments and Docstrings where needed
   - [x] Add reset script for database
-  - [ ] (Check tests - optional)
-- [ ] Documentation
-  - [ ] Setup/Benutzung Skript schreiben + in readme (L)
-  - [ ] Video aufnehmen (L)
+- [x] Documentation
+  - [x] Repo Struktur
+  - [x] Setup/Benutzung Skript schreiben + in readme (L)
+  - [x] Video aufnehmen (L)
   - [x] Abstract fertig (L)
-  - [ ] Vortrag Infoboxen Backend wo nötig (C)
-  - [ ] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C + L)
-  - [ ] technische Doku schreiben/überarbeiten (C)
-    - [ ] frontend
-    - [ ] llm_facade
-    - [ ] db_interface
-    - [ ] code_analyzer
+  - [x] Vortrag Infoboxen Backend wo nötig (C)
+  - [x] Architekturdiagramme, Sequenzdiagramme, Komponentendiagramme readme (C)
+  - [x] technische Doku schreiben/überarbeiten (C)
+    - [x] frontend
+    - [x] llm_facade
+    - [x] db_interface
+    - [x] code_analyzer

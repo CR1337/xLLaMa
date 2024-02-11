@@ -115,49 +115,6 @@ erDiagram
         text text "UNIQUE"
     }
 
-    SymbolDefinitionReference {
-        text id PK
-        datetime created_at
-        datetime updated_at
-        text symbol_definition FK
-        text symbol_reference FK
-    }
-    SymbolDefinition ||--o{ SymbolDefinitionReference: "defines"
-    SymbolReference ||--o{ SymbolDefinitionReference: "is defined by"
-
-    SymbolDefinitionType {
-        text id PK
-        datetime created_at
-        datetime updated_at
-        text name "UNIQUE"
-    }
-
-    SymbolDefinition {
-        text id PK
-        datetime created_at
-        datetime updated_at
-        text symbol
-        integer start_line
-        integer end_line
-        integer start_column
-        integer end_column
-        boolean is_builtin
-        text code_snippet FK
-        text symbol_definition_type FK
-    }
-    CodeSnippet ||--o{ SymbolDefinition: "contains"
-    SymbolDefinition }o--|| SymbolDefinitionType: "is of type"
-
-    SymbolReference {
-        text id PK
-        datetime created_at
-        datetime updated_at
-        integer start_line
-        integer end_line
-        integer start_column
-        integer end_column
-    }
-
     SystemPrompt {
         text id PK
         datetime created_at
@@ -166,7 +123,7 @@ erDiagram
         text name
     }
 
-    UndefinedSymbolReference {
+    SymbolReference {
         text symbol
         integer start_line
         integer end_line
@@ -174,7 +131,7 @@ erDiagram
         integer end_column
         text code_Snippet FK
     }
-    CodeSnippet ||--o{ UndefinedSymbolReference: "contains"
+    CodeSnippet ||--o{ SymbolReference: "contains"
 
     UserRatingType {
         text symbol
@@ -236,9 +193,8 @@ This endpoint returns a list of all database objects from `<table_name>`. Possib
 11. [`stop_sequences`](#stopsequence)
 12. [`symbol_references`](#symbolreference)
 13. [`system_prompts`](#systemprompt)
-14. [`symbol_references`](#symbolreference)
-15. [`user_rating_types`](#userratingtype)
-16. [`user_ratings`](#userrating)
+14. [`user_rating_types`](#userratingtype)
+15. [`user_ratings`](#userrating)
 
 ### `POST /<table_name>`
 This endpoint will create a new database object. You have to provide a json body with the necessary column values. Necessary columns are all columns that don't have a `NOT NULL` constraint and are not one of (`id`, `created_at`, `updated_at`). When you provide references to other database objects you have to give them as database ids.
@@ -274,55 +230,3 @@ A call to this endpoint is equivalent to subsequent call to `/db/drop` and `/db/
 
 ### `POST /db/populate`
 A call to this endpoint populates the database with some initial data. This is necessary for the entire system to work.
-
-## Tables
-
-This paragraph lists all database tables. It provides a short description for each as well as descriptions of all the tables columns
-
-### all tables
-
-All tables have the following columns:
-
-|Name|Type|Constraint|Description|
-|----|----|----------|-----------|
-|id|Text|PRIMARY KEY|This is the primary key.|
-|created_at|Datetime||The time this row was created.|
-|updated_at|Datetime||The time this row was last updated.|
-
-### `CodeSnippet`
-
-### `FollowUpType`
-
-### `FollowUp`
-
-### `FrameworkItem`
-
-### `Framework`
-
-### `Llm`
-
-### `Prediction`
-
-### `PromptPartUsage`
-
-### `PromptPart`
-
-### `StopSequenceUsage`
-
-### `StopSequence`
-
-### `SymbolDefinitionReference`
-
-### `SymbolDefinitionType`
-
-### `SymbolDefinition`
-
-### `SymbolReference`
-
-### `SystemPrompt`
-
-### `UndefinedSymbolReference`
-
-### `UserRatingType`
-
-### `UserRating`

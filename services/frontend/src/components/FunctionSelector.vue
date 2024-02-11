@@ -22,7 +22,7 @@
 
 <script>
 import AutoComplete from 'primevue/autocomplete';
-import { host } from "@/util/util.js";
+import { db } from "@/util/dbInterface.js";
 
 export default {
     name: "FunctionSelector",
@@ -44,14 +44,10 @@ export default {
             this.selectedFrameworkItem = null;
             this.selectionChanged();
             for (const frameworkItemId of framework.framework_items) {
-                fetch("http://" + host() + ":5003/framework_items/" + frameworkItemId)
-                .then((response) => response.json())
-                .then((responseJson) => {
+                db.getById("framework_items", frameworkItemId)
+                .then(responseJson => {
                     this.frameworkItems.push(responseJson);
                     this.enabled = true;
-                })
-                .catch((error) => {
-                    console.log(error);
                 });
             }
         },

@@ -4,6 +4,9 @@ from code_snippet import CodeSnippet
 
 
 class CodeExtractor:
+    """
+    This class extracts python code snippets from a multiline string
+    """
 
     _lines: List[str]
     _code_snippets: List[CodeSnippet]

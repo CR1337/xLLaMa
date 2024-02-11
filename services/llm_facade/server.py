@@ -43,7 +43,6 @@ def build_llm_request(request: Request) -> LlmRequest:
     llm = DbInterface.get_llm(llm_id)
 
     for request_class in [OllamaRequest, OpenAiRequest]:
-        # if request_class.has_model(llm['name']):
         if llm['name'] in request_class.model_names():
             llm_request_class: Type[LlmRequest] = request_class
             break

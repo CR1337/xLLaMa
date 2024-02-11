@@ -5,6 +5,9 @@ from code_analyzer import CodeAnalyzer
 
 
 class DbInterface:
+    """
+    This class handles all database intercation.
+    """
 
     DB_INTERFACE_PORT: int = os.environ.get('DB_INTERFACE_INTERNAL_PORT')
     DB_INTERFACE_URL: str = f"http://db_interface:{DB_INTERFACE_PORT}"

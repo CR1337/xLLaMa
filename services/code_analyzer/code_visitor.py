@@ -3,6 +3,9 @@ from typing import List
 
 
 class CodeVisitor(ast.NodeVisitor):
+    """
+    This visitor extracts all identifiers from a python module.
+    """
 
     _references: List[ast.Name]
 

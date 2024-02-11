@@ -126,10 +126,7 @@ if __name__ == "__main__":
             print(f"Waiting for database to be ready... ({i})", flush=True)
             sleep(1)
         else:
-            if os.environ.get('TEST') == "1":
-                print("Connected to test database.", flush=True)
-            else:
-                print("Connected to database.", flush=True)
+            print("Connected to database.", flush=True)
             break
 
     app.run(
