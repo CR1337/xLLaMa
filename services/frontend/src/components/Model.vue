@@ -200,19 +200,16 @@ export default {
                         text: prompts.exampleGenerationTask
                     }));
                 }
-                return {
-                    systemPromptId: systemPromptId,
-                    resolvedPromises: Promise.all(promises)
-                };
-            })
-            .then((data) => {
-                const promptPartIds = data.resolvedPromises.map(x => x.id);
-                return {
-                    systemPromptId: data.systemPromptId,
-                    promptPartIds: promptPartIds,
-                    llm: db.getByName("llms", this.model)
-                };
-            })
+                Promise.all(promises)
+                .then((resolvedPromises) => {
+                    const promptPartIds = resolvedPromises.map(x => x.id);
+                    return {
+                        systemPromptId: systemPromptId,
+                        promptPartIds: promptPartIds,
+                        llm: db.getByName("llms", this.model)
+                    };
+                })
+            });
         },
 
         createFollowUp(generationReason) {
