@@ -39,18 +39,17 @@
 
 ## Abgabe
 - [ ] Refactoring (C)
-  - [ ] frontend (insb. js code)
-    - [ ] follow up is currently GET requested by name but id is passed
+  - [x] frontend (insb. js code)
+    - [x] follow up is currently GET requested by name but id is passed
   - [x] llm_facade (insb. llm_request.py)
   - [x] db_interface
   - [x] code_analyzer
-  - [ ] Naming conventions
+  - [x] Naming conventions
   - [x] docs -> old docs
   - [ ] Remove debug code
   - [x] Remove metrics
   - [ ] Add Comments and Docstrings where needed
   - [x] Add reset script for database
-  - [ ] (Check tests - optional)
 - [ ] Documentation
   - [x] Setup/Benutzung Skript schreiben + in readme (L)
   - [x] Video aufnehmen (L)
