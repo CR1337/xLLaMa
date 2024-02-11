@@ -4,6 +4,9 @@ from db_interface import DbInterface
 
 
 class LlmRequest(ABC):
+    """
+    An abstract class that represents either a request to Ollama or to OpenAI.
+    """
 
     DEFAULT_REPEAT_PENALTY: float = 1.1
     DEFAULT_MAX_TOKENS: int = 256

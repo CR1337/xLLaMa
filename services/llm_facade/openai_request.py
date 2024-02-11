@@ -9,6 +9,9 @@ import json
 
 
 class OpenAiRequest(LlmRequest):
+    """
+    This represents a request to OpenAI.
+    """
 
     _availability: bool = True
     try:

@@ -4,6 +4,10 @@ from typing import Callable
 
 
 class OllamaScheduler:
+    """
+    This is used to assign Ollama workers to flask workers.
+    See doc/xLLaMa_endpresentation.pdf
+    """
 
     OLLAMA_INSTANCES: int = int(os.environ['OLLAMA_INSTANCES'])
     REDIS_KEY: str = 'ollama_usage'

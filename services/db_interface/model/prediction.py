@@ -2,7 +2,6 @@ from model.base_model import BaseModel
 from model.framework_item import FrameworkItem
 from model.llm import Llm
 from model.system_prompt import SystemPrompt
-# from model.follow_up import FollowUp
 from peewee import (
     TextField, FloatField, IntegerField, ForeignKeyField, DeferredForeignKey
 )
