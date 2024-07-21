@@ -13,6 +13,18 @@ Users have responded positively to the tool, noting its potential to improve the
 Further information can be found [here](doc/xLLaMa_endpresentation.pdf).
 
 ## How to use
+
+🔎 Select the API and function you want to generate an example for.
+<p>
+  <img src="doc/API_selection.gif"  style="width: 80%; height: 80%;"/> 
+</p>
+
+💡 You can click into the example code to generate further examples
+<p>
+  <img src="doc/example_generation.gif"  style="width: 80%; height: 80%;"/>
+</p>
+
+
 Setup instructions can be found [here](https://github.com/CR1337/xLLaMa?tab=readme-ov-file#setup).
 
 The web interface of xLLaMa is intuitively structured to match a user's workflow by going from the top to the bottom.
